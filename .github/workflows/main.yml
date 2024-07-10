@@ -27,4 +27,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: harish0234k/guidein-fronend-image:latest
+          tags: saikumartanakala/guiden
