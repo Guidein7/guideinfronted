@@ -79,15 +79,13 @@ const LandingPage = () => {
             </nav>
             <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between ">
                 <div className='flex flex-col justify-between items-center'>
-                <div className='text-center pt-20 lg:p-6'>
+                    <div className='text-center pt-20 lg:p-6'>
                         <h1 className='font-bold text-lg mb-1'>To Get Referral</h1>
                         <Link to='/subscribe' className='bg-blue-700 text-white p-2 rounded-lg'>Subscribe Now</Link>
                     </div>
-
                     <div className="flex justify-center items-center p-2  lg:p-6 ">
                         <img src={guideinLandingPage} alt="Landing Page" className=" h-auto max-w-full" />
                     </div>
-                    
                 </div>
 
                 <footer className="bg-[#00145e] w-full p-4">
