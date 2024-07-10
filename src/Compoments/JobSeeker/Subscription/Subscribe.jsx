@@ -18,19 +18,17 @@ function Subscribe() {
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-
-
     useEffect(() => {
         if (log.isAuthenticated) {
+            if(token !== 'InValid credentials') {
             const decoded = jwtDecode(token);
             const email = decoded.sub;
             const mobile = decoded.mobile;
             const name = decoded.username;
-
-            // Update state variables using setState functions
             setEmail(email);
             setMobile(mobile);
             setName(name);
+            }
         }
     }, [log.isAuthenticated, token]);
 
@@ -76,7 +74,7 @@ function Subscribe() {
             image: GuideinLogo,
             order_id: orderId, //from server
             handler: function (response) {
-                console.log(response);
+
                 const data = {
                     order_id: response.razorpay_order_id,
                     payment_id: response.razorpay_payment_id,
@@ -92,7 +90,7 @@ function Subscribe() {
                     },
 
                 }).then(response => {
-                    console.log(response);
+
                     setSuccessMessage('Subscription successful');
 
                     // Clear the success message after 3 seconds
@@ -105,7 +103,11 @@ function Subscribe() {
 
 
                 }).catch(error => {
-                    console.log(error)
+                    setSuccessMessage('subscription failed')
+                    setTimeout(() => {
+                        setSuccessMessage('');
+
+                    }, 3000);
                 })
             },
             prefill: {
@@ -120,7 +122,6 @@ function Subscribe() {
 
         const paymentObject = new Razorpay(options);
         paymentObject.on('payment.failed', function (response) {
-            console.log(response);
         });
         paymentObject.open();
     }
@@ -133,12 +134,12 @@ function Subscribe() {
             contact: mobile,
             plan: "STANDARD"
         };
-        axios.post(`${config.api.baseURL }${config.api.jobSeeker.subscribe}`, data, {
+        axios.post(`${config.api.baseURL}${config.api.jobSeeker.subscribe}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }).then(response => {
-            console.log(response)
+
 
             setKey(response.data.key);
             setOrderId(response.data.orderId);
@@ -146,7 +147,7 @@ function Subscribe() {
 
 
         }).catch(error => {
-            console.log(error);
+
             if (error.response.status === 403) {
                 alert('session expired please')
                 handleLogout();
@@ -171,12 +172,12 @@ function Subscribe() {
             plan: "PREMIUM"
         };
 
-        axios.post(`${config.api.baseURL }${config.api.jobSeeker.subscribe}`, data, {
+        axios.post(`${config.api.baseURL}${config.api.jobSeeker.subscribe}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }).then(response => {
-            console.log(response)
+
 
             setKey(response.data.key);
             setOrderId(response.data.orderId);
@@ -184,7 +185,7 @@ function Subscribe() {
 
 
         }).catch(error => {
-            console.log(error);
+
             if (error.response.status === 403) {
                 alert('session expired please')
                 handleLogout();
@@ -209,12 +210,12 @@ function Subscribe() {
             plan: "ULTIMATE"
         };
 
-        axios.post(`${config.api.baseURL }${config.api.jobSeeker.subscribe}`, data, {
+        axios.post(`${config.api.baseURL}${config.api.jobSeeker.subscribe}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }).then(response => {
-            console.log(response)
+
 
             setKey(response.data.key);
             setOrderId(response.data.orderId);
@@ -222,14 +223,14 @@ function Subscribe() {
 
 
         }).catch(error => {
-            console.log(error);
+
             if (error.response.status === 403) {
                 alert('session expired please')
                 handleLogout();
             }
             else if (error.response.status === 409) {
                 setSuccessMessage('Your current plan is already active');
-                
+
                 setTimeout(() => {
                     setSuccessMessage('');
                 }, 3000);
@@ -249,7 +250,7 @@ function Subscribe() {
     };
 
     const paymentButton = () => {
-        if (token) {
+        if (token && token !== 'InValid credentials') {
             standardPayment();
         } else {
             navigate('/login');
@@ -257,7 +258,7 @@ function Subscribe() {
     };
 
     const paymentButton1 = () => {
-        if (token) {
+        if (token && token !== 'InValid credentials') {
             PremiumPayment();
         } else {
             navigate('/login');
@@ -265,7 +266,7 @@ function Subscribe() {
     };
 
     const paymentButton2 = () => {
-        if (token) {
+        if (token && token !== 'InValid credentials') {
             UltimatePayment();
         } else {
             navigate('/login');
@@ -282,7 +283,7 @@ function Subscribe() {
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col ">
-            {token ? (
+            {token  && token !==  'InValid credentials' ? (
                 <NavBar />
             ) : (
                 <nav className="bg-[#f8f9fa] py-4">

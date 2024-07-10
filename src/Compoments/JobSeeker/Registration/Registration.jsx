@@ -103,20 +103,19 @@ const Registration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      setLoading(true);
+    if (validateForm()) {   
       const email = formData.email;
       const mobile = formData.mobile;
-      console.log(mobile,email)
       const role = "JOB_SEEKER";
       const registrationData = { ...formData, role:role };
+      setLoading(true);
       axios.post(`${config.api.baseURL}${config.api.jobSeeker.register}`, registrationData).then(response => {
         navigate(`/verification`, { state: { email, mobile } });
       }).catch(error => {
         if (error.response && error.response.status === 409) {
           setErrorMessage("User already exists. Please try with a different email or mobile.");
         } else {
-          console.log("error");
+         
           setUnKnownError('Error while submitting your request. Please try again.');
           setTimeout(() => {
             setUnKnownError('');
@@ -124,10 +123,7 @@ const Registration = () => {
         }  
       }).finally(() => setLoading(false))
     }
-    else {
-      console.log('invalid formdata')
-      
-    }
+   
   };
 
 
@@ -238,7 +234,7 @@ const Registration = () => {
           <div className="text-center mt-6">
             <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6">Continue</button>
           </div>
-          <p className="text-xs">Already have an account? <Link to="/login" className="text-primary">Sign in</Link></p>
+          <p className="text-xs">Already have an account? <Link to="/login" className="text-blue-500">Sign in</Link></p>
         </form>
       </div>
       <div className="bg-[#00145e] w-full p-4 my-2">

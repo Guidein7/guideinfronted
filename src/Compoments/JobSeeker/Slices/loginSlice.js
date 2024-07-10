@@ -3,13 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import config from "../../../config";
 
-// export const login = createAsyncThunk('login',(formData) => {
-//     return axios.post('https://burro-up-panda.ngrok-free.app/api/guidein/v1/auth/authenticate',formData)
-//         .then(response => {
-//             return { status: response.status, data: response.data }; // Return both status and data
-//         })
-//         .catch(error =>{ return error})
-// })
+
 
 
 export const login = createAsyncThunk('login', async (formData) => {

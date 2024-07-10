@@ -35,6 +35,7 @@ function Profile() {
         linkedInUrl: '',
         resume: null,
     });
+    const [errorMessage, setErrorMessage] = useState('')
     useEffect(() => {
         getProfile();
     }, []);
@@ -47,7 +48,7 @@ function Profile() {
             },
         })
             .then(response => {
-                console.log(response);
+               
                 if (response.status === 200) {
                     setProfile(response.data);
                     setFormData({
@@ -63,7 +64,20 @@ function Profile() {
                 }
             })
             .catch(error => {
-                console.log(error);
+               if(error.response.status === 403) {
+                setErrorMessage('session expired')
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+               }
+               else{
+                setErrorMessage('Error while fetching profile')
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+               }
             })
             .finally(() => setLoading(false));
     }
@@ -98,25 +112,36 @@ function Profile() {
             [name]: value
         });
     };
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type !== 'application/pdf') {
-            alert('Please upload a PDF file.');
-            return;
+            setErrorMessage('Please upload a pdf file')
+            setTimeout(() => setErrorMessage(''), 2000)
+            // window.location.reload();
+
         }
         setFormData({
             ...formData,
             resume: file
         });
         if (file) {
+
             setResumeFileName(file.name);
             setIsNewResumeUploaded(true);  // Set the flag to true when a new file is uploaded
         }
+
+
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        setLoading(true); // Start loading when submitting the form
+        if (formData.resume && formData.resume.type !== 'application/pdf') {
+            setErrorMessage('Please upload a pdf file')
+            setTimeout(() => setErrorMessage(''), 2000)
+            return;
+        }
+
         const form = new FormData();
         form.append('name', formData.name);
         form.append('email', formData.email);
@@ -124,7 +149,6 @@ function Profile() {
         form.append('currentStatus', formData.currentStatus);
         form.append('experience', formData.experience);
         form.append('linkedInUrl', formData.linkedInUrl);
-        console.log(formData.resume)
         if (isNewResumeUploaded) {
             if (formData.resume) {
                 form.append('resume', formData.resume);
@@ -134,15 +158,12 @@ function Profile() {
             const oldResumeBlob = base64ToBlob(profile.resume, 'application/pdf');
             form.append('resume', oldResumeBlob, `${formData.name}.resume.pdf`);
         }
-
-
-
-
         const url = isEditing
             ? `${config.api.baseURL}${config.api.jobSeeker.updateProfile}`
             : `${config.api.baseURL}${config.api.jobSeeker.saveProfile}`;
         const method = isEditing ? 'put' : 'post';
 
+        setLoading(true); // Start loading when submitting the form
         axios({
             method: method,
             url: url,
@@ -155,10 +176,15 @@ function Profile() {
                 setProfile(formData);
                 setIsEditing(false);
                 setSuccessMessage('Profile successfully saved');
-                console.log('Profile saved successfully:', response);
                 getProfile();
             })
-            .catch(error => console.error('Error saving profile:', error))
+            .catch(error => {
+                setErrorMessage('Error while saving profile')
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            })
             .finally(() => setLoading(false)); // Stop loading after the request is done
     };
 
@@ -176,7 +202,7 @@ function Profile() {
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between ">
-            <NavBar/>
+            <NavBar />
             {loading ? (
                 <div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
@@ -185,6 +211,8 @@ function Profile() {
             ) : (
                 <div className='flex-grow flex justify-center items-center pt-24'>
                     <div >
+                        {errorMessage && (<p className='text-red-400 text-center fixed w-full z-10 text-3xl'>{errorMessage}</p>)}
+
                         {profile && !isEditing ? (
                             <div className='text-center bg-white shadow-md rounded-lg p-6 w-full max-w-md m-4'>
                                 <h2 className='text-2xl font-semibold mb-3'>profile</h2>
@@ -255,6 +283,7 @@ function Profile() {
                         ) : (
                             <div className='text-center bg-white shadow-md rounded-lg p-6 w-full max-w-md m-4'>
                                 <h2 className='text-2xl font-semibold mb-3'>{isEditing ? 'Edit Profile' : 'Complete profile'}</h2>
+
                                 <form onSubmit={handleSubmit}>
                                     <div className='mb-3'>
                                         <label className='block text-gray-700 text-start'><strong>Full Name</strong><span className='text-red-700'>*</span></label>
@@ -265,7 +294,7 @@ function Profile() {
                                             onChange={handleInputChange}
                                             className='w-full px-3 py-2 border rounded-md'
                                             required
-                                            
+
                                         />
                                     </div>
                                     <div className='mb-3'>
@@ -277,7 +306,7 @@ function Profile() {
                                             onChange={handleInputChange}
                                             className='w-full px-3 py-2 border rounded-md'
                                             required
-                                           
+
                                         />
                                     </div>
                                     <div className='mb-3'>
@@ -289,7 +318,7 @@ function Profile() {
                                             onChange={handleInputChange}
                                             className='w-full px-3 py-2 border rounded-md'
                                             required
-                                            
+
                                         />
                                     </div>
                                     <div className='mb-3'>
@@ -340,73 +369,74 @@ function Profile() {
                                         />
                                     </div>
                                     <div className="mb-5">
-    <label className="block text-gray-700 text-start"><strong>Resume</strong></label>
-    {!profile ? (
-        <div>
-            <input
-                type="file"
-                name="resume"
-                onChange={handleFileChange}
-                required
-            />
-            <p className='text-red-500'>Accept .pdf max size 5mb</p>
-        </div>
-    ) : (
-        <div>
-            {!isNewResumeUploaded && (
-                <p className="cursor-pointer mb-3 flex" onClick={handleResumeView}>
-                    <FaFilePdf className='mt-1' />
-                    <span className='text-blue-500'>{formData.name}.resume</span>
-                </p>
-            )}
-            {resumeFileName && (
-                <p className="text-gray-700">{resumeFileName}</p>
-            )}
-            <div>
-                <button
-                    type="button"
-                    onClick={() => fileInputRef.current.click()}
-                    className="bg-blue-700 p-1 text-white rounded focus:outline-none"
-                >
-                    Update Resume
-                </button>
-                <input
-                    type="file"
-                    name="resume"
-                    onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file && file.type !== 'application/pdf') {
-                            alert('Please upload a PDF file.');
-                            return;
-                        }
-                        handleFileChange(e);
-                    }}
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
-                />
-                <p  className='text-xs text-red-500'> accept .pdf  (5mb)</p>
-            </div>
-        </div>
-    )}
-</div>
+                                        <label className="block text-gray-700 text-start"><strong>Resume</strong></label>
+                                        {!profile ? (
+                                            <div>
+                                                <input
+                                                    type="file"
+                                                    name="resume"
+                                                    onChange={handleFileChange}
+                                                    required
+                                                />
+                                                <p className='text-red-500 mr-32'>Accept .pdf max size 5mb</p>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                {!isNewResumeUploaded && (
+                                                    <p className="cursor-pointer mb-3 flex" onClick={handleResumeView}>
+                                                        <FaFilePdf className='mt-1' />
+                                                        <span className='text-blue-500'>{formData.name}.resume</span>
+                                                    </p>
+                                                )}
+                                                {resumeFileName && (
+                                                    <p className="text-gray-700">{resumeFileName}</p>
+                                                )}
+                                                <div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => fileInputRef.current.click()}
+                                                        className="bg-blue-700 p-1 text-white rounded focus:outline-none"
+                                                    >
+                                                        Update Resume
+                                                    </button>
+                                                    <input
+                                                        type="file"
+                                                        name="resume"
+                                                        onChange={(e) => {
+                                                            const file = e.target.files[0];
+                                                            if (file && file.type !== 'application/pdf') {
+                                                                alert('Please upload a PDF file.');
+                                                                return;
+                                                            }
+                                                            handleFileChange(e);
+                                                        }}
+                                                        ref={fileInputRef}
+                                                        style={{ display: 'none' }}
+                                                        
+                                                    />
+                                                    <p className='text-xs text-red-500'> accept .pdf  (5mb)</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
 
 
                                     {isEditing && (
-                                            <button onClick={cancelButton} className='w-25 bg-gray-500 text-white p-2 rounded-md mx-2'>cancel</button>
-                                        )}
-                                        <button type='submit' className='w-25 bg-blue-700 text-white p-2 rounded-md mx-2'>
-                                            Save
-                                        </button>
+                                        <button onClick={cancelButton} className='w-25 bg-gray-500 text-white p-2 rounded-md mx-2'>cancel</button>
+                                    )}
+                                    <button type='submit' className='w-25 bg-blue-700 text-white p-2 rounded-md mx-2'>
+                                        Save
+                                    </button>
                                 </form>
                             </div>
                         )}
                     </div>
                 </div>
             )}
-              {successMessage && (
-    <div className="bg-green-500 text-white py-2 px-4 rounded-md absolute top-[40%] left-[80%] transform -translate-x-1/2">
-        {successMessage}
-    </div>)}
+            {successMessage && (
+                <div className="bg-green-500 text-white py-2 px-4 rounded-md absolute top-[40%] left-[80%] transform -translate-x-1/2">
+                    {successMessage}
+                </div>)}
             <footer className="bg-[#00145e] w-full p-4">
                 <div className="sm:mx-auto max-w-screen-lg">
                     <div className="grid grid-cols-2 gap-4">

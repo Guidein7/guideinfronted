@@ -13,12 +13,9 @@ function OtpAuthentication() {
     const location = useLocation();
     const { email, mobile } = location.state;
     const navigate = useNavigate();
-
     const resendVerification = () => {
-       
-     const role = "JOB_SEEKER";
-     //const newPassword = password;
-      const formData = {email,mobile,role}
+    const role = "JOB_SEEKER";
+    const formData = {email,mobile,role}
       
       axios.post(`${config.api.baseURL}${config.api.jobSeeker.resendOtp}`,formData).then(response => {
             if(response.status === 200){
@@ -28,7 +25,10 @@ function OtpAuthentication() {
                 },2000)
             }
       }).catch(error => {
-      console.log(error);
+        setOtpMessage('Error while sending otp try again');
+        setTimeout(() => {
+            setOtpMessage('');
+        },2000)
       })
 
     }
@@ -47,7 +47,7 @@ function OtpAuthentication() {
         
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.verification}`, verifyData)
             .then(response => {
-                console.log(response);
+                
                 // Check response status to determine if verification was successful
                 if (response.status === 200) {
                     setSuccess("Successfully verified!");
@@ -59,7 +59,7 @@ function OtpAuthentication() {
                 }
             })
             .catch(error => {
-                console.log(error);
+               
                 setError("An error occurred while verifying the OTP. Please try again.");
             });
     };

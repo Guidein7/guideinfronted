@@ -1,6 +1,4 @@
 
-
-
     import React, { useState } from 'react';
     import { Link, useNavigate } from 'react-router-dom';
     import GuideinLogo from '../../../assets/GuideinLogo.png';
@@ -42,10 +40,8 @@
         setError(null);
         const role = "JOB_SEEKER";
         const formdata = { email, mobile, role };
-        console.log(formdata);
            axios.post(`${config.api.baseURL}${config.api.jobSeeker.resendOtp}`,formdata)
            .then(response => {
-             console.log(response)
              setLoading(false);
              navigate(`/otp-authentication`, { state: { email, mobile } });
         }).catch(error => 
@@ -116,8 +112,5 @@
           </div>
         </div>
       );
-  
-    
-
 }
 export default UserVerification;

@@ -26,11 +26,8 @@ const NavBar = () => {
     );
 
     const handleLogout = () => {
-       
-
         dispatch(logoutUser());
-        navigate('/login');
-       
+        navigate('/login');  
     };
 
     const handleClickOutside = (event) => {

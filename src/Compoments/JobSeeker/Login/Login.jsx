@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import GuideinLogo from '../../../assets/GuideinLogo.png';
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../Slices/loginSlice";
 import { useNavigate } from "react-router-dom";
@@ -16,10 +16,9 @@ const Login = () => {
     const log = useSelector(state => state.log);
     const navigate = useNavigate();
     const [loger, setLoger] = useState('');
-    const[isVerifedUser,setIsVerifiedUser] = useState(false);
-    const[errorMessage, setErrorMessage]  = useState('')
+    const [isVerifedUser, setIsVerifiedUser] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('')
     const modalRef = useRef(null);
-  
 
     if (log.isLoading) {
         return (
@@ -65,37 +64,37 @@ const Login = () => {
         if (validateForm()) {
             const role = "JOB_SEEKER";
             let formData;
-    
+
             if (isValidEmail(inputValue)) {
                 formData = { email: inputValue, mobile: '', password, role };
             } else {
                 const formattedMobile = inputValue.startsWith('+91') ? inputValue : `+91${inputValue}`;
                 formData = { email: '', mobile: formattedMobile, password, role };
             }
-    
-            console.log(formData);
-    
+
+           
+
             try {
                 const action = login(formData);
                 const resultAction = await dispatch(action);
                 const response = resultAction.payload;
-    
+
                 if (response.status === 200) {
-                    console.log('login success');
+                   
                     navigate('/home');
                 }
-                else if(response.status === 403){
-                        setLoger("Invalid email or password");
+                else if (response.status === 403) {
+                    setLoger("Invalid email or password");
                 }
-                else if(response.status === 401){
+                else if (response.status === 401) {
                     setIsVerifiedUser(true);
                 }
             } catch (error) {
                 setErrorMessage('Error while submitting your request. Please try again.');
                 setTimeout(() => {
-                  setErrorMessage('');
+                    setErrorMessage('');
                 }, 3000);
-                console.error("Error:", error);
+               
             }
         }
     };
@@ -166,30 +165,30 @@ const Login = () => {
                 </form>
             </div>
             {isVerifedUser && (
-                        <div
-                            className="fixed top-0 left-0 w-full h-screen bg-gray-500 bg-opacity-50 flex justify-center items-center"
-                            ref={modalRef}
+                <div
+                    className="fixed top-0 left-0 w-full h-screen bg-gray-500 bg-opacity-50 flex justify-center items-center"
+                    ref={modalRef}
+                >
+                    <div className="relative bg-white p-5 rounded shadow-md w-full max-w-md">
+                        <span
+                            className="absolute top-2 right-2 text-xl cursor-pointer"
+                            onClick={() => isVerifedUser(false)}
                         >
-                            <div className="relative bg-white p-5 rounded shadow-md w-full max-w-md">
-                                <span
-                                    className="absolute top-2 right-2 text-xl cursor-pointer"
-                                    onClick={() => isVerifedUser(false)}
-                                >
-                                    &times;
-                                </span>
-                                <p className="text-red-700">
-                                    You are not the verified user please verify your details.
-                                </p>
-                                <div className="text-center mt-2">
-                                    <Link to="/user-verification" className="bg-blue-700 text-white p-2 rounded">
-                                        verify
-                                    </Link>
-                                </div>
-                            </div>
+                            &times;
+                        </span>
+                        <p className="text-red-700">
+                            You are not the verified user please verify your details.
+                        </p>
+                        <div className="text-center mt-2">
+                            <Link to="/user-verification" className="bg-blue-700 text-white p-2 rounded">
+                                verify
+                            </Link>
                         </div>
+                    </div>
+                </div>
 
 
-                    )}
+            )}
 
             <div className="bg-[#00145e] w-full p-4 my-2">
                 <footer className='sm:mx-auto max-w-screen-lg'>

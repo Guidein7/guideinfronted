@@ -8,6 +8,7 @@ import { logoutUser } from '../Slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import { PiClipboard } from 'react-icons/pi';
 
 function AppliedJobs() {
     const log = useSelector(state => state.log);
@@ -16,6 +17,7 @@ function AppliedJobs() {
     const email = decoded.sub;
     const [job, setJobs] = useState([])
     const [loading, setLoading] = useState(false)
+    const[errorMessage,setErrorMessage] = useState('');
 
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
@@ -38,11 +40,27 @@ function AppliedJobs() {
             },
         }
         ).then(response => {
-            console.log(response);
+           
             setJobs(response.data)
 
         })
-            .catch(error => console.log(error))
+            .catch(error => {
+                if(error.response.status === 403) {
+                    setErrorMessage('session Expired')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    }, 2000);
+                }
+                else{
+                    setErrorMessage('Error while Loading applied jobs')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    }, 2000);
+                } 
+                     
+            })
             .finally(() => setLoading(false))
     }
 
@@ -66,8 +84,9 @@ function AppliedJobs() {
                     </div>
                 ) : (
                     <div>
+                        {errorMessage && (<p className='text-red-500 text-center'>{errorMessage}</p>)}
                         {job.length === 0 ? (
-                            <p>No jobs applied yet.</p>
+                            <p className='h-screen flex items-center justify-center'>No jobs applied yet.</p>
                         ) : (
                             <div>
                                 {job.map((status, index) => (

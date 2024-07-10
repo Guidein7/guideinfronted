@@ -3,30 +3,26 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
-import GuideinLogo from '../../../assets/GuideinLogo.png';
-import { logoutUser } from '../Slices/loginSlice';
-import { useDispatch } from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../Slices/loginSlice';
+
 
 function DashBoard() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
     const decoded = jwtDecode(token);
     const email = decoded.sub;
-    const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [dashboardDetails, setDashboardDetails] = useState({});
+    const[errorMessage,setErrorMessage] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const handleLogout = () => {
-        navigate('/login');
         dispatch(logoutUser());
-    };
-    const [dashboardDetails, setDashboardDetails] = useState({});
-
-
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
+        navigate('/login');  
     };
 
     const getDashboardDetails = () => {
@@ -38,10 +34,18 @@ function DashBoard() {
             },
         }
         ).then(response => {
-            console.log(response)
             setDashboardDetails(response.data)
         }).catch(error => {
-            console.log(error)
+
+            if(error.response.status === 403) {
+                setErrorMessage('session Expierd')
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                },2000)
+            }
+            setErrorMessage('Error while fething dashboard details Try again')
+            setTimeout(() => setErrorMessage(''),2000)
         })
             .finally(() => setLoading(false))
     }
@@ -51,12 +55,11 @@ function DashBoard() {
     }, []);
 
     let isActiveValue;
-
     if (dashboardDetails && dashboardDetails.planHistory && dashboardDetails.planHistory.length > 0) {
         isActiveValue = dashboardDetails.planHistory[0].isActive;
     }
 
-    console.log(isActiveValue);
+ 
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
@@ -65,8 +68,8 @@ function DashBoard() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                 <p className="mt-4 text-gray-900">Loading...</p>
             </div>) : (
-
                 <div className='flex-grow pt-24'>
+                    {errorMessage && (<p className='text-red-500'>{errorMessage}</p>)}
                     <h1 className='font-bold px-2 lg:ml-24 text-2xl'>Dashboard</h1>
 
                     {(!isActiveValue) && dashboardDetails.planHistory && (
@@ -75,7 +78,7 @@ function DashBoard() {
                             <Link to='/subscribe' className='bg-blue-700 p-2 rounded text-white'>Subscribe</Link>
                         </div>
                     )}
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center items-center lg:my-5'>
+                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center items-center lg:my-10'>
                         <div className='bg-white p-5 mx-2'>
                             <h1 className='font-bold text-center text-lg'>Total Referrals</h1>
                             <h1 className='font-bold text-center text-lg'>{dashboardDetails.totalReferrals}</h1>
@@ -103,7 +106,7 @@ function DashBoard() {
         </div> */}
 
                     </div>                    
-                    <div className='my-6 '>
+                    <div className='my-6  '>
                         {dashboardDetails?.planHistory?.map((item, index) => (
                             <div key={index} className='mx-4'>
                                 <h1 className='font-bold mt-2'>Plan History</h1>
@@ -114,16 +117,8 @@ function DashBoard() {
 
 
                             </div>
-
                         )
-
                         )}
-
-                    </div>
-                  
-                    <div className='text-center my-2'>
-                        <p className='font-bold text-lg'>Didn't find the job?</p>
-                        <button className='bg-blue-700 p-2 text-white rounded'>Request a job Referral</button>
                     </div>
                 </div>
             )}

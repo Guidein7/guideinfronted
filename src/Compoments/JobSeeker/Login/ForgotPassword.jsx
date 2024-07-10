@@ -9,28 +9,23 @@ const ForgetPassword = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const validateEmail = (email) => {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return re.test(String(email).toLowerCase());
   };
-
   const validateMobile = (mobile) => {
     const re = /^\d{10}$/; // Check if the input is exactly 10 digits
     return re.test(String(mobile));
   };
-
-  const handleSubmit =  (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
     let email = '';
     let mobile = '';
-
     if (validateEmail(input)) {
       email = input;
     } else if (validateMobile(input)) {
-      mobile = `+91${input}`; 
+      mobile = `+91${input}`;
     } else {
       setError('Please enter a valid email or 10-digit mobile number');
       setLoading(false);
@@ -39,19 +34,15 @@ const ForgetPassword = () => {
     setError(null);
     const role = "JOB_SEEKER";
     const formdata = { email, mobile, role };
-    console.log(formdata);
-       axios.post(`${config.api.baseURL}${config.api.jobSeeker.forgotPassword}`,formdata)
-       .then(response => {
-         console.log(response)
-         setLoading(false);
-         navigate('/reset-verify', { state: { email, mobile } });
-    }).catch(error => 
-     {
-      setLoading(false);
-      setError(error.response ? error.response.data.message : 'An error occurred');
-    })
+    axios.post(`${config.api.baseURL}${config.api.jobSeeker.forgotPassword}`, formdata)
+      .then(response => {
+        setLoading(false);
+        navigate('/reset-verify', { state: { email, mobile } });
+      }).catch(error => {
+        setLoading(false);
+        setError(error.response ? error.response.data.message : 'An error occurred');
+      })
   }
-  
 
   return (
     <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">

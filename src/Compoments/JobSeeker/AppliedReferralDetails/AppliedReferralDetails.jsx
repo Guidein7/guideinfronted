@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import session from 'redux-persist/lib/storage/session';
 
 function AppliedRefeReferralDetails() {
     const log = useSelector(state => state.log);
@@ -29,8 +30,8 @@ function AppliedRefeReferralDetails() {
     const [loading,setLoading] = useState(false);
     const [referralDetails,setReferralDetails] = useState({})
     const[proof,setProof] = useState('');
-    console.log(status);
-
+    const[errorMessage,setErrorMessage] = useState('')
+    
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };
@@ -52,11 +53,26 @@ useEffect(() => {
             },
         }
         ).then(response => {
-            console.log(response)
+            
             setReferralDetails(response.data)
             setProof(response.data.proof);
         }).catch(error => {
-            console.log(error); 
+            
+            if(error.response.status === 403){
+                setErrorMessage('session expired');
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+
+            }
+            setErrorMessage('error while fetching data');
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+
+            
         })
         .finally(() => setLoading(false))
     }
@@ -122,6 +138,7 @@ useEffect(() => {
            <NavBar/>
 
             <div className='flex-grow pt-24'>
+                {errorMessage && <p className='text-red text-center'>{errorMessage}</p>}
                 <IoMdArrowRoundBack onClick={handleBackClick} size={24} className='mx-10 cursor-pointer my-1  ' />
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>

@@ -20,7 +20,6 @@ const PasswordResetVerification = () => {
         const verifyData = { email, mobile, otp, role };
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.verification}`, verifyData)
             .then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     setSuccessMessage("Successfully verified");
                     setTimeout(() => {
@@ -32,7 +31,7 @@ const PasswordResetVerification = () => {
                 }
             })
             .catch(error => {
-                console.log(error);
+               
                 setError("An error occurred while verifying the OTP. Please try again.");
             })
             .finally(() => setLoading(false));
@@ -43,7 +42,7 @@ const PasswordResetVerification = () => {
       const formData = {email,mobile,role}
           axios.post(`${config.api.baseURL}${config.api.jobSeeker.resendOtp}`,formData).then(response => {
            
-                console.log('OTP resent successfully');
+              
                   setSuccessMessage("otp resend successfully");
                   setTimeout(() => {
                       setSuccessMessage('');

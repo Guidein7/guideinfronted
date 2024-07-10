@@ -153,8 +153,7 @@ function JobDetails() {
                 }
 
             }
-        ).then(response => {
-            console.log(response) 
+        ).then(response => { 
            fetchJobs();
         }).catch(error => {
             console.log(error)
@@ -215,7 +214,7 @@ function JobDetails() {
                 Authorization: `Bearer ${token}`,
             },
         }).then(response => {
-            console.log(response)
+           
             if (response.status === 200) {
                 setShowDetails(false);
                 setSuccessMessage(true);
@@ -227,6 +226,7 @@ function JobDetails() {
                 setShowDetails(false);
                 setIscredits(true);
             }
+            
         })
 
             .finally(() => setLoading(false))
@@ -248,12 +248,10 @@ function JobDetails() {
             if (jobi) {
                 setJobStatus(jobi.status); 
                 setSavedJob(jobi.saved); // Assuming 'status' is the key for job status in the response object
-            } else {
-                console.log('Job not found');
-            }
+            } 
            
         }).catch(error => {
-            console.log(error)
+           
         }).finally(() => setLoading(false))
 
     };
