@@ -1,0 +1,461 @@
+import { Link } from "react-router-dom";
+import GuideinLogo from '../../../assets/GuideinLogo.png';
+import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logoutUser } from "../Slices/loginSlice";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import NavBar from "../NavBar/NavBar";
+import config from "../../../config";
+
+function Subscribe() {
+    const log = useSelector(state => state.log);
+    const token = log.data.token;
+    const [email, setEmail] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [name, setName] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
+
+    useEffect(() => {
+        if (log.isAuthenticated) {
+            const decoded = jwtDecode(token);
+            const email = decoded.sub;
+            const mobile = decoded.mobile;
+            const name = decoded.username;
+
+            // Update state variables using setState functions
+            setEmail(email);
+            setMobile(mobile);
+            setName(name);
+        }
+    }, [log.isAuthenticated, token]);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [confirmPayment, setConfirmPayment] = useState(false);
+    const [confirmPayment1, setConfirmPayment1] = useState(false);
+    const [confirmPayment2, setConfirmPayment2] = useState(false);
+    const modalRef = useRef(null);
+
+    const [key, setKey] = useState('');
+    const [orderId, setOrderId] = useState('');
+    function loadScript(src) {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+                resolve(true);
+            };
+            script.onerror = () => {
+                resolve(false);
+            };
+            document.body.appendChild(script);
+        });
+    }
+
+    async function displayRazorpay(plan) {
+        setConfirmPayment(false);
+        setConfirmPayment1(false);
+        setConfirmPayment2(false);
+        const res = await loadScript(`${config.api.jobSeeker.razorPay}`);
+
+        if (!res) {
+            alert("Razorpay SDK failed to load. Are you online?");
+            return;
+        }
+
+        const options = {
+            key: key, // from server
+            currency: "INR",
+            name: "Guidein",
+            description: "Plan Subscription",
+            image: GuideinLogo,
+            order_id: orderId, //from server
+            handler: function (response) {
+                console.log(response);
+                const data = {
+                    order_id: response.razorpay_order_id,
+                    payment_id: response.razorpay_payment_id,
+                    razorPaySignature: response.razorpay_signature,
+                    plan: plan,
+                    email: email,
+                    name: name,
+                    contact: mobile
+                }
+                axios.post(`${config.api.baseURL}${config.api.jobSeeker.submitSubscription}`, data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+
+                }).then(response => {
+                    console.log(response);
+                    setSuccessMessage('Subscription successful');
+
+                    // Clear the success message after 3 seconds
+                    setTimeout(() => {
+                        setSuccessMessage('');
+                        navigate('/home');
+                    }, 3000);
+
+
+
+
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
+            prefill: {
+                name: name,
+                email: email,
+                contact: mobile,
+            },
+            theme: {
+                color: "#3399cc",
+            },
+        };
+
+        const paymentObject = new Razorpay(options);
+        paymentObject.on('payment.failed', function (response) {
+            console.log(response);
+        });
+        paymentObject.open();
+    }
+
+    const standardPayment = async () => {
+        setLoading(true);
+        const data = {
+            email: email,
+            name: name,
+            contact: mobile,
+            plan: "STANDARD"
+        };
+        axios.post(`${config.api.baseURL }${config.api.jobSeeker.subscribe}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            console.log(response)
+
+            setKey(response.data.key);
+            setOrderId(response.data.orderId);
+            setConfirmPayment(true);
+
+
+        }).catch(error => {
+            console.log(error);
+            if (error.response.status === 403) {
+                alert('session expired please')
+                handleLogout();
+            }
+            else if (error.response.status === 409) {
+                setSuccessMessage('Your current plan is already active');
+                // Clear the success message after 3 seconds
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
+            }
+
+        }).finally(() => setLoading(false))
+    };
+
+    const PremiumPayment = async () => {
+        setLoading(true)
+        const data = {
+            email: email,
+            name: name,
+            contact: mobile,
+            plan: "PREMIUM"
+        };
+
+        axios.post(`${config.api.baseURL }${config.api.jobSeeker.subscribe}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            console.log(response)
+
+            setKey(response.data.key);
+            setOrderId(response.data.orderId);
+            setConfirmPayment1(true);
+
+
+        }).catch(error => {
+            console.log(error);
+            if (error.response.status === 403) {
+                alert('session expired please')
+                handleLogout();
+            }
+            else if (error.response.status === 409) {
+                setSuccessMessage('Your current plan is already active');
+                // Clear the success message after 3 seconds
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
+            }
+
+        }).finally(() => setLoading(false))
+    };
+
+    const UltimatePayment = async () => {
+        setLoading(true);
+        const data = {
+            email: email,
+            name: name,
+            contact: mobile,
+            plan: "ULTIMATE"
+        };
+
+        axios.post(`${config.api.baseURL }${config.api.jobSeeker.subscribe}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            console.log(response)
+
+            setKey(response.data.key);
+            setOrderId(response.data.orderId);
+            setConfirmPayment2(true);
+
+
+        }).catch(error => {
+            console.log(error);
+            if (error.response.status === 403) {
+                alert('session expired please')
+                handleLogout();
+            }
+            else if (error.response.status === 409) {
+                setSuccessMessage('Your current plan is already active');
+                
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
+            }
+
+        }).finally(() => setLoading(false))
+    };
+
+
+
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleLogout = () => {
+        dispatch(logoutUser());
+        navigate('/login');
+    };
+
+    const paymentButton = () => {
+        if (token) {
+            standardPayment();
+        } else {
+            navigate('/login');
+        }
+    };
+
+    const paymentButton1 = () => {
+        if (token) {
+            PremiumPayment();
+        } else {
+            navigate('/login');
+        }
+    };
+
+    const paymentButton2 = () => {
+        if (token) {
+            UltimatePayment();
+        } else {
+            navigate('/login');
+        }
+    };
+
+    const toggleNavbar = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleEarnMoneyClick = () => {
+        window.open('/employee-landingpage', '_blank');
+    };
+
+    return (
+        <div className="bg-[#f5faff] min-h-screen flex flex-col ">
+            {token ? (
+                <NavBar />
+            ) : (
+                <nav className="bg-[#f8f9fa] py-4">
+                    <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                        <div className="block lg:hidden">
+                            <Link className="text-dark focus:outline-none" onClick={toggleNavbar}>
+                                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </Link>
+                            {isOpen && (
+                                <div className="flex flex-col">
+                                    <button onClick={handleEarnMoneyClick} className="bg-blue-700 text-white p-2 rounded-lg my-1">
+                                        Earn Money
+                                    </button>
+                                    <Link to='/register' className="bg-blue-700 text-white p-2 rounded-lg my-1">
+                                        Sign Up
+                                    </Link>
+                                    <Link to='/login' className="bg-blue-700 text-white p-2 rounded-lg my-1">
+                                        Login
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+
+                        <div>
+                            <Link to='/'><img src={GuideinLogo} alt="Logo" className="h-8" /></Link>
+                        </div>
+
+                        <div className="hidden lg:flex items-center space-x-4">
+                            <button onClick={handleEarnMoneyClick} className="bg-blue-700 text-white p-2 rounded-lg">
+                                Earn Money
+                            </button>
+                            <Link to='/register' className="bg-blue-700 text-white p-2 rounded-lg">
+                                Sign Up
+                            </Link>
+                            <Link to='/login' className="bg-blue-700 text-white p-2 rounded-lg">
+                                Login
+                            </Link>
+                        </div>
+                    </div>
+                </nav>
+            )}
+
+
+            <div className="container mx-auto mt-20 px-4 py-6 flex-grow">
+
+
+                {successMessage && (
+                    <div className="fixed top-14 left-0 w-full text-green-700 font-bold text-2xl text-center py-4 z-50">
+                        {successMessage}
+                    </div>
+                )}
+
+                {loading ? (<div className="flex flex-col justify-center items-center h-screen">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+                    <p className="mt-4 text-gray-900">Loading...</p>
+                </div>) : (<div>
+                    <h1 className="text-center text-xl font-bold">Subscription Plans</h1>
+                    <p className="text-center mb-3"> choose the plan that best suits your needs</p>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Standard Plan */}
+                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 className="text-2xl font-semibold mb-4 text-center">Standard</h2>
+                            <p className="mb-2">2 referral credits</p>
+                            <p className="mb-2">Access to Job listings</p>
+                            <p className="mb-2">Starts at</p>
+                            <p className="font-bold mb-2"><s>&#8377;1600</s><span className="mx-2">&#8377;1299</span></p>
+                            <div className="text-center">
+                                <button onClick={paymentButton} className="bg-blue-700 text-white py-2 px-4 rounded ">
+                                    Buy Now
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Professional Plan */}
+                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 className="text-2xl font-semibold mb-4 text-center">Premium</h2>
+                            <p className="mb-2">5 referral credits</p>
+                            <p className="mb-2">Access to Job listings</p>
+                            <p className="mb-2">Starts at</p>
+                            <p className="font-bold mb-2"><s>&#8377;4000</s><span className="mx-2">&#8377;2999</span></p>
+                            <div className="text-center">
+                                <button onClick={paymentButton1} className="bg-blue-700 text-white py-2 px-4 rounded ">
+                                    Buy Now
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Premium Plan */}
+                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 className="text-2xl font-semibold mb-4 text-center">Ultimate</h2>
+                            <p className="mb-2">10 referral credits</p>
+                            <p className="mb-2">Access to Job listings</p>
+                            <p className="mb-2">Starts at</p>
+                            <p className="font-bold mb-2"><s>&#8377;8000</s><span className="mx-2">&#8377;5999</span></p>
+                            <div className="text-center">
+                                <button onClick={paymentButton2} className="bg-blue-700 text-white py-2 px-4 rounded ">
+                                    Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>)}
+
+                {confirmPayment && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div ref={modalRef} className="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
+                            <p>Subscription Type: <span className="font-bold">Standard</span></p>
+                            <p>Price: <span className="font-bold">&#8377;1299</span></p>
+                            <p>Name <span className="font-bold">{name}</span></p>
+                            <p>Email <span className="font-bold">{email}</span></p>
+                            <div className=" mt-4 flex justify-center">
+                                <button onClick={() => setConfirmPayment(false)} className="bg-gray-500 text-white py-2 px-4 rounded mr-2">Cancel</button>
+                                <button onClick={() => displayRazorpay("STANDARD")} className="bg-blue-700 text-white py-2 px-4 rounded">Make payment</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {confirmPayment1 && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
+                            <p>Subscription Type: <span className="font-bold">Premium</span></p>
+                            <p>Price: <span className="font-bold">&#8377;2999</span></p>
+                            <p>Name <span className="font-bold">{name}</span></p>
+                            <p>Email <span className="font-bold">{email}</span></p>
+                            <div className=" mt-4 flex justify-center">
+                                <button onClick={() => setConfirmPayment1(false)} className="bg-gray-500 text-white py-2 px-4 rounded mr-2">Cancel</button>
+                                <button onClick={() => displayRazorpay("PREMIUM")} className="bg-blue-700 text-white py-2 px-4 rounded">Make payment</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {confirmPayment2 && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
+                            <p>Subscription Type: <span className="font-bold">Ultimate</span></p>
+                            <p>Price: <span className="font-bold">&#8377;5999</span></p>
+                            <p>Name <span className="font-bold">{name}</span></p>
+                            <p>Email <span className="font-bold">{email}</span></p>
+                            <div className=" mt-4 flex justify-center">
+                                <button onClick={() => setConfirmPayment2(false)} className="bg-gray-500 text-white py-2 px-4 rounded mr-2">Cancel</button>
+                                <button onClick={() => displayRazorpay("ULTIMATE")} className="bg-blue-700 text-white py-2 px-4 rounded">Make payment</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className="bg-[#00145e] w-full p-4 my-2">
+                <footer className='sm:mx-auto max-w-screen-lg'>
+                    <div className='grid grid-cols-2 gap-4'>
+                        <div className='text-white justify-self-start'>
+                            <h2>Company</h2>
+                            <p>About us</p>
+                        </div>
+                        <div className='text-white justify-self-end'>
+                            <h2>Help & Support</h2>
+                            <p>Contact Us</p>
+                        </div>
+                    </div>
+                    <div className='text-white text-center mt-4'>
+                        <p>Copyright &copy; {new Date().getFullYear()}</p>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    );
+}
+
+export default Subscribe;

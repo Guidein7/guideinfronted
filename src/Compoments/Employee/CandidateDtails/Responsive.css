@@ -1,0 +1,32 @@
+/* Responsive Styles for Modal Form */
+.modal-content {
+    max-width: 80vw;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  /* Add a bottom margin to the modal content */
+
+  
+  /* For smaller screens (e.g., mobile) */
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 80vw;
+      padding: 1rem;
+    }
+  }
+  
+  /* For medium screens (e.g., tablet) */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .modal-content {
+      width: 80vw;
+      padding: 1.5rem;
+    }
+  }
+  
+  /* For larger screens (e.g., desktop) */
+  @media (min-width: 1025px) {
+    .modal-content {
+      width: 50vw !important;
+      padding: 1.5rem;
+    }
+  }

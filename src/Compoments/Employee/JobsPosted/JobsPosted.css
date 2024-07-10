@@ -1,0 +1,31 @@
+/* Ensure body does not scroll when modal is open */
+body.modal-open {
+    overflow: hidden;
+   
+}
+
+/* Style for the modal background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50; /* Increased z-index value */
+  }
+/* Style for the modal content */
+.modal-content {
+
+    background-color:white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-height: 90vh;
+    overflow-y: auto;
+    width: 50%;
+    max-width: 100px;
+}
