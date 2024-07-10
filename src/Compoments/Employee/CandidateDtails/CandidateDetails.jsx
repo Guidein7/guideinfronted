@@ -15,7 +15,6 @@ import { IoMdLaptop } from "react-icons/io";
 import '../CandidateDtails/Responsive.css';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import GuideinLogo from '../../../assets/GuideinLogo.png'
-import { CgProfile } from "react-icons/cg";
 import config from '../../../config';
 import SideBar from '../SideBar/SideBar';
 
