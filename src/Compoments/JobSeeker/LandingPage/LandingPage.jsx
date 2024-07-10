@@ -79,33 +79,34 @@ const LandingPage = () => {
             </nav>
             <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between ">
                 <div className='flex flex-col justify-between items-center'>
-                
-                <div className="flex justify-center items-center p-2  lg:p-6 ">
-                    <img src={guideinLandingPage} alt="Landing Page" className=" h-auto max-w-full" />
-                </div>
                 <div className='text-center pt-20 lg:p-6'>
-                    <h1 className='font-bold text-lg mb-1'>To Get Referral</h1>
-                    <Link to='/subscribe' className='bg-blue-700 text-white p-2 rounded-lg'>Subscribe Now</Link>
+                        <h1 className='font-bold text-lg mb-1'>To Get Referral</h1>
+                        <Link to='/subscribe' className='bg-blue-700 text-white p-2 rounded-lg'>Subscribe Now</Link>
+                    </div>
+
+                    <div className="flex justify-center items-center p-2  lg:p-6 ">
+                        <img src={guideinLandingPage} alt="Landing Page" className=" h-auto max-w-full" />
+                    </div>
+                    
                 </div>
-                </div>
-          
-            <footer className="bg-[#00145e] w-full p-4">
-                <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="text-white justify-self-start">
-                            <h2>Company</h2>
-                            <p>About us</p>
+
+                <footer className="bg-[#00145e] w-full p-4">
+                    <div className="sm:mx-auto max-w-screen-lg">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="text-white justify-self-start">
+                                <h2>Company</h2>
+                                <p>About us</p>
+                            </div>
+                            <div className="text-white justify-self-end">
+                                <h2>Help & Support</h2>
+                                <p>Contact Us</p>
+                            </div>
                         </div>
-                        <div className="text-white justify-self-end">
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                        <div className="text-white text-center mt-4">
+                            <p>Copyright &copy; 2024</p>
                         </div>
                     </div>
-                    <div className="text-white text-center mt-4">
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </div>
-            </footer>
+                </footer>
             </div>
         </div>
     )
