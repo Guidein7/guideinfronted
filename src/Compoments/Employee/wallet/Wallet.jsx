@@ -32,9 +32,11 @@ function Wallet() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [walletData, setWalletData] = useState({});
-    const[upiMessage,setUpiMessage] = useState('');
-    const[lowBalanceMessage,setLowBalanceMessage] = useState('');
-    const [withdrawInProgress,setWithDrawInProgress] = useState('')
+    const [upiMessage, setUpiMessage] = useState('');
+    const [lowBalanceMessage, setLowBalanceMessage] = useState('');
+    const [withdrawInProgress, setWithDrawInProgress] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
+
 
 
     useEffect(() => {
@@ -45,11 +47,11 @@ function Wallet() {
     };
 
     const handleSaveClick = () => {
-       
+
         const upiPattern = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
         if (!inputValue.trim()) {
             setError('UPI ID cannot be empty');
-            
+
             return;
         }
 
@@ -59,7 +61,7 @@ function Wallet() {
         }
         setError('')
         // Perform save operation with the updated inputValue, e.g., update state, send to server, etc.
-        console.log('Updated value:', inputValue);
+
         const formData = {
             email: claim,
             upiId: inputValue
@@ -71,10 +73,22 @@ function Wallet() {
             },
 
         }).then(response => {
-            console.log(response);
+
             getwalletDetails();
         }).catch(error => {
-            console.log(error);
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error fetching data');
+                setTimeout(() => {
+                    setErrorMessage('');
+                }, 2000);
+            }
         }).finally(() => setLoading(false))
 
         setIsEditing(false);
@@ -93,7 +107,7 @@ function Wallet() {
             },
 
         }).then(response => {
-            console.log(response);
+
             setWalletData(response.data)
 
             if (response.data.upiId) {
@@ -104,7 +118,19 @@ function Wallet() {
                 setIsEditing(true);
             }
         }).catch(error => {
-            console.log(error)
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error fetching data');
+                setTimeout(() => {
+                    setErrorMessage('');
+                }, 2000);
+            }
         }).finally(() => setLoading(false))
 
 
@@ -112,41 +138,53 @@ function Wallet() {
 
 
     const requestWithDraw = () => {
-        if(!inputValue){
+        if (!inputValue) {
             setUpiMessage('please fill bank datails to request withdraw')
             setTimeout(() => {
                 setUpiMessage('');
-            },2000);
+            }, 2000);
             return;
 
         }
-        if(walletData.withdrawInProgress > 0){
+        if (walletData.withdrawInProgress > 0) {
             setWithDrawInProgress('your previous withdraw request is already in progress');
             setTimeout(() => {
                 setWithDrawInProgress('');
-            },2000);
-            return; 
+            }, 2000);
+            return;
         }
 
-        if(walletData.currentBalance > 0) {
+        if (walletData.currentBalance > 0) {
             setLoading(true);
-            axios.put(`${config.api.baseURL}${config.api.jobPoster.requestWithdraw}${claim}`,{},{
+            axios.put(`${config.api.baseURL}${config.api.jobPoster.requestWithdraw}${claim}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             }).then(response => {
-                console.log(response);
+
                 getwalletDetails();
             }).catch(error => {
-                console.log(error);
+                if (error.response.status === 403) {
+                    setErrorMessage('session Expired');
+                    setTimeout(() => {
+                        setErrorMessage('');
+                        handleLogout();
+                    }, 2000);
+                }
+                else {
+                    setErrorMessage('Error fetching data');
+                    setTimeout(() => {
+                        setErrorMessage('');
+                    }, 2000);
+                }
             }).finally(() => setLoading(false));
         }
         else {
             setLowBalanceMessage('your current balance is low')
             setTimeout(() => {
                 setLowBalanceMessage('');
-               
-            },2000);
+
+            }, 2000);
 
         }
     }
@@ -166,58 +204,61 @@ function Wallet() {
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
             <SideBar />
-            <div className='flex-grow  ml-0 xl:ml-[20%] px-0 lg:px-10 mt-8 xl:mt-0'>
-                <h1 className='font-bold  mt-5 ml-2'>wallet</h1>
+            <div className='flex-grow pt-10 lg:pt-2  ml-0 xl:ml-[20%] px-0 lg:px-10 mt-8 xl:mt-0'>
+                <h1 className='font-bold text-xl   ml-5'>Wallet</h1>
 
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>) : (
                     <div>
-                        {lowBalanceMessage && (<p className='text-red-500 text-center'>{lowBalanceMessage}</p>)}
+                        {lowBalanceMessage && (<p className='text-red-500  text-center'>{lowBalanceMessage}</p>)}
                         {upiMessage && (<p className='text-red-500 text-center'>{upiMessage}</p>)}
-                        {withdrawInProgress && (<p className='text-red-500 text-center'>{withdrawInProgress}</p>)}
+                        {withdrawInProgress && (<p className='text-red-500 fixed top-12 lg:top-2 bg-white p-3 text-center'>{withdrawInProgress}</p>)}
+                        {errorMessage && (<p className='text-red-500 fixed top-12 lg:top-2 bg-white p-3 text-center'>{errorMessage}</p>)}
+                        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 lg:my-5'>
+                            <div className='bg-blue-500 text-white text-center py-5 rounded-lg flex-1 mx-10'>
 
-                        <div className='ml-1 my-5  flex flex-col justify-center'>
+                                <p className=' text-lg'>Total Referrals</p>
+                                <span className=' text-lg'>{walletData.totalReferrals}</span>
 
-                            <div className='my-3'>
-                                <div className='grid grid-cols-2 gap-10 xl:gap-0'>
-                                    <p className='w-full'>Total referrals:</p>
-                                    <span className=''>{walletData.totalReferrals}</span>
-                                </div>
                             </div>
-                            <div className='my-3'>
-                                <div className='grid grid-cols-2 gap-10 xl:gap-0'>
-                                    <p className='w-full'>Total Money Earned:</p>
-                                    <span className=''>{walletData.totalEarned}</span>
-                                </div>
+                            <div className='bg-blue-500 text-white text-center rounded-lg py-5 flex-1 mx-10'>
+
+                                <p className=' text-lg'>Total Money Earned</p>
+                                <span className=' text-lg'>&#8377;{walletData.totalEarned}</span>
+
                             </div>
-                            <div className='my-3'>
-                                <div className='grid grid-cols-2 gap-10 xl:gap-0'>
-                                    <p className='w-full'>Amount Withdrawn:</p>
-                                    <span className=''>{walletData.amountWithdrawn}</span>
-                                </div>
+                            <div className='bg-blue-500 text-white text-center  rounded-lg py-5 flex-1 mx-10'>
+
+                                <p className='text-lg'>Amount Withdrawn</p>
+                                <span className='text-lg'>&#8377;{walletData.amountWithdrawn}</span>
+
                             </div>
-                            <div className='my-3'>
-                                <div className='grid grid-cols-2 gap-10 xl:gap-0'>
-                                    <p className='w-full'>Current balance:</p>
-                                    <div className=''>
-                                        <span className=''>{walletData.currentBalance}</span>
-                                        <button onClick={requestWithDraw} className='mx-5 bg-gray-700 text-white p-2 rounded-lg '><span className='mr-2'>&#8377;</span>
-                                            Withdraw</button>
-                                    </div>
+                            <div className='bg-blue-500 text-white py-3 text-center rounded-lg flex-1 mx-10'>
+
+                                <p className='f text-lg'>Current balance</p>
+
+                                <div className='text-center'>
+                                    <span className=' text-lg'>&#8377;{walletData.currentBalance}</span>
+                                    <button onClick={requestWithDraw} className=' bg-green-500 mx-auto text-white p-2  block rounded-lg'>
+                                        Withdraw
+                                    </button>
                                 </div>
+
+
                             </div>
-                            <div className='my-3'>
-                                <div className='grid grid-cols-2 gap-10 xl:gap-0'>
-                                    <p className='w-full '>Withdrawn in progress:</p>
-                                    <span className=''>{walletData.withdrawInProgress}</span>
-                                </div>
+                            <div className='bg-blue-500 text-white text-center rounded-lg py-5 flex-1 mx-10'>
+
+                                <p className=' text-lg'>Withdrawn in progress</p>
+                                <span className=' text-lg'>&#8377;{walletData.withdrawInProgress}</span>
+
                             </div>
                         </div>
-                        <h1 className='font-bold'>Bank details</h1>
-                        <div className='grid  grid-cols-2'>
-                            <p className='m-0'>UPI Id/PhonePe/Gpay No</p>
+
+                        <h1 className='font-bold text-lg mb-1 mt-4 mx-10'>Bank details</h1>
+                        <div className='grid  grid-cols-1 mx-10  mb-10'>
+                            <p className=''>UPI Id/PhonePe/Gpay No</p>
                             {isEditing ? (
                                 <div className='flex items-center'>
                                     <input
@@ -228,7 +269,7 @@ function Wallet() {
                                         placeholder='enter upi id '
                                     />
                                     <button
-                                        className='ml-2 p-1 border rounded'
+                                        className='ml-2 p-1 border  rounded'
                                         onClick={handleSaveClick}
                                     >
                                         Save
@@ -237,9 +278,9 @@ function Wallet() {
                                 </div>
                             ) : (
                                 <div className='flex items-center'>
-                                    <span className='ml-4'>{inputValue}</span>
+                                    <span className=' border border-black px-10 rounded-lg py-1'>{inputValue}</span>
                                     <button
-                                        className='ml-2 p-1 border rounded'
+                                        className='ml-2 p-2 border bg-gray-200 boredr-gray-300 rounded'
                                         onClick={handleEditClick}
                                     >
                                         Edit
@@ -247,33 +288,35 @@ function Wallet() {
                                 </div>
                             )}
                         </div>
-                        <h1 className='font-bold mt-2'>
-                            Transcation history
-                        </h1>
-                        {walletData?.transactionHistory?.map((item, index) => (
-                            <div className='p-2 my-1 inline' key={index}>
-                                <p>Date : {item.transactionOn}</p>
-                                <p>Amount : {item.amount}</p>
-                                <p>Transaction Id : {item.transactionId}</p>
-                            </div>
-                        ))}
+
+                        {walletData.transactionHistory?.length > 0 && (<div>
+                            <h1 className='font-bold mt-2'>
+                                Transcation history
+                            </h1>
+                            {walletData?.transactionHistory?.map((item, index) => (
+                                <div className='p-2 my-1 inline' key={index}>
+                                    <p>Date : {item.transactionOn}</p>
+                                    <p>Amount : {item.amount}</p>
+                                    <p>Transaction Id : {item.transactionId}</p>
+                                </div>
+                            ))}
+                        </div>)}
 
                     </div>)}
 
             </div>
-            <footer className="bg-[#00145e]  p-4 ml-0 xl:ml-[20%]">
+            <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
                 <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 ">
                         <div className="text-white justify-self-start">
-                            <h2>Company</h2>
-                            <p>About us</p>
+
                         </div>
                         <div className="text-white justify-self-end">
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className="text-white text-center mt-4">
+                    <div className="text-white text-center ">
                         <p>Copyright &copy; 2024</p>
                     </div>
                 </div>

@@ -1,118 +1,3 @@
-// import { useState } from 'react';
-// import GuideinLogo from '../../../assets/GuideinLogo.png';
-// import { Link, useLocation,useNavigate } from 'react-router-dom';
-// import axios from 'axios';
-
-// function EmployeeVerification() {
-//     const [otp, setOtp] = useState(''); // Changed from verificationCode to otp
-//     const location = useLocation();
-//     const { email, mobile } = location.state;
-//     console.log(email);
-//     const [error, setError] = useState('');
-//     const [success, setSuccess] = useState('');
-//     const navigate = useNavigate();
-
-//     const sendVerificationCode = () => {
-//         // Implement logic to send verification code via SMS
-//         // You might use a service like Twilio or your own backend for this
-//         // This function could trigger an API call to your server, which then sends the SMS
-//     };
-
-//     const handleSubmit = (e) => {
-//         e.preventDefault();
-//         const role = "JOB_SEEKER"
-//         const verifyData = { email, mobile, otp, role };
-//         if(otp == 4875){
-//             setSuccess("Successfully registered!");
-//                      setTimeout(() => {
-//                         navigate('/login');
-//                     }, 2000);
-                    
-//         }
-//         else {
-//             setError("Invalid OTP. Please try again.");
-// }
-        
-//         // axios.post('https://96c4-106-222-125-156.ngrok-free.app/api/guidein/v1/auth/register/otpvalidate', verifyData)
-//         //     .then(response => {
-//         //         console.log(response);
-//         //         // Check response status to determine if verification was successful
-//         //         if (response.status === 200) {
-//         //             setSuccess("Successfully registered!");
-//         //             setTimeout(() => {
-//         //                 navigate('/login');
-//         //             }, 2000); // Navigate to login page after 2 seconds
-//         //         } else {
-//         //             setError("Invalid OTP. Please try again.");
-//         //         }
-//         //     })
-//         //     .catch(error => {
-//         //         console.log(error);
-//         //         setError("An error occurred while verifying the OTP. Please try again.");
-//         //     });
-//     };
-
-//     return (
-//         <div className="bg-[#f5faff] min-h-screen  flex flex-col justify-between">
-           
-//             <nav className="bg-[#f8f9fa] py-4 mb-1">
-//                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-//                     <div className="lg:block">
-//                         <Link to="/employee-landingpage">
-//                             {' '}
-//                             <img src={GuideinLogo} alt="Logo" className="h-8" />{' '}
-//                         </Link>
-//                     </div>
-//                 </div>
-//             </nav>
-//             {success && (
-//   <div className=" w-full max-w-sm mx-auto bg-green-500 text-white p-4 rounded-md">
-//     {success}
-//   </div>
-// )}
-
-//             <div className="w-full max-w-sm mx-auto flex   align-center">
-//                 <form className="bg-white shadow-md align-center rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-//                     <div className="mb-4">
-//                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="verificationCode">
-//                             Verification Code
-//                         </label>
-//                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="verificationCode" name="verificationCode" onChange={(e) => setOtp(e.target.value)} type="text" placeholder="Verification Code" /> {/* Changed from verificationCode to otp */}
-//                     </div>
-//                     <p className="" type="button" onClick={sendVerificationCode}>
-//                         Send Verification Code
-//                     </p>
-//                     <div className="text-center">
-//                         <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6" type="submit">
-//                             Verify
-//                         </button>
-//                     </div>
-//                     {error && <div className="text-red-500">{error}</div>}
-                    
-//                 </form>
-//             </div>
-//             <div className="bg-[#00145e] w-full p-4 my-2">
-//                 <footer className='sm:mx-auto max-w-screen-lg'>
-//                     <div className='grid grid-cols-2 gap-4'>
-//                         <div className='text-white justify-self-start'>
-//                             <h2>Company</h2>
-//                             <p>About us</p>
-//                         </div>
-//                         <div className='text-white justify-self-end'>
-//                             <h2>Help & Support</h2>
-//                             <p>Contact Us</p>
-//                         </div>
-//                     </div>
-//                     <div className='text-white text-center mt-4'>
-//                         <p>Copyright &copy; {new Date().getFullYear()}</p>
-//                     </div>
-//                 </footer>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default EmployeeVerification;
 import React, { useState } from 'react';
 import GuideinLogo from '../../../assets/GuideinLogo.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -123,38 +8,43 @@ function EmployeeVerification() {
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [otpMessage, setOtpMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
     const location = useLocation();
-    const { email, mobile } = location.state;
+    const { email, mobile,sessionUUID } = location.state;
     const navigate = useNavigate();
-
     const resendVerification = () => {
-       
-     const role = "JOB_POSTER";
-     //const newPassword = password;
-      const formData = {email,mobile,role}
-      console.log('Password reset successful');
-      axios.post(`${config.api.baseURL}${config.api.jobPoster.resendOtp}`,formData).then(response => {
-        console.log(response);
-      }).catch(error => {
-      console.log(error);
-      })
+        const role = "JOB_POSTER";
+        const formData = { email, mobile, role }
 
+        axios.post(`${config.api.baseURL}${config.api.jobPoster.resendOtp}`, formData).then(response => {
+            if (response.status === 200) {
+                setOtpMessage('Otp sent successfully');
+                setTimeout(() => {
+                    setOtpMessage('');
+                }, 2000)
+            }
+        }).catch(error => {
+            setOtpMessage('Error while sending otp please try again');
+            setTimeout(() => {
+                setOtpMessage('');
+            }, 2000)
+
+        })
     }
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        setError('');
+        setError("");
+
         if (!otp) {
             setErrorMessage('OTP is required');
             return;
         }
+        setErrorMessage('');
         const role = "JOB_POSTER"
-        const verifyData = { email, mobile, otp, role };
-        
+        const verifyData = { email, mobile, otp, role,sessionUUID };
         axios.post(`${config.api.baseURL}${config.api.jobPoster.verification}`, verifyData)
             .then(response => {
-                console.log(response);
-                // Check response status to determine if verification was successful
                 if (response.status === 200) {
                     setSuccess("Successfully registered!");
                     setTimeout(() => {
@@ -165,62 +55,64 @@ function EmployeeVerification() {
                 }
             })
             .catch(error => {
-                console.log(error);
                 setError("An error occurred while verifying the OTP. Please try again.");
             });
     };
-
     return (
         <div className="bg-[#f5faff] min-h-screen  flex flex-col justify-between">
             <nav className="bg-[#f8f9fa] py-4 mb-1">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <div className="lg:block">
-                        <Link to="/employee-landingpage">
+                        <Link to="/">
                             {' '}
                             <img src={GuideinLogo} alt="Logo" className="h-8" />{' '}
                         </Link>
                     </div>
                 </div>
             </nav>
+            {otpMessage && (
+                <p className='text-green-400 text-center'>{otpMessage}</p>
+            )}
             <div className="w-full max-w-sm mx-auto flex align-center">
-                <form className="bg-white shadow-md align-center rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+
+
+                <form className="bg-white  shadow-md align-center rounded p-8 w-80 lg:w-full mx-auto mb-4" onSubmit={handleSubmit}>
+                    <h1 className='font-bold text-center mb-6'>Verification </h1>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="verificationCode">
-                            Verification Code
-                        </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="verificationCode" name="verificationCode" onChange={(e) => setOtp(e.target.value)} type="text" placeholder="Verification Code" maxLength={6} />
+
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="otp" name="otp" value={otp} onChange={(e) => setOtp(e.target.value)} type="text" placeholder="Enter OTP" maxLength={6} />
+                        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
                     </div>
-                    <p className="" type="button" onClick={resendVerification} >
-                        Send Verification Code
-                    </p>
+
                     <div className="text-center">
-                        <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6" type="submit">
+                        <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6 mx-2" type="submit"   >
                             Verify
+                        </button>
+                        <button className="bg-orange-400 text-white p-2 rounded" type="button" onClick={resendVerification} >
+                            Resend OTP
                         </button>
                     </div>
                     {error && <div className="text-red-500">{error}</div>}
                     {success && <div className="text-green-500">{success}</div>}
                 </form>
             </div>
-            <div className="bg-[#00145e] w-full p-4 my-2">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e]  w-full  ">
+                <footer className=' sm:mx-auto max-w-screen-lg'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+                           
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtact-us' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
+                    <div className='text-white text-center pb-1 '>
+                        <p>Copyright &copy; 2024</p>
                     </div>
                 </footer>
             </div>
         </div>
     );
 }
-
 export default EmployeeVerification;

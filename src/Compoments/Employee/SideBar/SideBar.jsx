@@ -1,7 +1,7 @@
 
 
 import GuideinLogo from '../../../assets/GuideinLogo.png'
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import { MdOutlineCurrencyRupee, MdPolicy } from "react-icons/md";
 import { TiTickOutline } from "react-icons/ti";
 import { IoAlarmOutline } from "react-icons/io5";
@@ -31,6 +31,9 @@ const SideBar = () => {
 };
 
 const[errorMessage,setErrorMessage] = useState('')
+const sidebarRef = useRef(null);
+  const buttonRef = useRef(null);
+
 
   const fetchProfile = () => {
     axios.get(`${config.api.baseURL}${config.api.jobPoster.getProfile}${claim}`, {
@@ -67,9 +70,30 @@ const handleLogout = () => {
   dispatch(logoutEmployee());
   navigate('/employee-login');
 };
+const handleClickOutside = (event) => {
+    if (
+      sidebarRef.current && 
+      !sidebarRef.current.contains(event.target) && 
+      !buttonRef.current.contains(event.target)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 return(
-  <div>
+  <div className='bg-[#f8f9fa]  w-full fixed top-0 sm:left-0 py-8 md:bg-transparent md:relative md:py-0'>
      <button
+        ref={buttonRef}
                 className="absolute top-2 left-2 z-20 p-2 text-gray-900 bg-white rounded-md shadow-md xl:hidden"
                 onClick={toggleSidebar}
                 aria-label="Toggle sidebar"
@@ -78,15 +102,15 @@ return(
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
-            <div className={`fixed top-0 left-0 h-full w-3/4 md:w-2/5 xl:w-1/5 transition-transform ${isOpen ? '' : '-translate-x-full'} bg-white xl:shadow-2xl xl:translate-x-0 dark:bg-gray-800`} aria-label="Sidebar">
-                <div className="h-full p-5 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+            <div  ref={sidebarRef} className={`fixed top-0 left-0 h-full w-2.5/4 md:w-2/5 xl:w-1/5 transition-transform ${isOpen ? '' : '-translate-x-full'} bg-white xl:shadow-2xl xl:translate-x-0 dark:bg-gray-800`} aria-label="Sidebar">
+                <div className="h-full p-5 pb-4 overflow-y-auto bg-white">
                     <div>
-                        <Link to='/employee-home' ><img src={GuideinLogo} alt="logo"  className='h-8 mx-auto'/></Link>
+                        <Link to='/employee-home' ><img src={GuideinLogo} alt="logo"  className='h-8 mx-auto hidden lg:block'/></Link>
                     </div>
-                    <ul className="space-y-5 font-medium pt-5">
+                    <ul className="space-y-5 font-medium pt-20">
                         <li>
                             <Link to='/employee-profile'
-                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
 
                                 <span> <CgProfile className='mx-2' /></span>
                                 <span>Profile </span>
@@ -96,7 +120,7 @@ return(
 
                         <li>
                             <Link to='/employee-dashboard'
-                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-1">
                                     <IoMdLaptop />
                                 </span>
@@ -105,7 +129,7 @@ return(
                         </li>
                         <li>
                             <Link to='/job-post'
-                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-1">
                                     <TiTickOutline />
                                 </span>
@@ -114,7 +138,7 @@ return(
                         </li>
                         <li>
                             <Link to='/referrels-requested'
-                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-1">
                                     <IoAlarmOutline />
                                 </span>
@@ -123,7 +147,7 @@ return(
                         </li>
                         <li>
                             <Link to='/referred-jobs'
-                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-1">
                                     <MdOutlineModelTraining />
                                 </span>
@@ -132,7 +156,7 @@ return(
                         </li>
                         <li>
                             <button onClick={fetchProfile}
-                                className="flex items-center w-full p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                className="flex items-center w-full p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-1">
                                     <MdOutlineCurrencyRupee />
                                 </span>
@@ -143,7 +167,7 @@ return(
                         <li>
                             <a
                                 onClick={handleLogout}
-                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg dark:text-white border shadow-xl hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-700 group">
+                                className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-2">
                                     <HiOutlineLogout />
                                 </span>
@@ -153,6 +177,11 @@ return(
                     </ul>
                 </div>
             </div>
+            <div className="fixed top-2 right-2 z-20 xl:hidden">
+        <Link to='/employee-home'>
+          <img src={GuideinLogo} alt="logo" className='h-8' />
+        </Link>
+      </div>
   </div>
 )
 

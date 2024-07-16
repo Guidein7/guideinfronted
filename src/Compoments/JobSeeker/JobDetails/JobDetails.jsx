@@ -10,6 +10,8 @@ import { FaFilePdf } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import { IoIosArrowBack } from "react-icons/io";
+
 
 function JobDetails() {
     const log = useSelector(state => state.log);
@@ -19,7 +21,6 @@ function JobDetails() {
     const mobile = decoded.mobile;
     const name = decoded.username;
     const [profileCompletionMessage, setProfileCompletionMessage] = useState('');
-    
     const [isOpen, setIsOpen] = useState(false);
     const [requested, setRequested] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
@@ -28,7 +29,6 @@ function JobDetails() {
     const location = useLocation();
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
-    const [resume, setResume] = useState(null);
     const [isProfileCompleted, setIsProfileCompleted] = useState(false);
     const { job } = location.state;
     const jobId = job.jobId;
@@ -37,7 +37,6 @@ function JobDetails() {
     const [formData, setFormData] = useState({
         resume: null,
     });
-
     const fileInputRef = useRef();
     const [isNewResumeUploaded, setIsNewResumeUploaded] = useState(false)
     const [resumeFileName, setResumeFileName] = useState('')
@@ -45,15 +44,16 @@ function JobDetails() {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [subscribeMessage, setSubscribeMessage] = useState(false);
     const [isCredits, setIscredits] = useState(false);
-    const [creditMessage, setCreditMessage] = useState('')
-    const[savedJob,setSavedJob] = useState(job.saved)
+    const [savedJob, setSavedJob] = useState(job.saved)
+    const [uploadedResumeURL, setUploadedResumeURL] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+    const dispatch = useDispatch();
+    const [resumeUploadMessge,setResumeUploadMessage] = useState('')
 
     useEffect(() => {
-
         getProfileStatus();
         fetchJobs();
         checkSubscription();
-
     }, []);
 
     const getProfileStatus = () => {
@@ -64,20 +64,31 @@ function JobDetails() {
                 "ngrok-skip-browser-warning": "69420"
             },
         })
-            .then(response => {
-                console.log(response);
-                if (response.status === 200) {
-                    setIsProfileCompleted(true)
-                    setProfile(response.data)
-                }
-                else if (response.status === 204) {
-                    setIsProfileCompleted(false);
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
-            .finally(() => setLoading(false));
+        .then(response => {
+           if (response.status === 200) {
+                setIsProfileCompleted(true)
+                setProfile(response.data)
+            }
+            else if (response.status === 204) {
+                setIsProfileCompleted(false);
+            }
+        })
+        .catch(error => {
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error while fetching profile');
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
+        })
+        .finally(() => setLoading(false));
     }
 
     const checkSubscription = () => {
@@ -89,8 +100,6 @@ function JobDetails() {
             }
 
         }).then(response => {
-            console.log(response);
-            console.log("subscription status");
             if (response.status === 200) {
                 setIsSubscribed(true)
                 setProfile(response.data)
@@ -99,22 +108,23 @@ function JobDetails() {
                 setIsSubscribed(false);
             }
         }).catch(error => {
-            console.log(error);
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error while fetching subscription status');
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
         }).finally(() => setLoading(false));
 
     }
 
-    const handleBackClick = () => {
-        navigate(-1); // Go back to the previous page
-    };
-    if (!location.state || !location.state.job) {
-        return <div>Loading...</div>;
-    }
-
-    const dispatch = useDispatch();
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
-    };
     const handleLogout = () => {
         navigate('/login');
         dispatch(logoutUser());
@@ -140,9 +150,9 @@ function JobDetails() {
         }
     }
 
-    const handleSaveJob =  () => {
+    const handleSaveJob = () => {
         setLoading(true);
-        axios.post( `${config.api.baseURL}${config.api.jobSeeker.saveJob}`,{},
+        axios.post(`${config.api.baseURL}${config.api.jobSeeker.saveJob}`, {},
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -153,13 +163,25 @@ function JobDetails() {
                 }
 
             }
-        ).then(response => { 
-           fetchJobs();
+        ).then(response => {
+            fetchJobs();
         }).catch(error => {
-            console.log(error)
-        }) .finally ( ()=> {
-            setLoading(false) 
-        }) 
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error saving job');
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
+        }).finally(() => {
+            setLoading(false)
+        })
     };
 
     function base64ToBlob(base64, mime) {
@@ -178,21 +200,27 @@ function JobDetails() {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type !== 'application/pdf') {
-            alert('Please upload a PDF file.');
+            setResumeUploadMessage('please upload a pdf file')
+            setTimeout(() => {
+                setResumeUploadMessage('')
+            }, 2000);
             return;
         }
         setFormData({
             ...formData,
             resume: file
         });
+
         if (file) {
             setResumeFileName(file.name);
-            setIsNewResumeUploaded(true);  // Set the flag to true when a new file is uploaded
+            setIsNewResumeUploaded(true);
+            const fileURL = URL.createObjectURL(file);
+            setUploadedResumeURL(fileURL);
         }
     };
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        
         let formDetails = { jobId: jobId, jobPostedBy: jobPostedBy, requestedBy: email }
         const form = new FormData();
         form.append('jobId', formDetails.jobId);
@@ -203,7 +231,6 @@ function JobDetails() {
                 form.append('resume', formData.resume);
             }
         } else {
-            // Convert base64 resume to Blob and append to form
             const oldResumeBlob = base64ToBlob(profile.resume, 'application/pdf');
             form.append('resume', oldResumeBlob, `${formData.name}.resume.pdf`);
         }
@@ -214,7 +241,7 @@ function JobDetails() {
                 Authorization: `Bearer ${token}`,
             },
         }).then(response => {
-           
+
             if (response.status === 200) {
                 setShowDetails(false);
                 setSuccessMessage(true);
@@ -226,15 +253,26 @@ function JobDetails() {
                 setShowDetails(false);
                 setIscredits(true);
             }
-            
-        })
 
-            .finally(() => setLoading(false))
+          else  if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error while fetching jobs');
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
+        })
+         .finally(() => setLoading(false))
     }
-   
+
     const fetchJobs = async () => {
         setLoading(true);
-
         axios.get(
             `${config.api.baseURL}${config.api.jobSeeker.fetchJobs}${email}`,
             {
@@ -246,35 +284,52 @@ function JobDetails() {
         ).then(response => {
             const jobi = response.data.find(jobsi => jobsi.jobId === jobId);
             if (jobi) {
-                setJobStatus(jobi.status); 
-                setSavedJob(jobi.saved); // Assuming 'status' is the key for job status in the response object
-            } 
-           
+                setJobStatus(jobi.status);
+                setSavedJob(jobi.saved);
+            }
         }).catch(error => {
-           
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error while fetching jobs');
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
         }).finally(() => setLoading(false))
 
     };
-
-
+    const showDetailsClose = () => {
+        setIsNewResumeUploaded(false);
+        setResumeFileName('');
+        setFormData({
+            resume: null
+        });
+        setShowDetails(false);
+    }
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className='flex-grow pt-24'>
+            <div className='flex-grow ml-0 xl:ml-[20%]'>
                 {loading ? (
                     <div className="flex flex-col justify-center items-center h-screen">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                         <p className="mt-4 text-gray-900">Loading...</p>
                     </div>
-                ) :
-                    (
+                ) :(
                         <div>
-
-                            <div className='pl-5 lg:px-10'>
-                                <IoMdArrowRoundBack onClick={handleBackClick} size={24} className='cursor-pointer my-1' />
-                                <h1 className='text-xl lg:text-2xl font-bold underline my-1'>{job.jobTitle}</h1>
-                                <p className='font-bold underline underline-offset-1 my-1 lg:my-2'> {job.companyName}</p>
+                            
+                            <div className='pl-5 pt-14 '>
+                                {errorMessage && (<p className='fixed bg-white p-2 text-red-500 text-center'>{errorMessage}</p>)}
+                                {/* <h1 onClick={handleBackClick} className='flex text-blue-500 underline'> <IoIosArrowBack   size={20}  /><span>Back</span></h1> */}
+                                <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job.jobTitle}</h1>
+                                <p className='font-bold  my-1 lg:my-2'> {job.companyName}</p>
                                 <p className='my-1 lg:my-2'> {job.jobLocation} ({job.workMode})</p>
                                 <p className='my-1 lg:my-2'>Job Type: {job.jobType}</p>
                                 <p className='my-1 lg:my-2'>Experience: {job.experienceRequired}</p>
@@ -282,23 +337,23 @@ function JobDetails() {
                                 <p className='font-bold my-3 lg:my-4'>Know more about the job</p>
                                 <a className='text-blue-700 underline break-words my-1' target="_blank" href={job.jobDescriptionLink} style={{ wordWrap: 'break-word' }}>{job.jobDescriptionLink}</a>
                                 <h1 className='font-bold my-3 lg:my-4'>Job Posted By</h1>
-                                <p> name: <span className='font-bold my-1 lg:my-2'> {job.jobPosterName}</span></p>
-                                <p className='my-1 lg:my-2'>company: <span>{job.companyName}</span></p>
+                                <p> Employee Name: <span className='font-bold my-1 lg:my-2'> {job.jobPosterName}</span></p>
+                                <p className='my-1 lg:my-2'>Company: <span>{job.companyName}</span></p>
                                 <div className='my-2 lg:my-4'>
                                     <button
                                         onClick={toggleRequest}
-                                        className={`bg-green-700 text-white p-2 rounded mr-2 ${jobStatus !== 'UN_REQUESTED' ? ' cursor-not-allowed' : ''}${jobStatus === 'REQUESTED' && 'bg-blue-700'} ${jobStatus === 'REJECTED' && 'bg-red-500'}`}
+                                        className={` ${jobStatus === 'REQUESTED'?'bg-blue-500 hover:bg-blue-500 text-white px-4 py-2 rounded':jobStatus === 'REFERRED'?'bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded':jobStatus === 'IN_VERIFICATION'?'bg-yellow-500 hover:bg-yellow-500 text-white px-4 py-2 rounded':(jobStatus === 'REJECTED'|| jobStatus === 'VERIFICATION_FAILED')?'bg-red-500 hover:bg-red-500 text-white px-4 py-2 rounded':'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'}`}
                                         disabled={jobStatus !== 'UN_REQUESTED'}
                                     >
-                                        {jobStatus === 'UN_REQUESTED' ? 'Request For Referral' : jobStatus}
+                                        {jobStatus === 'UN_REQUESTED' ? 'Request Referral' : jobStatus}
                                     </button>
                                     {jobStatus === 'UN_REQUESTED' && (
                                         <button
                                             onClick={handleSaveJob}
-                                            className={`font-bold rounded p-2 mx-1 ${savedJob?  'bg-gray-500 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white'}`}
+                                            className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 `}
                                             disabled={savedJob}
                                         >
-                                            {savedJob ? 'Saved' : 'Save Job'}
+                                            {savedJob ? 'Saved' : 'Save'}
                                         </button>
                                     )}
                                 </div>
@@ -315,8 +370,8 @@ function JobDetails() {
                                     <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
                                         <h1 className="text-lg font-bold text-center mb-4">You are requesting a job referral for</h1>
                                         <div>
-                                            <h1 className='text-xl font-bold underline mb-2'>{job.jobTitle}</h1>
-                                            <p className='font-bold underline mb-2'> {job.companyName}</p>
+                                            <h1 className='text-xl font-bold  mb-2'>{job.jobTitle}</h1>
+                                            <p className='font-bold  mb-2'> {job.companyName}</p>
                                             <p className='mb-2'> {job.jobLocation} ({job.workMode})</p>
                                             <p className='mb-2'>Experience: {job.experienceRequired}</p>
                                             <p className='mb-2'>Posted on: {job.postedOn}</p>
@@ -333,7 +388,7 @@ function JobDetails() {
                                 <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
                                     <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
                                         <span className="absolute top-2 right-2 text-xl cursor-pointer" onClick={() => setSubscribeMessage(false)}>&times;</span>
-                                        <p className="text-red-700">You are not subscribed with us to get a referral.</p>
+                                        <p className="text-red-700 text-center">Please subscribe with us to request a referral</p>
                                         <div className="text-center mt-2">
                                             <Link to="/subscribe" className="bg-blue-700 text-white p-2 rounded">Subscribe</Link>
                                         </div>
@@ -355,60 +410,72 @@ function JobDetails() {
                                     <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
                                         <p className="text-green-700">Your referral request was submitted successfully. You will be notified via SMS once you are referred.</p>
                                         <div className="text-center mt-2">
-                                            <button className="bg-gray-500 text-white p-2 rounded" onClick={() => setSuccessMessage(false)}>Close</button>
+                                            <button className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2" onClick={() => setSuccessMessage(false)}>Close</button>
                                         </div>
                                     </div>
                                 </div>
                             )}
                             {showDetails && (
                                 <div
-                                    className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2"
+                                    className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2 sm:px-4 md:px-6 modal"
                                     ref={modalRef}
                                 >
-                                    <div className="bg-white p-5 rounded shadow-md w-full max-w-md">
-                                        <h1 className="text-lg text-center font-bold mb-3">Confirm your Details</h1>
+                                    <div className="bg-white p-5 rounded shadow-md w-full max-w-md sm:max-w-lg md:max-w-2xl modal-content max-h-[90vh] overflow-y-auto">
+                                        <h1 className="text-xl font-bold text-center mb-4">Confirm your Details</h1>
+                                        {resumeUploadMessge && (<p className='text-center bg-white p-2 text-red-500 mx-auto'>{resumeUploadMessge}</p>)}
                                         <form onSubmit={handleSubmit}>
-                                            <div className='mb-2'>
-                                                <label className='block text-gray-700 text-start'><strong>Full Name</strong><span className='text-red-700'>*</span></label>
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                    <strong>Full Name</strong><span className="text-red-700">*</span>
+                                                </label>
                                                 <input
-                                                    type='text'
+                                                    type="text"
                                                     value={name}
-                                                    className='w-full px-3 py-2 border rounded-md'
+                                                    className="w-full px-3 py-2 border rounded-md"
                                                     readOnly
                                                 />
                                             </div>
-                                            <div className='mb-2'>
-                                                <label className='block text-gray-700 text-start'><strong>Email</strong><span className='text-red-700'>*</span></label>
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                    <strong>Email</strong><span className="text-red-700">*</span>
+                                                </label>
                                                 <input
-                                                    type='text'
+                                                    type="text"
                                                     value={email}
-                                                    className='w-full px-3 py-2 border rounded-md'
+                                                    className="w-full px-3 py-2 border rounded-md"
                                                     readOnly
                                                 />
                                             </div>
-                                            <div className='mb-2'>
-                                                <label className='block text-gray-700 text-start'><strong>Mobile</strong><span className='text-red-700'>*</span></label>
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                    <strong>Mobile</strong><span className="text-red-700">*</span>
+                                                </label>
                                                 <input
-                                                    type='text'
+                                                    type="text"
                                                     value={mobile}
-                                                    className='w-full px-3 py-2 border rounded-md'
+                                                    className="w-full px-3 py-2 border rounded-md"
                                                     readOnly
                                                 />
                                             </div>
-                                            <div className="mb-5">
-                                                <label className="block text-gray-700 text-start"><strong>Resume</strong></label>
+                                            <div className="mb-6">
+                                                <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                    <strong>Resume</strong>
+                                                </label>
                                                 {!isNewResumeUploaded && (
-
-                                                    <p className="cursor-pointer mb-3 flex " onClick={handleResumeView}><FaFilePdf className='mt-1' /> <span className='text-blue-500'>{name}.resume</span></p>
+                                                    <p className="cursor-pointer flex items-center text-blue-500 mb-2" onClick={handleResumeView}>
+                                                        <FaFilePdf className="mr-2" /> <span>{name}.pdf</span>
+                                                    </p>
                                                 )}
                                                 {resumeFileName && (
-                                                    <p className="text-gray-700">{resumeFileName}</p>
+                                                    <a href={uploadedResumeURL} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                                                        {resumeFileName}
+                                                    </a>
                                                 )}
-                                                <div className='' >
+                                                <div className="mt-2">
                                                     <button
                                                         type="button"
                                                         onClick={() => fileInputRef.current.click()}
-                                                        className="bg-blue-700 p-2 text-white  rounded focus:outline-none"
+                                                        className="bg-blue-700 text-white px-4 py-2 rounded focus:outline-none"
                                                     >
                                                         Update Resume
                                                     </button>
@@ -417,19 +484,26 @@ function JobDetails() {
                                                         name="resume"
                                                         onChange={handleFileChange}
                                                         ref={fileInputRef}
-                                                        style={{ display: 'none' }}
+                                                        className="hidden"
                                                     />
-                                                    <p className='text-xs text-red-500'> accept .pdf  (5mb)</p>
+                                                    <p className="text-xs mt-1 mx-2">Only .PDF (5 MB)</p>
                                                 </div>
                                             </div>
-                                            <div className='text-center'>
-                                                <button className='w-25 bg-gray-500 text-white p-2 rounded-md mx-2' onClick={() => setShowDetails(false)}>cancel</button>
-
-                                                <button type='submit' className='w-25 bg-blue-500 text-white p-2 rounded-md mx-2'>
+                                            <div className="text-center">
+                                                <button
+                                                    type="button"
+                                                    onClick={showDetailsClose}
+                                                    className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded mr-2"
+                                                >
                                                     Submit
                                                 </button>
                                             </div>
-
                                         </form>
                                     </div>
                                 </div>
@@ -439,24 +513,22 @@ function JobDetails() {
                         </div>
                     )}
             </div>
-            <div className="bg-[#00145e] w-full p-4">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e] w-full p-1 ">
+                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
+                    <div className='text-white text-center pb-1'>
                         <p>Copyright &copy; {new Date().getFullYear()}</p>
                     </div>
                 </footer>
             </div>
-
         </div >
     );
 }

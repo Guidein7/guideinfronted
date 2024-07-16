@@ -87,7 +87,7 @@ function SavedJobs() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className="flex flex-grow flex-col pt-24">
+            <div className="flex flex-grow flex-col ml-0 xl:ml-[20%] pt-20 lg:pt-5">
                 {errorMessage && (<p className='text-red-500 text-center'>{errorMessage}</p>)}
                 <h1 className="text-xl mb-2 px-2 font-bold">Saved Jobs</h1>
                 {loading ? (
@@ -116,12 +116,12 @@ function SavedJobs() {
                                 <div className="flex flex-row">
                                     <button
                                         onClick={() => handleRemoveSavedJob(job.jobId)}
-                                        className='bg-red-500 text-white p-2 rounded'
+                                        className='text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800'
 
                                     >
-                                        Remove from savedJobs
+                                        Remove
                                     </button>
-                                    <button className="bg-green-500 hover:bg-green-700 text-white font-bold p-2 mx-1 rounded" onClick={() => handleClick(job)}>Request For Referral</button>
+                                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => handleClick(job)}>{job.status === 'UN_REQUESTED'?'Request Referral':'Referral Requested'}</button>
                                 </div>
                             </div>
                         ))
@@ -131,19 +131,18 @@ function SavedJobs() {
                 )}
             </div>
 
-            <div className="bg-[#00145e] w-full p-4">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e] w-full p-1 ">
+                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+                           
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
+                    <div className='text-white text-center pb-1'>
                         <p>Copyright &copy; {new Date().getFullYear()}</p>
                     </div>
                 </footer>

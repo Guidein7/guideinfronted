@@ -1,6 +1,6 @@
 /* Responsive Styles for Modal Form */
 .modal-content {
-    max-width: 80vw;
+    max-width: 85vw;
     margin: 0 auto;
     padding: 1.5rem;
   }
@@ -10,7 +10,7 @@
   /* For smaller screens (e.g., mobile) */
   @media (max-width: 768px) {
     .modal-content {
-      width: 80vw;
+      width: 96vw;
       padding: 1rem;
     }
   }

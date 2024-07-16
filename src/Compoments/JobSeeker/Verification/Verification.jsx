@@ -11,7 +11,7 @@ function Verification() {
     const [otpMessage, setOtpMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('');
     const location = useLocation();
-    const { email, mobile } = location.state;
+    const { email, mobile,sessionUUID } = location.state;
     const navigate = useNavigate();
     const resendVerification = () => {
         const role = "JOB_SEEKER";
@@ -42,7 +42,7 @@ function Verification() {
         }
         setErrorMessage('');
         const role = "JOB_SEEKER"
-        const verifyData = { email, mobile, otp, role };
+        const verifyData = { email, mobile, otp, role,sessionUUID };
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.verification}`, verifyData)
             .then(response => {
                 if (response.status === 200) {
@@ -50,12 +50,19 @@ function Verification() {
                     setTimeout(() => {
                         navigate('/login');
                     }, 2000); // Navigate to login page after 2 seconds
-                } else {
-                    setError("Invalid OTP. Please try again.");
                 }
+                if(error.response.status === 401){
+                    setError('invalid otp')
+                } 
             })
             .catch(error => {
+
+                if(error.response.status === 401){
+                    setError('invalid otp')
+                }
+                else{
                 setError("An error occurred while verifying the OTP. Please try again.");
+                }
             });
     };
     return (
@@ -96,23 +103,22 @@ function Verification() {
                     {success && <div className="text-green-500">{success}</div>}
                 </form>
             </div>
-            <div className="bg-[#00145e] w-full p-4 my-2">
-                <footer className='sm:mx-auto max-w-screen-lg'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
-                        </div>
-                    </div>
-                    <div className='text-white text-center mt-4'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
+            <div className="bg-[#00145e] w-full p-1 ">
+        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='text-white justify-self-start'>
+
             </div>
+            <div className='text-white justify-self-end'>
+              <h2 className='pr-2'>Help & Support</h2>
+              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
+            </div>
+          </div>
+          <div className='text-white text-center '>
+            <p>Copyright &copy; {new Date().getFullYear()}</p>
+          </div>
+        </footer>
+      </div>
         </div>
     );
 }

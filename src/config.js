@@ -1,7 +1,7 @@
 // src/config.js
 const config = {
   api: {
-    baseURL:'https://guidein-backend-guidein-backend.lomaem.easypanel.host',
+    baseURL: 'https://guidein-backend-guidein-backend.lomaem.easypanel.host',//' https://prepared-pleasing-dolphin.ngrok-free.app',//
     jobSeeker: {
       register:'/api/guidein/v1/auth/register',
       verification:'/api/guidein/v1/auth/register/otpvalidate',

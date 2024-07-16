@@ -30,6 +30,7 @@ function ReferrelsRequested() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const[errorMessage,setErrorMessage] = useState('')
 
     const handleLogout = () => {
         dispatch(logoutEmployee());
@@ -50,8 +51,22 @@ function ReferrelsRequested() {
 
         }).then(response => {
             setReferrals(response.data)
-            console.log(response)
-        }).catch(error => console.log(error))
+        }).catch(error => {
+                if(error.response.status === 403){
+                    setErrorMessage('session expired')
+                    setTimeout(() => {
+                        setErrorMessage('');
+                        handleLogout();
+                    }, 2000);
+                }
+                else{
+                    setErrorMessage('Error fetching data')
+                    setTimeout(() => {
+                        setErrorMessage('');
+                       
+                    }, 2000);
+                }
+        })
             .finally(() => setLoading(false));
     }
 
@@ -66,7 +81,7 @@ function ReferrelsRequested() {
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
         <SideBar/>
-            <div className='flex-grow flex flex-col  p-4 ml-0 xl:ml-[20%]'>
+            <div className='flex-grow pt-16 lg:pt-2 p-4 ml-0 xl:ml-[20%]'>
 
             {loading ? (
     <div className="flex flex-col justify-center items-center h-screen">
@@ -76,6 +91,7 @@ function ReferrelsRequested() {
 ) : (
     <div>
         <h1 className='font-bold bg-red mb-3'>Referrals Requested</h1>
+        {errorMessage &&(<p className='text-red-500 p-2 fixed text-center bg-white'>{errorMessage}</p>)}
         {referrals.length === 0 ? (
             <p className='flex items-center justify-center h-screen font-bold'>No referrals are available at the moment</p>
         ) : (
@@ -98,23 +114,22 @@ function ReferrelsRequested() {
 )}
 </div>
 
-<footer className="bg-[#00145e]  p-4 ml-0 xl:ml-[20%]">
-                    <div className="sm:mx-auto max-w-screen-lg">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="text-white justify-self-start">
-                                <h2>Company</h2>
-                                <p>About us</p>
-                            </div>
-                            <div className="text-white justify-self-end">
-                                <h2>Help & Support</h2>
-                                <p>Contact Us</p>
-                            </div>
+<footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
+                <div className="sm:mx-auto max-w-screen-lg">
+                    <div className="grid grid-cols-2 gap-4 ">
+                        <div className="text-white justify-self-start">
+
                         </div>
-                        <div className="text-white text-center mt-4">
-                            <p>Copyright &copy; 2024</p>
+                        <div className="text-white justify-self-end">
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                </footer>
+                    <div className="text-white text-center ">
+                        <p>Copyright &copy; 2024</p>
+                    </div>
+                </div>
+            </footer>
         </div>
 
     );

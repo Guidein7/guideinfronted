@@ -92,11 +92,9 @@ const Registration = () => {
     let valid = true;
     Object.keys(formData).forEach(item => {
       validateField(item, formData[item]);
-
       if (formData[item] === '' || errors[item] !== '') {
         valid = false;
       }
-
     })
     return valid;
   }
@@ -110,12 +108,12 @@ const Registration = () => {
       const registrationData = { ...formData, role:role };
       setLoading(true);
       axios.post(`${config.api.baseURL}${config.api.jobSeeker.register}`, registrationData).then(response => {
-        navigate(`/verification`, { state: { email, mobile } });
+        const sessionUUID = response.data.sessionUUID
+        navigate(`/verification`, { state: { email, mobile, sessionUUID} });
       }).catch(error => {
         if (error.response && error.response.status === 409) {
           setErrorMessage("User already exists. Please try with a different email or mobile.");
         } else {
-         
           setUnKnownError('Error while submitting your request. Please try again.');
           setTimeout(() => {
             setUnKnownError('');
@@ -123,11 +121,7 @@ const Registration = () => {
         }  
       }).finally(() => setLoading(false))
     }
-   
   };
-
-
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
     validateField(name, value);
@@ -163,22 +157,22 @@ const Registration = () => {
           </div>
         </div>
       </nav>
-      <div className="w-full max-w-xs mx-auto align-center lg:max-w-sm">
+      <div className="w-full max-w-xs mx-auto align-center lg:max-w-lg">
         {unKnownError && (<p className='text-red-500'>{unKnownError}</p>)}
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-4"
+          className="bg-gray border border-gray-300 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 mt-4"
           onSubmit={handleSubmit}
           noValidate
         >
-          <h1 className="font-bold text-center text-2xl">Create Account</h1>
-          <p className="p-0 mt-0 mb-6 text-xs text-center">Let's get your dream Job</p>
+          <h1 className=" font-bold text-center text-2xl">Sign up</h1>
+          <p className="p-0 mt-0 mb-6 text-lg text-center">Let's get your dream Job</p>
           <div className="mb-3">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">FullName<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="name">Full Name<span className='text-red-500'>*</span></label>
             <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-3  px-3 text-gray-700 bg-gray leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : ''}`}
               id="name"
               type="text"
-              placeholder=""
+              placeholder="Enter your full name"
               value={formData.username}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -187,12 +181,12 @@ const Registration = () => {
             {errors.username && <p className="text-red-500 text-xs italic">{errors.username}</p>}
           </div>
           <div className="mb-3">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="mobile">Mobile<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="mobile">Mobile<span className='text-red-500'>*</span></label>
             <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.mobile ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.mobile ? 'border-red-500' : ''}`}
               id="mobile"
               type="text"
-              placeholder="Enter Mobile"
+              placeholder="Enter Mobile number"
               value={formData.mobile}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -201,12 +195,12 @@ const Registration = () => {
             {errors.mobile && <p className="text-red-500 text-xs italic">{errors.mobile}</p>}
           </div>
           <div className="mb-3">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="email">Email<span className='text-red-500'>*</span></label>
             <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
               id="email"
               type="email"
-              placeholder=""
+              placeholder="Enter Email"
               value={formData.email}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -215,42 +209,41 @@ const Registration = () => {
             {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
           </div>
           <div className="relative mb-2">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="password">Password<span className='text-red-500'>*</span></label>
             <input
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : ''}`}
+              className={`shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : ''}`}
               id="password"
               type={type}
-              placeholder=""
+              placeholder="Enter Password"
               value={formData.password}
               onChange={handleChange}
               onBlur={handleBlur}
               name="password"
             />
-            <p onClick={passwordView} className="absolute top-0 right-0 mt-7 mr-2 px-3 py-2 text-blue-700 cursor-pointer">{buttonName}</p>
+            <p onClick={passwordView} className="absolute top-0 right-0 mt-8 mr-2 px-3 py-2 text-blue-700 cursor-pointer">{buttonName}</p>
             {errors.password && <p className="text-red-500 text-xs italic">{errors.password}</p>}
           </div>
-          <p className="text-xs">By clicking on the continue, you are agree to the <a href={Policy} className="text-blue-500" target="_blank" rel="noopener noreferrer">Terms and conditions</a></p>
+          <p className="text-xs">By clicking on Join now, you are agree to the <a href={Policy} className="text-blue-700" target="_blank" rel="noopener noreferrer">Terms and conditions</a></p>
           {errorMessage && <p className="text-red-500 text-sm italic">{errorMessage}</p>}
-          <div className="text-center mt-6">
-            <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6">Continue</button>
+          <div className="text-center mt-5">
+            <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6">Join Now</button>
           </div>
-          <p className="text-xs">Already have an account? <Link to="/login" className="text-blue-500">Sign in</Link></p>
+          <p className="">Already have an account? <Link to="/login" className="text-blue-700">Sign in</Link></p>
         </form>
       </div>
-      <div className="bg-[#00145e] w-full p-4 my-2">
-        <footer className="sm:mx-auto max-w-screen-lg">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-white justify-self-start">
-              <h2>Company</h2>
-              <p>About us</p>
+      <div className="bg-[#00145e] w-full p-1 ">
+        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='text-white justify-self-start'>
+
             </div>
-            <div className="text-white justify-self-end">
-              <h2>Help & Support</h2>
-              <p>Contact Us</p>
+            <div className='text-white justify-self-end'>
+              <h2 className='pr-2'>Help & Support</h2>
+              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
             </div>
           </div>
-          <div className="text-white text-center mt-4">
-            <p>Copyright &copy; 2024</p>
+          <div className='text-white text-center '>
+            <p>Copyright &copy; {new Date().getFullYear()}</p>
           </div>
         </footer>
       </div>

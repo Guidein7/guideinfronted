@@ -78,7 +78,7 @@ const Login = () => {
                 const action = login(formData);
                 const resultAction = await dispatch(action);
                 const response = resultAction.payload;
-
+                console.log(response);
                 if (response.status === 200) {
                    
                     navigate('/home');
@@ -110,17 +110,17 @@ const Login = () => {
                     </div>
                 </div>
             </nav>
-            <div className="w-full max-w-xs mx-auto">
+            <div className="w-full max-w-xs lg:max-w-lg mx-auto">
                 {errorMessage && (<p className="text-red-500 text-center">{errorMessage}</p>)}
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                    <h1 className="font-bold text-center text-2xl">Sign in</h1>
-                    <p className="p-0 mt-0 mb-6 text-xs text-center">Stay updated on your professional world</p>
+                <form className=" border border-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-3" onSubmit={handleSubmit}>
+                    <h1 className="font-bold text-center text-2xl mb-3">Sign in</h1>
+                   
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="inputValue">
+                        <label className="block text-gray-700  mb-2" htmlFor="inputValue">
                             Email or Mobile
                         </label>
                         <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="inputValue"
                             name="inputValue"
                             onChange={(e) => setInputValue(e.target.value)}
@@ -132,36 +132,36 @@ const Login = () => {
                         )}
                     </div>
                     <div className="relative mb-2">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+                        <label className="block text-gray-700  mb-2" htmlFor="password">
                             Password
                         </label>
                         <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                             id="password"
                             name="password"
                             onChange={(e) => setPassword(e.target.value)}
                             type={type}
-                            placeholder="Password"
+                            placeholder="Enter Password"
                         />
-                        <p onClick={passwordView} className="absolute top-0 right-0 mt-7 mr-2 px-3 py-2 text-blue-700 cursor-pointer">
+                        <p onClick={passwordView} className="absolute top-0 right-0 mt-8 mr-2 px-3 py-2 text-blue-700 cursor-pointer">
                             {buttonName}
                         </p>
                         {errors.password && (
                             <p className="text-red-500 text-xs italic">{errors.password}</p>
                         )}
                     </div>
-                    <Link to='/forgot-password' className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mb-6">
+                    <Link to='/forgot-password' className="inline-block align-baseline  text-sm text-blue-700 hover:text-blue-800 mb-6">
                         Forgot Password?
                     </Link>
                     <div>
                         <p className="text-red-500">{loger}</p>
                     </div>
                     <div className="text-center">
-                        <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6" type="submit">
+                        <button className="bg-blue-700  text-white py-1 px-7 rounded mb-6" type="submit">
                             Sign In
                         </button>
                     </div>
-                    <p className="text-xs">New to Guidein? <Link to='/register' className="text-blue-500">Join now</Link></p>
+                    <p className="">New to Guidein? <Link to='/register' className="text-blue-700">Join now</Link></p>
                 </form>
             </div>
             {isVerifedUser && (
@@ -190,23 +190,22 @@ const Login = () => {
 
             )}
 
-            <div className="bg-[#00145e] w-full p-4 my-2">
-                <footer className='sm:mx-auto max-w-screen-lg'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
-                        </div>
-                    </div>
-                    <div className='text-white text-center mt-4'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
+<div className="bg-[#00145e] w-full p-1 ">
+        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='text-white justify-self-start'>
+
             </div>
+            <div className='text-white justify-self-end'>
+              <h2 className='pr-2'>Help & Support</h2>
+              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
+            </div>
+          </div>
+          <div className='text-white text-center '>
+            <p>Copyright &copy; {new Date().getFullYear()}</p>
+          </div>
+        </footer>
+      </div>
         </div>
     );
 };

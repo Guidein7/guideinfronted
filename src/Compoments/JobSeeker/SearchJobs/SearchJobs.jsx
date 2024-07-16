@@ -50,6 +50,7 @@ function SearchJobs() {
                 }
             );
             setJobs(response.data.reverse());
+           
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 setSaveJobMessage('session Expired');
@@ -72,26 +73,25 @@ function SearchJobs() {
     };
     const handleSaveJob = async (jobId) => {
         setLoading(true);
-        try {
-            const response = await axios.post(
-                `${config.api.baseURL}${config.api.jobSeeker.saveJob}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    params: {
-                        jobId: jobId,
-                        email: email
-                    }
-                }
-            );
-        } catch (error) {
+
+        axios.post( `${config.api.baseURL}${config.api.jobSeeker.saveJob}`,{},{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                jobId: jobId,
+                email: email
+            }
+
+        }).then(response => {
+            fetchJobs();
+        }).catch(error => {
+
             setSaveJobMessage('Error while saving job');
             setTimeout(() => setSaveJobMessage(''), 2000)
-        } finally {
-            setLoading(false);
-        }
+
+        }).finally(() => setLoading(false))
+        
     };
     const handleClick = (job) => {
         navigate('/job-details', { state: { job } });
@@ -105,14 +105,14 @@ function SearchJobs() {
         setCurrentPage(1); 
     };
     return (
-        <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
+        <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between pt-14 lg:pt-0">
             <NavBar />
             {jobs.length > 0 && (
-                <div className="flex flex-row pl-0 lg:pl-10 fixed w-full z-20 pt-20 bg-[#f5faff]  mb-2 pb-2 overflow-x-auto">
+                <div className="flex flex-row pl-0 lg:pl-10 fixed  w-full ml-0 xl:ml-[20%] z-10  bg-[#f5faff]  mb-2 py-2 overflow-x-auto">
                     <input
                         type="text"
                         name="jobTitle"
-                        placeholder="Filter by Job Title"
+                        placeholder="Search by Job Title"
                         value={filters.jobTitle}
                         onChange={handleFilterChange}
                         className="p-2 border rounded mr-2"
@@ -123,7 +123,7 @@ function SearchJobs() {
                         onChange={handleFilterChange}
                         className="p-2 border rounded mr-2"
                     >
-                        <option value="">Filter by Experience</option>
+                        <option value="">Experience</option>
                         <option value="0-1 Years">0-1 Years</option>
                         <option value="1-3 Years">1-3 Years</option>
                         <option value="3-5 Years">3-5 Years</option>
@@ -136,7 +136,7 @@ function SearchJobs() {
                         onChange={handleFilterChange}
                         className="p-2 border rounded"
                     >
-                        <option value="">Filter by Location</option>
+                        <option value="">Location</option>
                         <option value="Bangalore">Bangalore</option>
                         <option value="Hyderabad">Hyderabad</option>
                         <option value="Mumbai">Mumbai</option>
@@ -171,12 +171,12 @@ function SearchJobs() {
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>
             ) : (
-                <div className=" flex flex-grow flex-col pt-32 ">
+                <div className=" flex flex-grow flex-col  ml-0 xl:ml-[20%] pt-20 ">
                     {saveJobMessage && (<p className="text-red-500 text-center">{saveJobMessage}</p>)}
 
                     {jobs.length > 0 && (
-                        <h1 className="text-xl mb-2 md:text-left">
-                            Showing {currentJobs.length} of {filteredJobs.length} jobs
+                        <h1 className=" mb-2 mx-2 md:text-left  lg:pt-0">
+                              {filteredJobs.length} results
                         </h1>
                     )}
                     {jobs.length <= 0 ? (<div><h1 className="flex h-screen items-center justify-center">No Jobs avaliable right now</h1></div>) :
@@ -186,7 +186,7 @@ function SearchJobs() {
                                     <div className="mb-4 md:mb-0">
                                         <p
                                             onClick={() => handleClick(job)}
-                                            className="text-lg font-semibold block underline cursor-pointer md:text-left"
+                                            className="text-lg font-semibold block  cursor-pointer md:text-left"
                                         >
                                             {job.jobTitle}
                                         </p>
@@ -194,18 +194,18 @@ function SearchJobs() {
                                         <p className="text-sm md:text-left">Location: {job.jobLocation} ({job.workMode})</p>
                                         <p className="text-sm md:text-left">JobType: {job.jobType}</p>
                                         <p className="text-sm md:text-left">Experience: {job.experienceRequired}</p>
-                                        <p className="text-sm md:text-left">Posted by: {job.jobPostedBy}</p>
+                                        <p className="text-sm md:text-left">Posted by: {job.jobPosterName}</p>
                                         <p className="text-sm md:text-left">Posted on: {job.postedOn}</p>
                                     </div>
                                     <div className="flex flex-row">
                                         <button
                                             onClick={() => handleSaveJob(job.jobId)}
-                                            className={`font-bold rounded p-2 mx-1 ${job.saved ? 'bg-gray-500 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white'}`}
+                                            className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 `}
                                             disabled={job.saved}
                                         >
-                                            {job.saved ? 'Saved' : 'Save Job'}
+                                            {job.saved ? 'Saved' : 'Save'}
                                         </button>
-                                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold p-2 mx-1 rounded" onClick={() => handleClick(job)}>Request For Referral</button>
+                                        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => handleClick(job)}>{job.status === 'UN_REQUESTED'? 'Request Referral':'Referral Requested'}</button>
                                     </div>
                                 </div>
                             ))}
@@ -215,46 +215,53 @@ function SearchJobs() {
 
                 </div>
             )}
-            {jobs.length > 10 && (
-                <div className="flex justify-center mt-4 mb-2">
+           {jobs.length > 10 && (
+    <div className="flex justify-center mt-4 mb-2">
+        {currentPage > 1 && (
+            <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-4 py-2 mx-1 bg-gray-300 rounded"
+            >
+                Previous
+            </button>
+        )}
+        {Array.from({ length: totalPages }, (_, index) => {
+            if (index + 1 === currentPage || (index + 1 >= currentPage - 1 && index + 1 <= currentPage + 1)) {
+                return (
                     <button
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 mx-1 bg-gray-300 rounded disabled:opacity-50"
+                        key={index}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={`px-4 py-2 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
                     >
-                        Previous
+                        {index + 1}
                     </button>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                            className={`px-4 py-2 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
-                    <button
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 mx-1 bg-gray-300 rounded disabled:opacity-50"
-                    >
-                        Next
-                    </button>
-                </div>
-            )}
-            <div className="bg-[#00145e] w-full p-4 ">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+                );
+            }
+            return null;
+        })}
+        {currentPage < totalPages && (
+            <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-4 py-2 mx-1 bg-gray-300 rounded"
+            >
+                Next
+            </button>
+        )}
+    </div>
+)}
+
+<div className="bg-[#00145e] w-full p-1 ">
+                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+                           
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
+                    <div className='text-white text-center pb-1'>
                         <p>Copyright &copy; {new Date().getFullYear()}</p>
                     </div>
                 </footer>

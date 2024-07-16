@@ -1,15 +1,15 @@
-import React from 'react';
+
 import GuideinLogo from '../../../assets/GuideinLogo.png';
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-const EmployeeLandingPage = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
-    };
+import emailicon from '../../../assets/emailicon.png'
+import callicon from '../../../assets/callicon.png'
+function EContactUsJp() {
     const [showSideNav, setShowSideNav] = useState(false);
     const sideNavRef = useRef(null);
     const buttonRef = useRef(null);
+   
+
     const handleClickOutside = (event) => {
         if (
             sideNavRef.current &&
@@ -19,6 +19,7 @@ const EmployeeLandingPage = () => {
             setShowSideNav(false);
         }
     };
+
     useEffect(() => {
         if (showSideNav) {
             document.addEventListener('mousedown', handleClickOutside);
@@ -29,9 +30,11 @@ const EmployeeLandingPage = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [showSideNav]);
+
     const handleEarnMoneyClick = () => {
         window.open('/', '_blank');
     };
+
     const NavLinks = ({ className = '' }) => (
         <>
             <button
@@ -41,6 +44,7 @@ const EmployeeLandingPage = () => {
                 Get Referral
             </button>
             <Link
+                type=""
                 to="/employee-register"
                 className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 ${className}`}
             >
@@ -48,20 +52,21 @@ const EmployeeLandingPage = () => {
             </Link>
             <Link
                 to="/employee-login"
-                className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800  ${className}`}
+                className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 ${className}`}
             >
                 Sign In
             </Link>
         </>
     );
+
     return (
         <div className='bg-[#f5faff] min-h-screen flex flex-col justify-between'>
-            <nav className="bg-[#f8f9fa] py-4">
+            <nav className="bg-[#f8f9fa] py-4 w-full fixed z-50">
                 <div className='max-w-7xl mx-auto px-4 flex justify-between items-center'>
                     <div className='block lg:hidden'>
                         <button
                             ref={buttonRef}
-                            className='text-dark focus:outline-none z-50 relative'
+                            className='text-dark focus:outline-none z-50'
                             onClick={() => setShowSideNav(!showSideNav)}
                         >
                             <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,7 +76,7 @@ const EmployeeLandingPage = () => {
                     </div>
                     <div className='lg:block'>
                         <Link to='/employee-landingpage'>
-                            <img src={GuideinLogo} alt='logo' className='h-8' />
+                            <img src={GuideinLogo} alt='logo' className='h-8 lg:h-8' />
                         </Link>
                     </div>
                     <div className='hidden lg:flex space-x-4'>
@@ -81,47 +86,61 @@ const EmployeeLandingPage = () => {
             </nav>
             <div
                 ref={sideNavRef}
-                className={`side-nav fixed top-0 left-0 h-full w-40 bg-[#f8f9fa] shadow-lg z-40 flex flex-col transform transition-transform duration-300 ${showSideNav ? 'translate-x-0' : '-translate-x-full'}`}
+                className={`side-nav fixed top-0 left-0 h-full w-38 bg-[#f8f9fa] shadow-lg z-40 flex flex-col transform transition-transform duration-300 ${showSideNav ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className='p-4 pt-16'>
                     <NavLinks className='flex flex-col my-4' />
                 </div>
             </div>
-            <div className="sm:mx-auto  max-w-screen-lg  rounded ">
+            <div className='flex-grow justify-center items-center pt-24'>
+                <div className="flex  flex-col justify-center items-center">
+                    <h1 className=" text-3xl">We are here to help.</h1>
+                    <p className="pt-12 text-center">Have an issue or query or feedback for us? our support team is here to help you 24/7</p>
+                    <h1 className="pt-12 ont-bold text-3xl">Contact Us</h1>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pt-10">
+                        <div>
+                            <img src={emailicon} alt='emailicon' />
+                            <p>support@guidein.org</p>
+                        </div>
+                        <div className='hidden lg:block'>
+                            <h1 className="text-3xl text-center ">Address</h1>
+                            <div className="pt-5 text-center">
+                                <p>P. No 27, Sri Ram Nagar Colony</p>
+                                <p>Beeramguda, Hyderabad, Medak</p>
+                                <p>Telangana, 502032</p>
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <div className="mx-auto">
+                                <img src={callicon} alt='callicon' className="mx-auto" />
+                            </div>
+                            <p>+91 9392579230</p>
+                            <p></p>
+                        </div>
+                    </div>
 
-                <p className=" my-2 bg-blue-100 text-justify p-4">
-                    while the journey to securing a job call may be fraught with challenges and uncertainties, it is also a testament to the resilience and determination of individuals striving to carve out their place in the professional world. By embracing change, honing their skills, and cultivating a resilient mindset, job seekers can navigate the complexities of today’s job market and ultimately land that transformative call that heralds the beginning of a new chapter in their careers.
-                </p>
+                </div>
+            </div>
 
-            </div>
-            <div className='flex flex-col justify-center items-center  lg:h-1/2 mb-2'>
-                <div>
-                    <h1 className='text-2xl font-bold  my-2'>To Earn Money</h1>
-                </div>
-                <div>
-                    <Link to='/employee-login' className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-12 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                        Post  a Job
-                    </Link>
-                </div>
-            </div>
-            <div className="bg-[#00145e]  w-full  ">
-                <footer className=' sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e] w-full p-1 ">
+                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
                            
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtact-us' className='pl-2'>Contact Us</Link>
+                            <h2 className='mr-2'>Help & Support</h2>
+                            <Link to='/econtact-us' className='ml-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center pb-1 '>
-                        <p>Copyright &copy; 2024</p>
+                    <div className='text-white text-center mt-4'>
+                        <p>Copyright &copy; {new Date().getFullYear()}</p>
                     </div>
                 </footer>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default EmployeeLandingPage;
+export default EContactUsJp;
+

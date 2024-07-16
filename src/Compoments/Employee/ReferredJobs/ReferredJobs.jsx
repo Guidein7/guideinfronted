@@ -31,6 +31,7 @@ function ReferredJobs() {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(false)
+    const[errorMessage,setErrorMessage] = useState('')
     const handleLogout = () => {
         // Dispatch the logout action
         dispatch(logoutEmployee());
@@ -50,10 +51,25 @@ function ReferredJobs() {
                 "ngrok-skip-browser-warning": "69420"
             },
         }).then(response => {
-            console.log(response);
+           
             setJobs(response.data.reverse())
 
-        }).catch(error => console.log(error))
+        }).catch(error => {
+            if(error.response.status === 403){
+                setErrorMessage('session expired')
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+            }
+            else{
+                setErrorMessage('Error fetching data')
+                setTimeout(() => {
+                    setErrorMessage('');
+                   
+                }, 2000);
+            }
+        })
             .finally(() => setLoading(false));
     }
 
@@ -71,9 +87,10 @@ function ReferredJobs() {
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
             <SideBar/>
-            <div className='flex-grow flex flex-col justify-between p-4 ml-0 xl:ml-[20%]'>
+            <div className='flex-grow pt-10  lg:pt-2 p-4 ml-0 xl:ml-[20%]'>
                 <div className='flex-grow'>
                     <h1 className='font-bold mt-10'>Referred Jobs</h1>
+                    {errorMessage &&(<p className='text-red-500 p-2 fixed text-center bg-white'>{errorMessage}</p>)}
                     {loading ? (
                         <div className="flex flex-col justify-center items-center h-screen">
                             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
@@ -88,13 +105,13 @@ function ReferredJobs() {
                                     {jobs.map(referredJob => (
                                         <div key={referredJob.referralId} className='flex flex-col md:flex-row justify-between bg-white my-2 cursor-pointer p-4 md:p-6' onClick={() => handleClick(referredJob)} >
                                             <div className='flex flex-col space-y-2 md:space-y-0'>
-                                                <p className='text-base md:text-lg'>{referredJob.candidateName}</p>
+                                                <p className='text-base md:text-base'>Requested by: {referredJob.candidateName}</p>
                                                 <p className='text-sm md:text-base'>Referral For: {referredJob.referralFor}</p>
                                                 <p className='text-sm md:text-base'>Experience: {referredJob.candidateExperience}</p>
                                             </div>
                                             <div className='flex flex-col space-y-2 md:space-y-0'>
                                                 <p className='text-sm md:text-base'>Referral Requested On: {referredJob.requestedOn}</p>
-                                                <p className='text-sm md:text-base'>Current Status: {referredJob.status}</p>
+                                                <p className={`text-sm `}>Current Status: <span className={` ${referredJob.status === 'IN_VERIFICATION'?'text-yellow-500 font-bold':referredJob.status === 'REFERRED'?'text-green-700 font-bold':'text-red-500 font-bold'}`}>{referredJob.status}</span></p>
                                             </div>
                                         </div>
                                     ))}
@@ -107,19 +124,18 @@ function ReferredJobs() {
                 </div>
 
             </div>
-            <footer className="bg-[#00145e]  p-4 ml-0 xl:ml-[20%]">
+            <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
                 <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 ">
                         <div className="text-white justify-self-start">
-                            <h2>Company</h2>
-                            <p>About us</p>
+
                         </div>
                         <div className="text-white justify-self-end">
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className="text-white text-center mt-4">
+                    <div className="text-white text-center ">
                         <p>Copyright &copy; 2024</p>
                     </div>
                 </div>

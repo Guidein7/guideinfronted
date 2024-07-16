@@ -14,7 +14,7 @@ const ForgetPassword = () => {
     return re.test(String(email).toLowerCase());
   };
   const validateMobile = (mobile) => {
-    const re = /^\d{10}$/; // Check if the input is exactly 10 digits
+    const re = /^\d{10}$/;
     return re.test(String(mobile));
   };
   const handleSubmit = (e) => {
@@ -31,7 +31,7 @@ const ForgetPassword = () => {
       setLoading(false);
       return;
     }
-    setError(null);
+    setError('');
     const role = "JOB_SEEKER";
     const formdata = { email, mobile, role };
     axios.post(`${config.api.baseURL}${config.api.jobSeeker.forgotPassword}`, formdata)
@@ -85,19 +85,18 @@ const ForgetPassword = () => {
           </div>
         </form>
       </div>
-      <div className="bg-[#00145e] w-full p-4 my-2">
-        <footer className='sm:mx-auto max-w-screen-lg'>
+      <div className="bg-[#00145e] w-full p-1 ">
+        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
           <div className='grid grid-cols-2 gap-4'>
             <div className='text-white justify-self-start'>
-              <h2>Company</h2>
-              <p>About us</p>
+
             </div>
             <div className='text-white justify-self-end'>
-              <h2>Help & Support</h2>
-              <p>Contact Us</p>
+              <h2 className='pr-2'>Help & Support</h2>
+              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
             </div>
           </div>
-          <div className='text-white text-center mt-4'>
+          <div className='text-white text-center '>
             <p>Copyright &copy; {new Date().getFullYear()}</p>
           </div>
         </footer>

@@ -1,9 +1,4 @@
 import { useState, useEffect } from 'react';
-import { MdOutlineCurrencyRupee } from "react-icons/md";
-import { TiTickOutline } from "react-icons/ti";
-import { IoAlarmOutline } from "react-icons/io5";
-import { MdOutlineModelTraining } from "react-icons/md";
-import { HiOutlineLogout } from "react-icons/hi";
 import { logoutEmployee } from '../slices/employeeLoginSlice';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -18,6 +13,7 @@ import GuideinLogo from '../../../assets/GuideinLogo.png'
 import { CgProfile } from "react-icons/cg";
 import config from '../../../config';
 import SideBar from '../SideBar/SideBar';
+import Pagination from './Pagenation';
 
 
 const cities = [
@@ -55,7 +51,6 @@ function JobsPosted() {
     const token = log.data.token;
     const decoded = jwtDecode(token);
     const claim = decoded.sub;
-
     const [editJobId, setEditJobId] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -74,15 +69,16 @@ function JobsPosted() {
     const [jobs, setJobs] = useState([]);
     const [profileComplete, setProfileComplete] = useState(false);
     const [loading, setLoading] = useState(true);
-    const[completeProfileMessage,setProfileCompleteMessage] = useState('');
-    const[profileError,setProfileError] = useState(false);
+    const [completeProfileMessage, setProfileCompleteMessage] = useState('');
+    const [profileError, setProfileError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [updateMessage, setUpdateMessage] = useState('');
 
     useEffect(() => {
         fetchJobs();
         fetchProfile();
         setTimeout(() => setLoading(false), 1000)
     }, []);
-
     const fetchProfile = () => {
         axios.get(`${config.api.baseURL}${config.api.jobPoster.getProfile}${claim}`, {
             headers: {
@@ -91,7 +87,6 @@ function JobsPosted() {
             },
         })
             .then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     setFormData(prevdata => ({
                         ...prevdata,
@@ -99,37 +94,51 @@ function JobsPosted() {
                     }))
                     setProfileComplete(true);
                 }
-                else if(response.status === 204){
+                else if (response.status === 204) {
                     setProfileCompleteMessage('please complete profile to post a job')
                 }
             })
             .catch(error => {
-                
-                    console.error('Error fetching profile:', error);
-                
+                if (error.response.status === 403) {
+                    setErrorMessage('session Expired')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    }, 2000);
+                }
+                else {
+                    setErrorMessage('Error occured')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                    }, 2000);
+                }
             });
     }
-
     const fetchJobs = async () => {
-        const params = {
-            postedBy: claim
-        };
         axios.get(`${config.api.baseURL}${config.api.jobPoster.postedJobs}${claim}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "ngrok-skip-browser-warning": "69420"
             },
         }).then(response => {
-            console.log(response);
-            // Log the response data
             setJobs(response.data.reverse())
-
         }).catch(error => {
-            console.log(error);
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired')
+                setTimeout(() => {
+                    setErrorMessage('')
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error While fetching jobs')
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
         })
 
     };
-
     const handleLogout = () => {
         dispatch(logoutEmployee());
         navigate('/employee-login');
@@ -154,13 +163,12 @@ function JobsPosted() {
                 jobPostedBy: claim,
             });
         } else {
-           setProfileError(true);
-           setTimeout(() => {
-            setProfileError(false);
-           },3000)
+            setProfileError(true);
+            setTimeout(() => {
+                setProfileError(false);
+            }, 3000)
         }
     };
-
     const handleEdit = (jobId) => {
         setIsEditing(true)
         setEditJobId(jobId)
@@ -189,7 +197,6 @@ function JobsPosted() {
             jobLocation: selectedCities
         });
     };
-
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -201,10 +208,19 @@ function JobsPosted() {
                     Authorization: `Bearer ${token}`
                 }
             }).then(response => {
-                console.log(response);
+                setUpdateMessage('Job updated successfully');
+                setTimeout(() => {
+                    setUpdateMessage('');
+                }, 2000);
                 fetchJobs();
 
-            }).catch(error => console.log(error)).finally(() => setLoading(false));
+            }).catch(error => {
+                setErrorMessage('Failed to update Job');
+                setTimeout(() => {
+                    setErrorMessage('');
+                }, 2000);
+            })
+                .finally(() => setLoading(false));
 
         } else {
             axios.post(`${config.api.baseURL}${config.api.jobPoster.saveJob}`, JSON.stringify(formData), {
@@ -213,16 +229,33 @@ function JobsPosted() {
                     Authorization: `Bearer ${token}`
                 }
             }).then(response => {
-                console.log(response);
+                setUpdateMessage('Job posted successfully');
+                setTimeout(() => {
+                    setUpdateMessage('');
+                }, 2000);
                 fetchJobs();
                 toggleForm();
-            }).catch(error => console.log(error))
+            }).catch(error => {
+                if (error.response.status === 403) {
+                    setErrorMessage('session Expired')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    }, 2000);
+                }
+                else {
+                    setErrorMessage('Failed to post a job')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                    }, 2000);
+                }
+            })
                 .finally(() => setLoading(false));
         }
         setIsEditing(false);
         setEditJobId(null)
         toggleForm();
-        console.log(formData);
+
     };
 
     const handleDisableEnable = async (jobId, enabled) => {
@@ -236,10 +269,24 @@ function JobsPosted() {
                 }
             )
                 .then(response => {
-                    console.log(response)
+
                     fetchJobs();
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    if (error.response.status === 403) {
+                        setErrorMessage('session Expired')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                            handleLogout();
+                        }, 2000);
+                    }
+                    else {
+                        setErrorMessage('Error occured')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                        }, 2000);
+                    }
+                })
                 .finally(() => setLoading(false));
         }
         else {
@@ -251,10 +298,24 @@ function JobsPosted() {
                 }
             )
                 .then(response => {
-                    console.log(response)
+
                     fetchJobs();
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    if (error.response.status === 403) {
+                        setErrorMessage('session Expired')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                            handleLogout();
+                        }, 2000);
+                    }
+                    else {
+                        setErrorMessage('Error occured')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                        }, 2000);
+                    }
+                })
                 .finally(() => setLoading(false));
         }
     };
@@ -270,13 +331,27 @@ function JobsPosted() {
         };
     }, [isFormOpen]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [jobsPerPage] = useState(10); // Adjust this value as needed
+
+    const indexOfLastJob = currentPage * jobsPerPage;
+    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
+
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
-       
-        <SideBar/>
-            <div className='flex-grow flex flex-col justify-between p-4 ml-0 xl:ml-[20%]'>
+
+            <SideBar />
+            <div className='flex-grow pt-16 lg:pt-2 p-4 ml-0 xl:ml-[20%]'>
                 {profileError && (
                     <p className='text-red-500 text-center'>{completeProfileMessage}</p>
+                )}
+                {errorMessage && (
+                    <p className='text-red-500 fixed inset-0  flex justify-center bg-white  text-center'>{errorMessage}</p>
+                )}
+                {updateMessage && (
+                    <p className='text-green-500 fixed inset-0  flex justify-center bg-white   text-center'>{updateMessage}</p>
                 )}
                 <div className='flex-grow'>
                     <div className='flex justify-between items-center mb-2 '>
@@ -288,6 +363,7 @@ function JobsPosted() {
                             <FaPlus className='mt-1 mx-2' /> Post a Job
                         </button>
                     </div>
+                    {jobs.length >0 && (<p className='text-xs mb-2'> Showing {jobs.length} results</p>)}
                     {isFormOpen && (
                         <div className='modal-overlay'>
                             <div className='modal-content'>
@@ -295,7 +371,7 @@ function JobsPosted() {
                                 <form onSubmit={handleFormSubmit}>
                                     <div className='mb-4'>
                                         <label htmlFor='jobTitle' className='block text-sm font-medium text-gray-700'>
-                                            Job Title
+                                            Job Title<span className='text-red-500'>*</span>
                                         </label>
                                         <input
                                             type='text'
@@ -308,7 +384,7 @@ function JobsPosted() {
                                     </div>
                                     <div className='mb-4'>
                                         <label htmlFor='companyName' className='block text-sm font-medium text-gray-700'>
-                                            Company Name
+                                            Company Name<span className='text-red-500'>*</span>
                                         </label>
                                         <input
                                             type='text'
@@ -322,7 +398,7 @@ function JobsPosted() {
                                     </div>
                                     <div className='mb-4'>
                                         <label htmlFor='jobLocation' className='block text-sm font-medium text-gray-700'>
-                                            Job Location
+                                            Job Location<span className='text-red-500'>*</span>
                                         </label>
                                         <Select
                                             isMulti
@@ -336,7 +412,7 @@ function JobsPosted() {
                                     </div>
                                     <div className='mb-4'>
                                         <label htmlFor='jobType' className='block text-sm font-medium text-gray-700'>
-                                            Job Type
+                                            Job Type<span className='text-red-500'>*</span>
                                         </label>
                                         <select
                                             id='jobType'
@@ -358,7 +434,7 @@ function JobsPosted() {
                                     </div>
                                     <div className='mb-4'>
                                         <label htmlFor='workMode' className='block text-sm font-medium text-gray-700'>
-                                            Work Mode
+                                            Work Mode<span className='text-red-500'>*</span>
                                         </label>
                                         <select
                                             id='workMode'
@@ -375,7 +451,7 @@ function JobsPosted() {
                                     </div>
                                     <div className='mb-4'>
                                         <label htmlFor='jobDescriptionLink' className='block text-sm font-medium text-gray-700'>
-                                            Job Description Link
+                                            Job Description Link<span className='text-red-500'>*</span>
                                         </label>
                                         <input
                                             type='text'
@@ -389,7 +465,7 @@ function JobsPosted() {
                                     <h2 className='text-xl font-semibold mb-4'>Requirements</h2>
                                     <div className='mb-4'>
                                         <label htmlFor='educationLevel' className='block text-sm font-medium text-gray-700'>
-                                            Education Level
+                                            Education Level<span className='text-red-500'>*</span>
                                         </label>
                                         <select
                                             id='educationLevel'
@@ -409,7 +485,7 @@ function JobsPosted() {
                                     </div>
                                     <div className='mb-4'>
                                         <label htmlFor='experienceRequired' className='block text-sm font-medium text-gray-700'>
-                                            Experience Required
+                                            Experience Required<span className='text-red-500'>*</span>
                                         </label>
                                         <select
                                             id='experienceRequired'
@@ -430,13 +506,13 @@ function JobsPosted() {
                                         <button
                                             type='button'
                                             onClick={cancel}
-                                            className='text-gray-700 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md shadow-md mr-2'
+                                            className='text-white bg-red-700 hover:bg-red-800 px-4 py-2 rounded-md shadow-md mr-2'
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type='submit'
-                                            className='text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md shadow-md'
+                                            className='text-white bg-green-700 hover:bg-green-800 px-4 py-2 rounded-md shadow-md'
                                         >
                                             {isEditing ? 'Update Job' : 'Post Job'}
                                         </button>
@@ -453,8 +529,8 @@ function JobsPosted() {
                             </div>
                         ) : (
                             <div>
-                                {jobs.length > 0 ? (
-                                    jobs.map(job => (
+                                {currentJobs.length > 0 ? (
+                                    currentJobs.map(job => (
                                         <div key={job.jobId} className='bg-white p-4 rounded shadow-md mb-2 flex justify-between'>
                                             <div>
                                                 <h2 className='text-lg font-semibold'>{job.jobTitle}</h2>
@@ -466,7 +542,7 @@ function JobsPosted() {
                                             </div>
                                             <div className='flex items-center space-x-2'>
                                                 <button className='bg-blue-700 text-white h-8 px-2 rounded' onClick={() => handleEdit(job.jobId)}>Edit</button>
-                                                <button className={`${job.enabled ? 'bg-red-500' : 'bg-green-500'} text-white h-8 px-2 rounded   ${job.disabledByAdmin ? 'cursor-not-allowed' : ''}`  } onClick={() => handleDisableEnable(job.jobId, job.enabled)} disabled={job.disabledByAdmin}>
+                                                <button className={`${job.enabled ? 'bg-red-500' : 'bg-green-500'} text-white h-8 px-2 rounded   ${job.disabledByAdmin ? 'cursor-not-allowed' : ''}`} onClick={() => handleDisableEnable(job.jobId, job.enabled)} disabled={job.disabledByAdmin}>
                                                     {job.enabled ? 'Disable' : 'Enable'}
                                                 </button>
                                             </div>
@@ -479,26 +555,32 @@ function JobsPosted() {
                         )}
                     </div>
 
+
                 </div>
-               
+
             </div>
-            <footer className="bg-[#00145e]  p-4 ml-0 xl:ml-[20%]">
-                    <div className="sm:mx-auto max-w-screen-lg">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="text-white justify-self-start">
-                                <h2>Company</h2>
-                                <p>About us</p>
-                            </div>
-                            <div className="text-white justify-self-end">
-                                <h2>Help & Support</h2>
-                                <p>Contact Us</p>
-                            </div>
+            <Pagination
+                totalJobs={jobs.length}
+                jobsPerPage={jobsPerPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+            />
+              <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
+                <div className="sm:mx-auto max-w-screen-lg">
+                    <div className="grid grid-cols-2 gap-4 ">
+                        <div className="text-white justify-self-start">
+
                         </div>
-                        <div className="text-white text-center mt-4">
-                            <p>Copyright &copy; 2024</p>
+                        <div className="text-white justify-self-end">
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                </footer>
+                    <div className="text-white text-center ">
+                        <p>Copyright &copy; 2024</p>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }

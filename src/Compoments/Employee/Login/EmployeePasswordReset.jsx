@@ -283,20 +283,19 @@ const EmployeePasswordReset = () => {
                     </form>
                 </div>
             </div>
-            <div className="bg-[#00145e] w-full p-4 my-2">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e]  w-full  ">
+                <footer className=' sm:mx-auto max-w-screen-lg'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+                           
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtact-us' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
+                    <div className='text-white text-center pb-1 '>
+                        <p>Copyright &copy; 2024</p>
                     </div>
                 </footer>
             </div>

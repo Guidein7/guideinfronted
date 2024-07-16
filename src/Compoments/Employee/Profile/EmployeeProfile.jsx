@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react';
-import { MdOutlineCurrencyRupee } from "react-icons/md";
-import { TiTickOutline } from "react-icons/ti";
-import { IoAlarmOutline } from "react-icons/io5";
-import { MdOutlineModelTraining } from "react-icons/md";
-import { HiOutlineLogout } from "react-icons/hi";
-import { IoMdLaptop } from "react-icons/io";
 import { logoutEmployee } from '../slices/employeeLoginSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { CgProfile } from "react-icons/cg";
 import GuideinLogo from '../../../assets/GuideinLogo.png'
 import config from '../../../config';
 import SideBar from '../SideBar/SideBar';
@@ -36,11 +29,13 @@ function EmployeeProfile() {
     });
     const [loading, setLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage,setErrorMessage] = useState('')
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`${config.api.baseURL}${config.api.jobPoster.getProfile}${email}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -48,16 +43,29 @@ function EmployeeProfile() {
             },
         })
             .then(response => {
-                console.log(response);
+              
                 if (response.status === 200) {
                     setProfile(response.data);
+                }
+                if(response.status ===204){
+                    setProfile(null);
                 }
             })
             .catch(error => {
                 if (error.response && error.response.status === 204) {
                     setProfile(null);
-                } else {
-                    console.error('Error fetching profile:', error);
+                } else if(error.response.status === 403){
+                    setErrorMessage('session Expired')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    },2000)
+                }
+                else{
+                    setErrorMessage('Error fetching profile')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                    },2000)
                 }
 
             })
@@ -93,12 +101,12 @@ function EmployeeProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setLoading(true);
+       
         const url = isEditing
             ? `${config.api.baseURL}${config.api.jobPoster.updateProfile}`
             : `${config.api.baseURL}${config.api.jobPoster.saveProfile}`;
         const method = isEditing ? 'put' : 'post';
-
+        setLoading(true);
         axios({
             method: method,
             url: url,
@@ -111,9 +119,23 @@ function EmployeeProfile() {
                 setProfile(formData);
                 setIsEditing(false);
                 setSuccessMessage('Profile saved successfully')
-                console.log('Profile saved successfully:', response);
             })
-            .catch(error => console.error('Error saving profile:', error))
+            .catch(error => {
+                if(error.response.status === 403){
+                    setErrorMessage('session Expired')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    },2000)
+                }
+                else{
+                    setErrorMessage('Error saving  profile')
+                    setTimeout(() => {
+                        setErrorMessage('')
+                    },2000)
+                }
+                
+            })
             .finally(() => setLoading(false))
 
     };
@@ -137,7 +159,7 @@ function EmployeeProfile() {
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
            <SideBar/>
-            <div className='flex-grow flex justify-center items-center w-full min-w-lg'>
+            <div className='flex-grow  ml-0 xl:ml-[20%] pt-14 lg:pt-2'>
                 <div >
 
                     {loading ? (
@@ -149,12 +171,12 @@ function EmployeeProfile() {
                         <div>
 
                             {profile && !isEditing ? (
-                                <div className='text-center bg-white shadow-md rounded-lg px-10 w-full max-w-lg m-4 py-2'>
-                                    <h2 className='text-2xl font-semibold mb-4'>Profile</h2>
+                                <div className='text-center bg-[#fcfcfa] mx-auto border border-gray-300 shadow-md rounded-lg px-5 lg:px-10 w-full max-w-xs lg:max-w-lg m-4 py-2'>
+                                    <h2 className='text-lg font-semibold mb-3'> My Profile</h2>
                                     <div>
-                                        <h3 className='text-xl font-semibold mb-2 text-start'>Personal Details</h3>
-                                        <div className='mb-2'>
-                                            <label className='block  text-start'><strong>Full Name:</strong></label>
+                                        
+                                        <div className='mb-1'>
+                                            <label className='block  text-start'>Full Name</label>
                                             <input
                                                 type='text'
                                                 value={profile.name}
@@ -163,7 +185,7 @@ function EmployeeProfile() {
                                             />
                                         </div>
                                         <div className='mb-2'>
-                                            <label className='block  text-start'><strong>Email:</strong></label>
+                                            <label className='block  text-start'>Email</label>
                                             <input
                                                 type='email'
                                                 value={profile.email}
@@ -172,7 +194,7 @@ function EmployeeProfile() {
                                             />
                                         </div>
                                         <div className='mb-2'>
-                                            <label className='block  text-start'><strong>Mobile:</strong></label>
+                                            <label className='block  text-start'>Mobile</label>
                                             <input
                                                 type='text'
                                                 value={profile.mobile}
@@ -182,9 +204,9 @@ function EmployeeProfile() {
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 className='text-xl font-semibold mb-2 text-start'>Employment Details</h3>
+                                        
                                         <div className='mb-2'>
-                                            <label className='block  text-start' ><strong>Current Company:</strong></label>
+                                            <label className='block  text-start' >Current Company</label>
                                             <input
                                                 type='text'
                                                 value={profile.currentCompany}
@@ -193,7 +215,7 @@ function EmployeeProfile() {
                                             />
                                         </div>
                                         <div className='mb-2'>
-                                            <label className='block  text-start'><strong>Total Experience:</strong></label>
+                                            <label className='block  text-start'>Total Experience</label>
                                             <input
                                                 type='text'
                                                 value={profile.totalExperience}
@@ -202,7 +224,7 @@ function EmployeeProfile() {
                                             />
                                         </div>
                                         <div className='mb-2'>
-                                            <label className='block  text-start'><strong>LinkedIn URL:</strong></label>
+                                            <label className='block  text-start'>LinkedIn URL</label>
                                             <input
                                                 type='url'
                                                 value={profile.linkedInUrl}
@@ -213,14 +235,14 @@ function EmployeeProfile() {
                                     </div >
                                     <button
                                         onClick={handleEdit}
-                                        className=' bg-blue-500 text-white py-2 px-4 rounded-md'
+                                        className=' bg-blue-700 hover:bg-blue-800 text-white px-4 py-1.5 rounded mr-2'
                                     >
-                                        Edit
+                                        Update Profile
                                     </button>
                                 </div>
                             ) : (
-                                <div className='text-center bg-white shadow-md rounded-lg p-6 w-full max-w-sm m-4' >
-                                    <h2 className='text-2xl font-semibold mb-4'>{isEditing ? 'Edit Profile' : 'Complete Profile'}</h2>
+                                <div className='text-center bg-[#fcfcfa] mx-auto border border-gray-300 shadow-md rounded-lg px-5 lg:px-10 w-full max-w-xs lg:max-w-lg m-4 py-2' >
+                                    <h2 className='text-lg   font-semibold mb-4'>{isEditing ? 'Edit Profile' : 'Complete Profile'}</h2>
                                     <form onSubmit={handleSubmit}>
                                         <div className='mb-4'>
                                             <label className='block text-black-900 bold text-start'>Full Name<span className='text-red-700'>*</span></label>
@@ -299,9 +321,9 @@ function EmployeeProfile() {
                                             />
                                         </div>
                                         {isEditing && (
-                                            <button className='w-25 bg-gray-500 text-white py-2 rounded-md mx-3' onClick={cancelButton} >cancel</button>
+                                            <button className=' bg-red-700 hover:bg-red-800 text-white px-4 py-1.5 rounded mr-2' onClick={cancelButton} >Cancel</button>
                                         )}
-                                        <button type='submit' className=' bg-blue-500 text-white p-2 rounded-md '>
+                                        <button type='submit' className='  bg-green-700 hover:bg-green-800 text-white px-4 py-1.5 rounded mr-2'>
                                             Save
                                         </button>
                                     </form>
@@ -313,28 +335,32 @@ function EmployeeProfile() {
 
             </div>
             {successMessage && (
-    <div className="bg-green-500 text-white py-2 px-4 rounded-md absolute top-[10%] left-1/2 transform -translate-x-1/2">
+    <div className="bg-green-500 text-white py-2 px-4 rounded-md fixed text-center top-[10%] left-1/2 transform -translate-x-1/2">
         {successMessage}
     </div>
 )}
+{errorMessage && (
+    <div className="bg-green-500 text-white py-2 px-4 rounded-md fixed text-center top-[10%] left-1/2 transform -translate-x-1/2">
+        {errorMessage}
+    </div>
+)}
 
-<footer className="bg-[#00145e]  p-4 ml-0 xl:ml-[20%]">
-                    <div className="sm:mx-auto max-w-screen-lg">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="text-white justify-self-start">
-                                <h2>Company</h2>
-                                <p>About us</p>
-                            </div>
-                            <div className="text-white justify-self-end">
-                                <h2>Help & Support</h2>
-                                <p>Contact Us</p>
-                            </div>
+<footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
+                <div className="sm:mx-auto max-w-screen-lg">
+                    <div className="grid grid-cols-2 gap-4 ">
+                        <div className="text-white justify-self-start">
+
                         </div>
-                        <div className="text-white text-center mt-4">
-                            <p>Copyright &copy; 2024</p>
+                        <div className="text-white justify-self-end">
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                </footer>
+                    <div className="text-white text-center ">
+                        <p>Copyright &copy; 2024</p>
+                    </div>
+                </div>
+            </footer>
         </div>
 
     );

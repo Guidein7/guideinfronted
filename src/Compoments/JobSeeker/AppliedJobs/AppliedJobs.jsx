@@ -41,7 +41,7 @@ function AppliedJobs() {
         }
         ).then(response => {
            
-            setJobs(response.data)
+            setJobs(response.data.reverse())
 
         })
             .catch(error => {
@@ -74,7 +74,7 @@ function AppliedJobs() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className='flex flex-grow flex-col pt-24'>
+            <div className='flex flex-grow flex-col ml-0 xl:ml-[20%] pt-16 lg:pt-5'>
 
                 <h1 className='font-bold m-2 text-lg'>Applied Jobs</h1>
                 {loading ? (
@@ -90,7 +90,7 @@ function AppliedJobs() {
                         ) : (
                             <div>
                                 {job.map((status, index) => (
-                                    <div key={index} className="bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row justify-between items-start md:items-center cursor-pointer" onClick={() => handleClick(status)}>
+                                    <div key={index} className="bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row justify-between items-start md:items-center cursor-pointer mx-2" onClick={() => handleClick(status)}>
                                         <div className="mb-4 md:mb-0">
                                             <h2 className='text-lg font-semibold'>{status.jobTitle}</h2>
                                             <p className='text-sm'>Company: {status.companyName}</p>
@@ -101,7 +101,7 @@ function AppliedJobs() {
                                         </div>
                                         <div>
                                             <p>Referral Requested On: {status.requstedOn}</p>
-                                            <p>Current Status: <span className={status.currentStatus === 'REQUESTED' ? 'text-blue-700 font-bold' : status.currentStatus === 'IN_PROGRESS' ? 'text-yellow-500 font-bold' : status.currentStatus === 'REJECTED' ? 'text-red-500 font-bold' : ''}> {status.currentStatus}</span></p>
+                                            <p>Current Status: <span className={status.currentStatus === 'REQUESTED' ? 'text-blue-700 font-bold' : status.currentStatus === 'IN_PROGRESS' ? 'text-yellow-500 font-bold' : status.currentStatus === 'REJECTED' ? 'text-red-500 font-bold' : 'text-green-700 font-bold'}> {status.currentStatus}</span></p>
                                             {status.currentStatus === 'REJECTED' && (
                                                 <p>Reason: {status.reason}</p>
                                             )}
@@ -115,19 +115,18 @@ function AppliedJobs() {
 
 
             </div>
-            <div className="bg-[#00145e] w-full p-4 ">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e] w-full p-1 ">
+                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+                           
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
+                    <div className='text-white text-center pb-1'>
                         <p>Copyright &copy; {new Date().getFullYear()}</p>
                     </div>
                 </footer>

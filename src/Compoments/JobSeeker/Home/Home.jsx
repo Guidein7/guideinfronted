@@ -94,10 +94,10 @@ function Home() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className='flex-grow pt-24'>
+            <div className='flex-grow  ml-0 xl:ml-[20%] pt-20 lg:pt-5'>
 
                 {loading ? (
-                    <div className="flex flex-col justify-center items-center h-screen">
+                    <div className="flex flex-col justify-center items-center  h-screen">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                         <p className="mt-4 text-gray-900">Loading...</p>
                     </div>
@@ -108,7 +108,7 @@ function Home() {
                         {!isSubscribed && (
                             <div className='text-center mb-3'>
                                 <h1 className='font-bold my-3'>To Get an Employee Referral</h1>
-                                <Link to='/subscribe' className='bg-blue-700 text-white rounded p-2 my-3 mb-3'>Subscribe Now</Link>
+                                <Link to='/subscribe' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe Now</Link>
                             </div>
                         )}
                         <h1 className='mx-5 font-bold mb-2 text-lg'>Jobs Posted by Employees</h1>
@@ -119,7 +119,7 @@ function Home() {
                                     <div key={index} className="bg-white p-1 rounded shadow-md mb-1 flex flex-col md:flex-row justify-between items-start md:items-center mx-5 cursor-pointer" onClick={() => handleClick(job)}>
                                         <div className="mb-4 md:mb-0">
                                             <p
-                                                className="text-lg font-semibold block underline cursor-pointer md:text-left"
+                                                className="text-lg font-semibold block  cursor-pointer md:text-left"
                                             >
                                                 {job.jobTitle}
                                             </p>
@@ -135,26 +135,25 @@ function Home() {
                             </div>)}
                         {jobs.length > 0 && (
                             <div className='text-center m-5'>
-                                <Link to='/search-jobs' className='cursor-pointer flex justify-center'><span className='mx-2'>see all jobs</span> <FaArrowRight className='mt-1' />
+                                <Link to='/search-jobs' className='cursor-pointer flex justify-center'><span className='mx-2 font-bold'>Show all Jobs</span> <FaArrowRight className='mt-1' />
                                 </Link>
                             </div>
                         )}
                     </div>
                 )}
             </div>
-            <div className="bg-[#00145e] w-full p-4 ">
-                <footer className='sm:mx-auto max-w-screen-lg'>
+            <div className="bg-[#00145e] w-full p-1 ">
+                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='text-white justify-self-start'>
-                            <h2>Company</h2>
-                            <p>About us</p>
+                           
                         </div>
                         <div className='text-white justify-self-end'>
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className='text-white text-center mt-4'>
+                    <div className='text-white text-center pb-1'>
                         <p>Copyright &copy; {new Date().getFullYear()}</p>
                     </div>
                 </footer>

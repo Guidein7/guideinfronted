@@ -56,6 +56,10 @@ import WalletDetails from './Compoments/Admin/Employee/WalletDetails'
 import EmpWalletDetails from './Compoments/Admin/Employee/EmpWalletDetails'
 import DisabledJobs from './Compoments/Admin/Employee/DIsabledJobs'
 import DisabledJobDetails from './Compoments/Admin/Employee/DisabledJobDetails'
+import Contactus from './Compoments/JobSeeker/NavBar/Contactus'
+import ContactUsJs from './Compoments/JobSeeker/LandingPage/Contactusjs'
+import EContactus from './Compoments/Employee/SideBar/Econtactus'
+import EContactUsJp from './Compoments/Employee/LandingPage/EContactusJp'
 
 
 function App() { 
@@ -101,6 +105,9 @@ function App() {
         <Route path="/dashboard" element={<DashBoard/>} />
         <Route path="/user-verification" element={<UserVerification/>} />
         <Route path="/otp-authentication" element={<OtpAuthentication/>} />
+        <Route path="/contactus" element={<Contactus/>} />
+        <Route path="/contact-us" element={<ContactUsJs/>} />
+
 
 
         <Route path='/employee-landingpage' element={<EmployeeLandingPage/>}/>
@@ -122,7 +129,8 @@ function App() {
         <Route path="/job-poster-verification" element={<JobPosterVerification/>} />
         <Route path="/job-poster-otp-authentication" element={<JobPosterOtpAuthentication/>} />
         <Route path='/sidebar' element={<SideBar/>}/>
-
+        <Route path="/econtactus" element={<EContactus/>} />
+        <Route path="/econtact-us" element={<EContactUsJp/>} />
 
         <Route path='/welcome' element={<Welcome/>}/>
         <Route path='/welcome2' element={<Welcome2/>}/>

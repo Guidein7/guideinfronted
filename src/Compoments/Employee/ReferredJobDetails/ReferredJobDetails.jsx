@@ -34,8 +34,7 @@ function ReferredJobDetails() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [proof, setProof] = useState('')
-
-    console.log(referredJob);
+    const [errorMessage,setErrorMessage] = useState('');
 
 
     function base64ToBlob(base64, mime) {
@@ -89,10 +88,24 @@ function ReferredJobDetails() {
                 "ngrok-skip-browser-warning": "69420"
             },
         }).then(response => {
-            console.log(response);
+            
             setReferredJobdetails(response.data);
             setProof(response.data.proof);
-        }).catch(error => console.log(error))
+        }).catch(error => {
+                if(error.response.status === 403) {
+                    setErrorMessage('session Expired');
+                    setTimeout(() => {
+                        setErrorMessage('');
+                        handleLogout();
+                    }, 2000);
+                }
+                else{
+                    setErrorMessage('Error fetching data');
+                    setTimeout(() => {
+                        setErrorMessage('');
+                    }, 2000);
+                }
+        })
             .finally(() => setLoading(false))
     }
 
@@ -113,23 +126,27 @@ function ReferredJobDetails() {
         navigate(-1); // Go back to the previous page
     };
 
+    const viewProof = () => {
     const base64String = proof;
     const mimeType = getMimeType(base64String);
     const blobUrl = createBlobUrl(base64String, mimeType);
+    return blobUrl;
+    }
 
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
            <SideBar/>
-            <div className='flex-grow flex flex-col justify-between p-4 ml-0 xl:ml-[20%]'>
+            <div className='flex-grow pt-16 lg:pt-2 p-4 ml-0 xl:ml-[20%]'>
 
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>) : (
                     <div>
-                        <IoMdArrowRoundBack onClick={handleBackClick} size={24} className=' cursor-pointer my-1' />
-                        <div className="mx-2  bg-white p-2 ">
+                        {/* <IoMdArrowRoundBack onClick={handleBackClick} size={24} className=' cursor-pointer my-1' /> */}
+                        <div className="mx-2  pt-2 lg:pt-0 ">
                             <h1 className="font-bold mb-3">CandidateDetails</h1>
+                            {errorMessage && (<p className="text-red-500 p-2 text-center fixed bg-white">{errorMessage}</p>)}
                             <p className="mb-2"> Full Name : {referredJobDetails.candidateName}</p>
                             <p className="mb-2">Email {referredJobDetails.candidateEmail}</p>
                             <p className="mb-2">mobile:{referredJobDetails.candidateMobile}</p>
@@ -143,20 +160,16 @@ function ReferredJobDetails() {
                             <p className="mb-4">job PostedOn: {referredJobDetails.jobPostedOn}</p>
 
                             <h1 className="font-bold mb-2">Referral Details </h1>
-                            <p className=" mb-2">Date Of Referral: {referredJobDetails.dateOfReferral}</p>
-                            <p className="mb-2"> Method Of Referral:{referredJobDetails.methodOfReferral}</p>
-                            <p className="mb-2">Comments: {referredJobDetails.comments}</p>
-                            <p className="mb-2">uploaded proof:  <a href={blobUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                            {referredJobDetails.dateOfReferral && (<p className=" mb-2">Date Of Referral: {referredJobDetails.dateOfReferral}</p>)}
+                            {referredJobDetails.methodOfReferral && (<p className="mb-2"> Method Of Referral: {referredJobDetails.methodOfReferral}</p>)}
+                                                      {referredJobDetails.proof && ( <p className="mb-2">uploaded proof:  <a href={viewProof()} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                 View proof
-                            </a></p>
-                            
-                           
+                            </a></p>)}
 
-
-
-                            <p>Job Status:<span className="text-green-500 font-bold">{referredJobDetails.referralStatus}</span></p>
+                            <p>Job Status: <span className={` ${referredJob.status === 'IN_VERIFICATION'?'text-yellow-500 font-bold':referredJob.status === 'REFERRED'?'text-green-500 font-bold':'text-red-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
 
                             {referredJob.reason && (<p>Reason: <span className="">{referredJob.reason}</span></p>)}
+                            <p className="mb-2">Comments: {referredJobDetails.comments}</p>
 
 
                         </div>
@@ -164,19 +177,18 @@ function ReferredJobDetails() {
                 )}
 
             </div>
-            <footer className="bg-[#00145e]  p-4 ml-0 xl:ml-[20%]">
+            <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
                 <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 ">
                         <div className="text-white justify-self-start">
-                            <h2>Company</h2>
-                            <p>About us</p>
+
                         </div>
                         <div className="text-white justify-self-end">
-                            <h2>Help & Support</h2>
-                            <p>Contact Us</p>
+                            <h2 className='pr-2'>Help & Support</h2>
+                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
                         </div>
                     </div>
-                    <div className="text-white text-center mt-4">
+                    <div className="text-white text-center ">
                         <p>Copyright &copy; 2024</p>
                     </div>
                 </div>
