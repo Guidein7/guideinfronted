@@ -125,8 +125,8 @@ function EmpWalletDetails() {
                                     <p className='w-full '>Withdrawn in progress:</p>
                                     <div>
                                         <span className=''>{walletData.withdrawInProgress}</span>
-                                        <button onClick={() => setshowForm(true)} className='mx-3 bg-gray-700 text-white p-2 rounded-lg '><span className='mr-2'></span>
-                                            Mark As Deposit</button>
+                                       {walletData.withdrawInProgress  && (<button onClick={() => setshowForm(true)} className='mx-3 bg-gray-700 text-white p-2 rounded-lg '><span className='mr-2'></span>
+                                            Mark As Deposit</button>)}
                                     </div>
                                 </div>
                             </div>

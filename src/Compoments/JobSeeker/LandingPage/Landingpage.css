@@ -1,0 +1,52 @@
+
+.main{
+
+/* width: 861px;
+height: 60px;
+
+left: 289px;
+gap: 0px;
+opacity: 0px; */
+top: 216px;
+font-family: Inter;
+color: #3E454B;
+text-align: center;
+
+}
+.paragraph{
+font-family: Inter;
+color: #3E454B;
+}
+.box-gradient{
+    background: linear-gradient(90deg, #0E4A87 0%, #1B69B8 100%);
+    border: 6px solid #C0CDFC;
+    font-family: Inter;
+
+}
+.numbers {
+    width: 37px;
+    height: auto;
+    display: inline-block;
+    opacity: 1; /* Set to 1 to make visible */
+    font-family: 'Mont Demo', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 168px;
+    text-align: center; /* Center align text */
+    position: absolute;
+    top: -90px; /* Adjust as needed */
+    left: 10%; /* Adjust as needed */
+    color: #8CA3F7;
+    -webkit-text-stroke: 2px #FFFFFF;
+    
+   
+   
+    
+}
+
+.gradient-container{
+    background: linear-gradient(180deg, rgba(200, 221, 232, 0.47) 0%, rgba(189, 212, 247, 0.47) 100%);
+/* background: linear-gradient(180deg, rgba(140, 163, 247, 0.57) 0%, rgba(255, 114, 182, 0.57) 100%); */
+
+}
+

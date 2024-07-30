@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { employeeLogin } from "../slices/employeeLoginSlice";
+import EFooter from "../LandingPage/Footer";
 
 const EmployeeLogin = () => {
     const [type, setType] = useState('password');
@@ -138,6 +139,7 @@ const EmployeeLogin = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             type={type}
                             placeholder="Password"
+                            autoComplete="false"
                         />
                         <p onClick={passwordView} className="absolute top-0 right-0 mt-8 mr-2 px-3 py-2 text-blue-700 cursor-pointer">
                             {buttonName}
@@ -186,22 +188,7 @@ const EmployeeLogin = () => {
 
                     )}
 
-<div className="bg-[#00145e]  w-full  ">
-                <footer className=' sm:mx-auto max-w-screen-lg'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtact-us' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1 '>
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </footer>
-            </div>
+                        <EFooter/>
         </div>
     );
 };

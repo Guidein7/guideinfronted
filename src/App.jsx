@@ -60,12 +60,17 @@ import Contactus from './Compoments/JobSeeker/NavBar/Contactus'
 import ContactUsJs from './Compoments/JobSeeker/LandingPage/Contactusjs'
 import EContactus from './Compoments/Employee/SideBar/Econtactus'
 import EContactUsJp from './Compoments/Employee/LandingPage/EContactusJp'
+import SubscribeJ from './Compoments/JobSeeker/Subscription/SubscribeJ'
+import FAQ from './Compoments/Employee/LandingPage/Faqs'
+import EFAQ from './Compoments/Employee/SideBar/EFaq'
+import ReferralFAQ from './Compoments/JobSeeker/LandingPage/ReferralFaq'
+import JReferralFAQ from './Compoments/JobSeeker/NavBar/JReferralFaq'
 
 
 function App() { 
 
-  // const log = useSelector(state => state.emplog);
-  // let auth = log.isAuthenticated;
+  const log = useSelector(state => state.emplog);
+  let auth = log.isAuthenticated;
   //  const location = useLocation();
   
   // useEffect(() => {
@@ -76,7 +81,7 @@ function App() {
    
   // }, [location.pathname]);
 
-  const [auth,setAuth] = useState(true)
+  
   
 
   return (
@@ -94,6 +99,12 @@ function App() {
         <Route path='/forgot-password' element={<ForgetPassword/>}/>
         <Route path='/reset-verify' element={<PasswordResetVerification/>}/>
         <Route path='/reset-password' element={<PasswordReset/>}/>
+        <Route path="/user-verification" element={<UserVerification/>} />
+        <Route path="/otp-authentication" element={<OtpAuthentication/>} />
+        <Route path="/contactus" element={<Contactus/>} />
+        <Route path="/contact-us" element={<ContactUsJs/>} />
+        <Route path="/subscribej" element={<SubscribeJ/>} />
+
         <Route path='/search-jobs' element={<SearchJobs/>} />
         <Route path='/profile' element={<Profile/>} />
         <Route path='/saved-jobs' element={<SavedJobs/>} />
@@ -103,11 +114,11 @@ function App() {
         <Route path="/applied-referral-details" element={<AppliedRefeReferralDetails/>} />
         <Route path="/home" element={<Home/>} />
         <Route path="/dashboard" element={<DashBoard/>} />
-        <Route path="/user-verification" element={<UserVerification/>} />
-        <Route path="/otp-authentication" element={<OtpAuthentication/>} />
-        <Route path="/contactus" element={<Contactus/>} />
-        <Route path="/contact-us" element={<ContactUsJs/>} />
+        <Route path="/referral-faqs" element={<ReferralFAQ/>} />
+        <Route path="/faqs-referral" element={<JReferralFAQ/>} />
 
+     
+        
 
 
         <Route path='/employee-landingpage' element={<EmployeeLandingPage/>}/>
@@ -131,6 +142,8 @@ function App() {
         <Route path='/sidebar' element={<SideBar/>}/>
         <Route path="/econtactus" element={<EContactus/>} />
         <Route path="/econtact-us" element={<EContactUsJp/>} />
+        <Route path="/employee-faqs" element={<FAQ/>} />
+        <Route path="/faqs-employee" element={<EFAQ/>} />
 
         <Route path='/welcome' element={<Welcome/>}/>
         <Route path='/welcome2' element={<Welcome2/>}/>

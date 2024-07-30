@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import emailicon from '../../../assets/emailicon.png'
 import callicon from '../../../assets/callicon.png'
+import EFooter from './Footer';
 function EContactUsJp() {
     const [showSideNav, setShowSideNav] = useState(false);
     const sideNavRef = useRef(null);
@@ -121,23 +122,8 @@ function EContactUsJp() {
 
                 </div>
             </div>
-
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='mr-2'>Help & Support</h2>
-                            <Link to='/econtact-us' className='ml-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center mt-4'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+            <EFooter/>
+           
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import GuideinLogo from '../../../assets/GuideinLogo.png'
 import config from '../../../config';
+import JFooter from '../LandingPage/JFooter';
 
 const PasswordReset = () => {
     const [type, setType] = useState('password');
@@ -156,22 +157,7 @@ const PasswordReset = () => {
                     </form>
                 </div>
             </div>
-            <div className="bg-[#00145e] w-full p-1 ">
-        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='text-white justify-self-start'>
-
-            </div>
-            <div className='text-white justify-self-end'>
-              <h2 className='pr-2'>Help & Support</h2>
-              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
-            </div>
-          </div>
-          <div className='text-white text-center '>
-            <p>Copyright &copy; {new Date().getFullYear()}</p>
-          </div>
-        </footer>
-      </div>
+           <JFooter/>
         </div>
     );
 };

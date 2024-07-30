@@ -1,14 +1,12 @@
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { jwtDecode } from 'jwt-decode'; // Remove curly braces
 import axios from 'axios';
 import { logoutEmployee } from '../slices/employeeLoginSlice';
 import '../CandidateDtails/Responsive.css';
-import { IoMdArrowRoundBack } from "react-icons/io";
-import GuideinLogo from '../../../assets/GuideinLogo.png'
 import config from '../../../config';
 import SideBar from '../SideBar/SideBar';
+import Footer from '../SideBar/Footer';
 
 function CandidateDetails() {
     const log = useSelector(state => state.emplog);
@@ -34,13 +32,17 @@ function CandidateDetails() {
         companyName: '',
         dateOfReferral: '',
         methodOfReferral: '',
-        otherReferral: '', // Add this line
+        otherReferral: '',
         proof: null,
         comments: '',
     });
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const [errorMessage, setErrorMessage] = useState('')
-
+    useEffect(() => {
+        if (!token) {
+            navigate('/employee-login');
+        }
+    }, [token, navigate]);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -60,9 +62,7 @@ function CandidateDetails() {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-
         if (!file) return;
-
         setFormData({
             ...formData,
             proof: file
@@ -83,10 +83,6 @@ function CandidateDetails() {
         navigate('/employee-login');
     };
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
-
     useEffect(() => {
         getReferralRequest();
 
@@ -103,11 +99,10 @@ function CandidateDetails() {
                 candidateEmail: candidate.candidateEmail,
                 jobId: candidate.jobId,
             }
+        }).then(response => {
+            setCandidateDetails(response.data);
+            formData.companyName = response.data.company;
         })
-            .then(response => {
-                setCandidateDetails(response.data);
-                formData.companyName = response.data.company;
-            })
             .catch(error => {
                 if (error.response.status === 403) {
                     setErrorMessage('session Expired')
@@ -121,30 +116,27 @@ function CandidateDetails() {
                     setTimeout(() => {
                         setErrorMessage('')
                     }, 2000);
-
                 }
-            })
-            .finally(() => setLoading(false))
+            }).finally(() => setLoading(false))
     }
 
     const rejectReferral = (e) => {
         e.preventDefault();
-        setLoading(true);
         const rej = { ...rejectData, referralId: candidateDetails.referralId };
+        setLoading(true);
         axios.post(`${config.api.baseURL}${config.api.jobPoster.rejectReferral}`, rej, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        })
-            .then(response => {
-                setReject(false)
-                getReferralRequest();
-                setRejectData({
-                    reason: "",
-                    comments: ""
-                })
-
+        }).then(response => {
+            setReject(false)
+            getReferralRequest();
+            setRejectData({
+                reason: "",
+                comments: ""
             })
+
+        })
             .catch(error => {
                 if (error.response.status === 403) {
                     setErrorMessage('session Expired')
@@ -158,11 +150,8 @@ function CandidateDetails() {
                     setTimeout(() => {
                         setErrorMessage('')
                     }, 2000);
-
                 }
-            })
-            .finally(() => setLoading(false))
-
+            }).finally(() => setLoading(false))
     };
 
     const handleResumeView = () => {
@@ -177,7 +166,7 @@ function CandidateDetails() {
             companyName: candidateDetails.company,
             dateOfReferral: '',
             methodOfReferral: '',
-            otherReferral: '', // Add this line
+            otherReferral: '',
             proof: null,
             comments: '',
         })
@@ -190,21 +179,16 @@ function CandidateDetails() {
             comments: ""
         })
         setReject(false)
-
-
     }
     const referJob = (e) => {
         e.preventDefault();
-
         const dateOfreferral = formData.dateOfReferral;
         let methodOfReferral = formData.methodOfReferral;
         const comments = formData.comments;
         const proof = formData.proof;
-
         if (methodOfReferral === 'Others' && formData.otherReferral) {
             methodOfReferral = formData.otherReferral;
         }
-
         const referForm = {
             dateOfreferral: dateOfreferral,
             referralId: candidateDetails.referralId,
@@ -212,7 +196,6 @@ function CandidateDetails() {
             comments: comments,
             proof: proof,
         };
-
         const form = new FormData();
         form.append('referralId', referForm.referralId);
         form.append('dateOfReferral', referForm.dateOfreferral);
@@ -228,65 +211,63 @@ function CandidateDetails() {
             setRefer(false);
             setShowReferMessage(true);
             getReferralRequest();
-        })
-            .catch(error => {
-                if (error.response.status === 403) {
-                    setErrorMessage('session Expired')
-                    setTimeout(() => {
-                        setErrorMessage('');
-                        handleLogout();
-                    }, 2000);
-                }
-                else {
-                    setRefer(false);
-                    setErrorMessage('Error occured')
-                    setTimeout(() => {
-                        setErrorMessage('')
-                    }, 2000);
-
-                }
-            })
-            .finally(() => setLoading(false));
+        }).catch(error => {
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired')
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setRefer(false);
+                setErrorMessage('Error occured')
+                setTimeout(() => {
+                    setErrorMessage('')
+                }, 2000);
+            }
+        }).finally(() => setLoading(false));
     };
     const today = new Date().toISOString().split('T')[0];
 
-    const handleBackClick = () => {
-        navigate(-1); // Go back to the previous page
-    };
 
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
             <SideBar />
             <div className='flex-grow flex flex-col justify-between p-4 ml-0 xl:ml-[20%] pt-16 lg:pt-0'>
-
+                {errorMessage && (<p className='text-red-500 bg-white my-1 py-2 px-4  fixed left-1/2 transform -translate-x-1/2'>{errorMessage}</p>)}
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>) :
                     (<div className=''>
-
-
-                        {/* <IoMdArrowRoundBack onClick={handleBackClick} size={24} className=' cursor-pointer my-1' /> */}
                         <div className=' lg:p-4 rounded mb-2'>
                             <h1 className='font-bold text-center text-xl mb-3'>Candidate Details</h1>
-
                             <p className='mb-1'>Full Name : <span>{candidateDetails.candidateName}</span></p>
                             <p className='mb-1'>Mail Id : <span>{candidateDetails.candidateEmail}</span></p>
                             <p className='mb-1'>Mobile Number : <span>{candidateDetails.candidateMobile}</span></p>
                             <p className='mb-1'>Candidate Experience: {candidateDetails.candidateExperience}</p>
                             <p >Resume: <span className='text-blue-500 cursor-pointer' onClick={handleResumeView}>{candidateDetails.candidateName}.pdf</span></p>
-
                             <h1 className='font-bold mt-2'>Referral Requested for</h1>
                             <p className='mb-1'>Job Role: <span className=''>{candidateDetails.referralFor}</span></p>
                             <p className='mb-1'>Company: {candidateDetails.company}</p>
                             <p className='mb-1'>Location: {candidateDetails.jobLocation}</p>
                             <p>Experience: {candidateDetails.experienceRequired}</p>
                             <p>Posted On: {candidateDetails.jobPostedOn}</p>
-
-
                             <div className='flex mt-4'>
                                 {candidateDetails.referralStatus === 'REQUESTED' && (<button className='bg-red-700 hover:bg-red-800 text-white px-4 mr-2 py-2 rounded' onClick={() => setReject(true)}>Reject</button>)}
-                                <button className={`${candidateDetails.referralStatus !== 'REQUESTED'?'bg-yellow-500 hover:bg-yellow-500 text-white px-4 mr-2 py-2 rounded':'bg-green-700 hover:bg-green-800 text-white px-4 mr-2 py-2 rounded'}`} disabled={candidateDetails.referralStatus !== 'REQUESTED'} onClick={() => setRefer(true)}>{candidateDetails.referralStatus === 'REQUESTED' ? 'Refer' : candidateDetails.referralStatus}</button>
+                                <button
+                                    className={candidateDetails.referralStatus === 'IN_VERIFICATION'
+                                        ? 'bg-yellow-500 hover:bg-yellow-500 text-white px-4 mr-2 py-2 rounded'
+                                        : (candidateDetails.referralStatus === 'REJECTED' || candidateDetails.referralStatus === 'VERIFICATION_FAILED')
+                                            ? 'bg-red-700 hover:bg-red-800 text-white px-4 mr-2 py-2 rounded'
+                                            : 'bg-green-700 hover:bg-green-800 text-white px-4 mr-2 py-2 rounded'
+                                    }
+                                    disabled={candidateDetails.referralStatus !== 'REQUESTED'}
+                                    onClick={() => setRefer(true)}
+                                >
+                                    {candidateDetails.referralStatus === 'REQUESTED' ? 'Refer' : candidateDetails.referralStatus}
+                                </button>
                             </div>
                         </div>
                     </div>)}
@@ -461,22 +442,7 @@ function CandidateDetails() {
                     </div>
                 </div>
             )}
-            <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
-                <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4 ">
-                        <div className="text-white justify-self-start">
-
-                        </div>
-                        <div className="text-white justify-self-end">
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className="text-white text-center ">
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </div>
-            </footer>
+           <Footer/>
         </div>
     );
 }

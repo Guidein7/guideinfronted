@@ -1,7 +1,7 @@
 // src/config.js
 const config = {
   api: {
-    baseURL: 'https://guidein-backend-guidein-backend.lomaem.easypanel.host',//' https://prepared-pleasing-dolphin.ngrok-free.app',//
+    baseURL:  'https://guidein-backend-guidein-backend.lomaem.easypanel.host', //' https://burro-up-panda.ngrok-free.app', //'
     jobSeeker: {
       register:'/api/guidein/v1/auth/register',
       verification:'/api/guidein/v1/auth/register/otpvalidate',
@@ -70,7 +70,8 @@ const config = {
       empWalletDetails:'/api/guidein/v1/admin/getWalletDetails/',
       disabledJobs:'/api/guidein/v1/admin/getDisabledJobs',
       enableJob:'/api/guidein/v1/admin/enablejob/',
-      submitDeposit:'/api/guidein/v1/admin/submitDeposit'
+      submitDeposit:'/api/guidein/v1/admin/submitDeposit',
+      adminReject:'/api/guidein/v1/admin/rejectReferralRequest'
 
     }
 

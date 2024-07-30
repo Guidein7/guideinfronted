@@ -4,19 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import GuideinLogo from '../../../assets/GuideinLogo.png'
 import config from '../../../config';
 import SideBar from '../SideBar/SideBar';
+import Footer from '../SideBar/Footer';
 
 function EmployeeProfile() {
     const log = useSelector(state => state.emplog);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
-    const mobile = decoded.mobile;
-    const name = decoded.username;
-
-    const [isOpen, setIsOpen] = useState(false);
+    const decoded = token ? jwtDecode(token) : null;
+    const email = decoded ? decoded.sub : null;
+    const mobile = decoded ? decoded.mobile : null;
+    const name = decoded ? decoded.username : null;
     const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -29,12 +27,21 @@ function EmployeeProfile() {
     });
     const [loading, setLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage,setErrorMessage] = useState('')
-
+    const [errorMessage, setErrorMessage] = useState('')
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!token) {
+            navigate('/employee-login');
+        }
+    }, [token, navigate]);
+
+    useEffect(() => {
+        fetchProfile();
+    }, [token, email]);
+
+    const fetchProfile = () => {
         setLoading(true);
         axios.get(`${config.api.baseURL}${config.api.jobPoster.getProfile}${email}`, {
             headers: {
@@ -43,53 +50,42 @@ function EmployeeProfile() {
             },
         })
             .then(response => {
-              
+
                 if (response.status === 200) {
                     setProfile(response.data);
                 }
-                if(response.status ===204){
+                if (response.status === 204) {
                     setProfile(null);
                 }
             })
             .catch(error => {
-                if (error.response && error.response.status === 204) {
-                    setProfile(null);
-                } else if(error.response.status === 403){
+                if (error.response.status === 403) {
                     setErrorMessage('session Expired')
                     setTimeout(() => {
                         setErrorMessage('')
                         handleLogout();
-                    },2000)
+                    }, 2000)
                 }
-                else{
+                else {
                     setErrorMessage('Error fetching profile')
                     setTimeout(() => {
                         setErrorMessage('')
-                    },2000)
+                    }, 2000)
                 }
 
             })
             .finally(() => setLoading(false))
-    }, [token, email]);
 
-    useEffect(() => {
-        if (successMessage) {
-            const timer = setTimeout(() => {
-                setSuccessMessage('');
-            }, 2000);
+    }
 
-            return () => clearTimeout(timer);
-        }
-    }, [successMessage]);
+    
 
     const handleLogout = () => {
         dispatch(logoutEmployee());
         navigate('/employee-login');
     };
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -101,7 +97,7 @@ function EmployeeProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-       
+
         const url = isEditing
             ? `${config.api.baseURL}${config.api.jobPoster.updateProfile}`
             : `${config.api.baseURL}${config.api.jobPoster.saveProfile}`;
@@ -119,22 +115,25 @@ function EmployeeProfile() {
                 setProfile(formData);
                 setIsEditing(false);
                 setSuccessMessage('Profile saved successfully')
+                setTimeout(() => {
+                    setSuccessMessage('')
+                }, 2000);
             })
             .catch(error => {
-                if(error.response.status === 403){
+                if (error.response.status === 403) {
                     setErrorMessage('session Expired')
                     setTimeout(() => {
                         setErrorMessage('')
                         handleLogout();
-                    },2000)
+                    }, 2000)
                 }
-                else{
+                else {
                     setErrorMessage('Error saving  profile')
                     setTimeout(() => {
                         setErrorMessage('')
-                    },2000)
+                    }, 2000)
                 }
-                
+
             })
             .finally(() => setLoading(false))
 
@@ -158,9 +157,9 @@ function EmployeeProfile() {
 
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
-           <SideBar/>
-            <div className='flex-grow  ml-0 xl:ml-[20%] pt-14 lg:pt-2'>
-                <div >
+            <SideBar />
+            <div className='flex-grow  ml-0 xl:ml-[20%] pt-20 lg:pt-2'>
+                <div className='' >
 
                     {loading ? (
                         <div className="flex flex-col justify-center items-center h-screen">
@@ -169,12 +168,10 @@ function EmployeeProfile() {
                         </div>
                     ) : (
                         <div>
-
                             {profile && !isEditing ? (
-                                <div className='text-center bg-[#fcfcfa] mx-auto border border-gray-300 shadow-md rounded-lg px-5 lg:px-10 w-full max-w-xs lg:max-w-lg m-4 py-2'>
+                                <div className='text-center bg-[#fcfcfa] mx-auto border border-gray-300 shadow-md rounded-lg px-5 lg:px-6 w-full max-w-xs lg:max-w-lg my-4 py-2 lg:py-6'>
                                     <h2 className='text-lg font-semibold mb-3'> My Profile</h2>
                                     <div>
-                                        
                                         <div className='mb-1'>
                                             <label className='block  text-start'>Full Name</label>
                                             <input
@@ -204,7 +201,7 @@ function EmployeeProfile() {
                                         </div>
                                     </div>
                                     <div>
-                                        
+
                                         <div className='mb-2'>
                                             <label className='block  text-start' >Current Company</label>
                                             <input
@@ -323,7 +320,7 @@ function EmployeeProfile() {
                                         {isEditing && (
                                             <button className=' bg-red-700 hover:bg-red-800 text-white px-4 py-1.5 rounded mr-2' onClick={cancelButton} >Cancel</button>
                                         )}
-                                        <button type='submit' className='  bg-green-700 hover:bg-green-800 text-white px-4 py-1.5 rounded mr-2'>
+                                        <button type='submit' className={`${!isEditing ? ' bg-blue-700 hover:bg-blue-800 text-white px-4 py-1.5 rounded mr-2' : ' bg-green-700 hover:bg-green-800 text-white px-4 py-1.5 rounded mr-2'}`}>
                                             Save
                                         </button>
                                     </form>
@@ -335,32 +332,16 @@ function EmployeeProfile() {
 
             </div>
             {successMessage && (
-    <div className="bg-green-500 text-white py-2 px-4 rounded-md fixed text-center top-[10%] left-1/2 transform -translate-x-1/2">
-        {successMessage}
-    </div>
-)}
-{errorMessage && (
-    <div className="bg-green-500 text-white py-2 px-4 rounded-md fixed text-center top-[10%] left-1/2 transform -translate-x-1/2">
-        {errorMessage}
-    </div>
-)}
-
-<footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
-                <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4 ">
-                        <div className="text-white justify-self-start">
-
-                        </div>
-                        <div className="text-white justify-self-end">
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className="text-white text-center ">
-                        <p>Copyright &copy; 2024</p>
-                    </div>
+                <div className="bg-green-500 text-white py-2 px-4 rounded-md fixed  left-1/2 transform -translate-x-1/2">
+                    {successMessage}
                 </div>
-            </footer>
+            )}
+            {errorMessage && (
+                <div className="bg-red-500 text-white py-2 px-4 rounded-md fixed text-center  left-1/2 transform -translate-x-1/2">
+                    {errorMessage}
+                </div>
+            )}
+            <Footer/>
         </div>
 
     );

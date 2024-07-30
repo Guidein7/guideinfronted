@@ -1,23 +1,22 @@
-import GuideinLogo from '../../../assets/GuideinLogo.png';
 import { useState, useEffect, useRef } from 'react';
 import { logoutUser } from '../Slices/loginSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { FaFilePdf } from "react-icons/fa";
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import JSFooter from '../NavBar/JSFooter';
 
 function Profile() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
-    const mobile = decoded.mobile;
-    const name = decoded.username;
+    const decoded = token? jwtDecode(token):null;
+    const email = decoded?decoded.sub:null;
+    const mobile = decoded?decoded.mobile:null;
+    const name = decoded?decoded.username:null;
     const [isOpen, setIsOpen] = useState(false);
     const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +36,12 @@ function Profile() {
     });
     const [uploadedResumeURL, setUploadedResumeURL] = useState(null);
     const [errorMessage, setErrorMessage] = useState('')
+    useEffect(() => {
+        if(!token){
+            navigate('/login')
+        }
+    },[token,navigate])
+
     useEffect(() => {
         getProfile();
     }, []);
@@ -115,11 +120,21 @@ function Profile() {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        const maxSize = 5 * 1024 * 1024;
+
         if (file && file.type !== 'application/pdf') {
             setErrorMessage('Please upload a pdf file')
             setTimeout(() => setErrorMessage(''), 2000)
+            e.target.value = null;
             return;
         }
+        if (file && file.size > maxSize) {
+            setErrorMessage('File size exceeds 5 MB');
+            setTimeout(() => setErrorMessage(''), 2000);
+            e.target.value = null;
+            return;
+        }
+
         setFormData({
             ...formData,
             resume: file
@@ -128,7 +143,6 @@ function Profile() {
         if (file) {
             setResumeFileName(file.name);
             setIsNewResumeUploaded(true);
-
             const fileURL = URL.createObjectURL(file);
             setUploadedResumeURL(fileURL);
         }
@@ -222,7 +236,7 @@ function Profile() {
                                 <h2 className='text-2xl text-[#21259] mb-3'>My Profile</h2>
 
                                 <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Full Name<span className='text-red-700'>*</span></label>
+                                    <label className='block text-start lg:mb-1'>Full Name</label>
                                     <input
                                         type='text'
                                         value={profile.name}
@@ -231,7 +245,7 @@ function Profile() {
                                     />
                                 </div>
                                 <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Email<span className='text-red-700'>*</span></label>
+                                    <label className='block text-start lg:mb-1'>Email</label>
                                     <input
                                         type='email'
                                         value={profile.email}
@@ -240,7 +254,7 @@ function Profile() {
                                     />
                                 </div>
                                 <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Mobile No<span className='text-red-700'>*</span></label>
+                                    <label className='block text-start lg:mb-1'>Mobile No</label>
                                     <input
                                         type='text'
                                         value={profile.mobile}
@@ -249,7 +263,7 @@ function Profile() {
                                     />
                                 </div>
                                 <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Current Status<span className='text-red-700'>*</span></label>
+                                    <label className='block text-start lg:mb-1'>Current Status</label>
                                     <input
                                         type='text'
                                         value={profile.currentStatus}
@@ -258,7 +272,7 @@ function Profile() {
                                     />
                                 </div>
                                 <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Experience<span className='text-red-700'>*</span></label>
+                                    <label className='block text-start lg:mb-1'>Experience</label>
                                     <input
                                         type='text'
                                         value={profile.experience}
@@ -269,7 +283,7 @@ function Profile() {
 
                                 </div>
                                 <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Linkedin URL <span className='text-red-700'>*</span></label>
+                                    <label className='block text-start lg:mb-1'>Linkedin URL </label>
                                     <input
                                         type='text'
                                         value={profile.linkedInUrl}
@@ -280,7 +294,6 @@ function Profile() {
 
                                 <div className='text-start flex flex-row mb-2 lg:mb-3'>
                                     <span > Resume: </span>
-                                    {/* <FaFilePdf size={40} onClick={handleResumeView} className='cursor-pointer' /> */}
                                     <p onClick={handleResumeView} className='cursor-pointer text-blue-400'>{profile.name}.pdf</p>
                                 </div>
                                 <button onClick={handleEdit} className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Update Profile</button>
@@ -362,6 +375,21 @@ function Profile() {
                                             <option value='7+ Years'>7+ Years</option>
                                         </select>
                                     </div>
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Linkedin URL<span className='text-red-700'>*</span></label>
+                                        <input
+                                            type='text'
+                                            id='linkedInUrl'
+                                            name='linkedInUrl'
+                                            value={formData.linkedInUrl}
+                                            onChange={handleInputChange}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            required
+                                        />
+
+                                    </div>
+
+
                                     <div className="mb-2 lg:mb-1">
                                         {!profile ? (
                                             <div>
@@ -369,9 +397,11 @@ function Profile() {
                                                     type="file"
                                                     name="resume"
                                                     onChange={handleFileChange}
+                                                    accept="application/pdf"
+                                                    ref={fileInputRef}
                                                     required
                                                 />
-                                                <p className='text-red-500 mr-32'>Only .PDF (5 MB)</p>
+                                                <p className='text-xs mr-32'>Only .PDF (5 MB)</p>
                                             </div>
                                         ) : (
                                             <div>
@@ -397,17 +427,8 @@ function Profile() {
                                                     <input
                                                         type="file"
                                                         name="resume"
-                                                        onChange={(e) => {
-                                                            const file = e.target.files[0];
-                                                            if (file && file.type !== 'application/pdf') {
-                                                                setErrorMessage('Please upload a PDF file.');
-                                                                setTimeout(() => {
-                                                                    setErrorMessage('');
-                                                                }, 2000);
-                                                                return;
-                                                            }
-                                                            handleFileChange(e);
-                                                        }}
+                                                        accept="application/pdf"
+                                                        onChange={handleFileChange}
                                                         ref={fileInputRef}
                                                         style={{ display: 'none' }}
                                                     />
@@ -447,22 +468,7 @@ function Profile() {
             )}
 
 
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+<JSFooter/>
         </div>
     );
 }

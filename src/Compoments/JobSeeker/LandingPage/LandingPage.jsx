@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import GuideinLogo from '../../../assets/GuideinLogo.png';
 import guideinLandingPage from '../../../assets/guideinLandingPage.png';
+import dottedlines from '../../../assets/dottedlines.png'
 import { useDispatch } from 'react-redux';
+import './Landingpage.css'
+import JFooter from './JFooter';
 
 const LandingPage = () => {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -94,45 +97,62 @@ const LandingPage = () => {
           <NavLinks className='flex flex-col my-4' />
         </div>
       </div>
-      <div className='flex-grow justify-center items-center pt-24'>
-        <div className='text-center hidden lg:block  p-10 lg:p-2'>
+      <div className=' flex flex-col pt-24 flex-grow gradient-container'>
+      <div className='text-center  p-2 lg:p-2 my-2'>
           <h1 className='font-bold text-xl my-2'>To Get Referral</h1>
-          <Link to='/subscribe' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe Now</Link>
+          <Link to='/subscribej' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe Now</Link>
         </div>
-        <div className='my-4 p-4' >
-          <img src={guideinLandingPage} alt="Landing Page" className="h-auto max-w-full" />
-        </div>
-        <div className='text-center  p-10 lg:p-2 mb-2'>
-          <h1 className='font-bold text-xl my-2'>To Get Referral</h1>
-          <Link to='/subscribe' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe Now</Link>
-        </div>
-      </div>
 
-      {/* <div className="flex flex-col justify-between items-center pt-16 flex-grow">
-       
-        <div className="flex justify-center items-center lg:p-6">
-          
-        </div>
-      </div> */}
-
-      <div className="bg-[#00145e] w-full p-1 ">
-        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='text-white justify-self-start'>
-
+        <div className='grid grid cols-1 gap-5 mt-5 lg:mt-10'>
+          <h1 className=' text-center font-bold text-xl lg:text-3xl '>Get Hired Faster with Trusted Referrals</h1>
+          <div>
+            <p className='text-center text-base m-0 p-0  lg:text-xl paragraph'>Don't wait for connections to get a referral. Get referred instantly <span className='md:hidden'>and
+            increase your chances of landing your dream job right away!</span></p> <p className='hidden md:block text-center text-sm lg:text-xl paragraph m-0 p-0'>and
+              increase your chances of landing your dream job right away!</p>
+          </div>
+          <div className='relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 lg:mt-14 mx-10 mb-12'>
+            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12'>
+              <h1 className='numbers'>1</h1>
+              <div>
+                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Sign Up & Subscribe</h1>
+                <p className='text-base text-[#F5FAFF]'>Create an account and choose a subscription plan based on the number of referrals you need.</p>
+              </div>
             </div>
-            <div className='text-white justify-self-end'>
-              <h2 className='pr-2'>Help & Support</h2>
-              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
+            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12'>
+              <h1 className='numbers'>2</h1>
+              <div>
+                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Explore Jobs</h1>
+                <p className='text-base text-[#F5FAFF]'>Browse through available job postings from employees ready to refer candidates.</p>
+              </div>
+            </div>
+            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12'>
+              <h1 className='numbers'>3</h1>
+              <div>
+                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Instant Referral</h1>
+                <p className='text-base text-[#F5FAFF]'>Employees in our network will refer you right away. You'll be notified as soon as it’s done.</p>
+              </div>
+            </div>
+            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12 '>
+              <h1 className='numbers'>4</h1>
+              <div>
+                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Request a Referral</h1>
+                <p className='text-base text-[#F5FAFF]'>Fill in job details and upload your resume for immediate visibility to our employee network.</p>
+              </div>
+            </div>
+            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12 '>
+              <h1 className='numbers'>5</h1>
+              <div>
+                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Track & Succeed</h1>
+                <p className='text-base text-[#F5FAFF]'>Monitor your referral status in your dashboard, prepare for interviews and land your dream job.</p>
+              </div>
             </div>
           </div>
-          <div className='text-white text-center '>
-            <p>Copyright &copy; {new Date().getFullYear()}</p>
-          </div>
-        </footer>
+        </div>
       </div>
+    <JFooter/>
     </div>
   );
 };
 
 export default LandingPage;
+

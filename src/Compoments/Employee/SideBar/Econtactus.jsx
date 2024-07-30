@@ -2,6 +2,7 @@ import SideBar from './SideBar';
 import emailicon from '../../../assets/emailicon.png'
 import callicon from '../../../assets/callicon.png'
 import { Link } from "react-router-dom";
+import Footer from './Footer';
 
 function EContactus() {
     return(
@@ -17,7 +18,7 @@ function EContactus() {
                     <div className='mx-auto'>
                     <img src={emailicon} alt='emailicon'/>   
                     </div>
-                    <p>support@guidein.org</p>
+                    <p className='font-bold'>support@guidein.org</p>
                 </div>
                 <div className='hidden lg:block' >
                     <h1 className="text-3xl text-center  ">Address</h1>
@@ -31,29 +32,14 @@ function EContactus() {
                    <div className="mx-auto">
                    <img src={callicon} alt='callicon' className="mx-auto"/>
                    </div>
-                    <p>+91 9392579230</p>
+                    <p className='font-bold'>+91 9392579230</p>
                     <p></p>
                 </div>
             </div>
 
           </div>
            </div>
-           <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
-                <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4 ">
-                        <div className="text-white justify-self-start">
-
-                        </div>
-                        <div className="text-white justify-self-end">
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className="text-white text-center ">
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </div>
-            </footer>
+           <Footer/>
 
         </div>
     )

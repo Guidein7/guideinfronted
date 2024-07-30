@@ -24,7 +24,7 @@ function DisabledJobDetails(){
 
         }).then(response => {
             console.log(response);
-            setShowMessage('job disabled successfully')
+            setShowMessage('job enabled successfully')
             setTimeout(() => {
                 setShowMessage('');
                 navigate('/disabled-jobs')

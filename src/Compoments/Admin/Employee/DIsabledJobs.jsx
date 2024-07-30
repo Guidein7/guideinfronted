@@ -99,6 +99,7 @@ function DisabledJobs() {
                 <option value="no">Not Disabled by Admin</option>
               </select>
             </div>
+            <p className='mx-7 my-1'>{filteredJobs.length} results</p>
             <div className="overflow-x-auto px-4 sm:px-6 lg:px-8">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead className="bg-gray-800 text-white">

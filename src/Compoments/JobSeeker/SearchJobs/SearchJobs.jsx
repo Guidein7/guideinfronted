@@ -7,6 +7,7 @@ import { logoutUser } from "../Slices/loginSlice";
 import { jwtDecode } from "jwt-decode";
 import NavBar from "../NavBar/NavBar";
 import config from "../../../config";
+import JSFooter from "../NavBar/JSFooter";
 
 function SearchJobs() {
     const [jobs, setJobs] = useState([]);
@@ -31,9 +32,15 @@ function SearchJobs() {
     const dispatch = useDispatch();
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
+    const decoded = token? jwtDecode(token):null;
+    const email = decoded?decoded.sub:null;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!token){
+            navigate('/login')
+        }
+    },[token,navigate])
     useEffect(() => {
         fetchJobs();
     }, []);
@@ -172,14 +179,14 @@ function SearchJobs() {
                 </div>
             ) : (
                 <div className=" flex flex-grow flex-col  ml-0 xl:ml-[20%] pt-20 ">
-                    {saveJobMessage && (<p className="text-red-500 text-center">{saveJobMessage}</p>)}
+                    {saveJobMessage && (<p className="text-red-500 fixed left-1/2 transform -translate-x-1/2 bg-white px-4 py-2">{saveJobMessage}</p>)}
 
                     {jobs.length > 0 && (
                         <h1 className=" mb-2 mx-2 md:text-left  lg:pt-0">
                               {filteredJobs.length} results
                         </h1>
                     )}
-                    {jobs.length <= 0 ? (<div><h1 className="flex h-screen items-center justify-center">No Jobs avaliable right now</h1></div>) :
+                    {jobs.length === 0 ? (<h1 className="flex  flex-grow h-full  items-center justify-center">No Jobs avaliable right now</h1>) :
                         (<div>
                             {currentJobs.map((job, index) => (
                                 <div key={index} className="bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -250,22 +257,7 @@ function SearchJobs() {
     </div>
 )}
 
-<div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+<JSFooter/>
         </div>
     );
 

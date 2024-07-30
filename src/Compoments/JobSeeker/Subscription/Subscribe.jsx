@@ -8,6 +8,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import NavBar from "../NavBar/NavBar";
 import config from "../../../config";
+import JSFooter from "../NavBar/JSFooter";
 
 function Subscribe() {
     const log = useSelector(state => state.log);
@@ -380,12 +381,14 @@ function Subscribe() {
                             <p className="mb-2">2 referral credits</p>
                             <p className="mb-2">Access to Job listings</p>
                             <p className="mb-1">Starts at</p>
-                            <p className="font-bold "><span className="">&#8377;1299</span></p>
-                            <p className="text-xs font-bold"><s className=" me-1">&#8377;1600</s><span className="text-green-700">18% off</span></p>
+                            <p className="font-bold "><span className="">&#8377;1199</span></p>
+                            <p className="text-xs font-bold"><s className=" me-1">&#8377;1499</s><span className="text-green-700">20% off</span></p>
                           
                             <div className="text-center">
                                 <button onClick={paymentButton} className="bg-blue-700 text-white py-2 px-4 rounded ">
                                     Buy Now
+
+        
                                 </button>
                             </div>
                         </div>
@@ -396,8 +399,8 @@ function Subscribe() {
                             <p className="mb-2">5 referral credits</p>
                             <p className="mb-2">Access to Job listings</p>
                             <p className="mb-1">Starts at</p>
-                            <p className="font-bold "><span className="">&#8377;2999</span></p>
-                            <p className="text-xs font-bold"><s className=" me-1">&#8377;4000</s><span className="text-green-700">25% off</span></p>
+                            <p className="font-bold "><span className="">&#8377;2899</span></p>
+                            <p className="text-xs font-bold"><s className=" me-1">&#8377;3865</s><span className="text-green-700">25% off</span></p>
 
                             <div className="text-center">
                                 <button onClick={paymentButton1} className="bg-blue-700 text-white py-2 px-4 rounded ">
@@ -412,8 +415,8 @@ function Subscribe() {
                             <p className="mb-2">10 referral credits</p>
                             <p className="mb-2">Access to Job listings</p>
                             <p className="mb-1">Starts at</p>
-                            <p className="font-bold "><span className="">&#8377;5999</span></p>
-                            <p className="text-xs font-bold"><s className=" me-1">&#8377;8000</s><span className="text-green-700">25% off</span></p>
+                            <p className="font-bold "><span className="">&#8377;5399</span></p>
+                            <p className="text-xs font-bold"><s className=" me-1">&#8377;7712</s><span className="text-green-700">30% off</span></p>
 
                             <div className="text-center">
                                 <button onClick={paymentButton2} className="bg-blue-700 text-white py-2 px-4 rounded ">
@@ -429,7 +432,7 @@ function Subscribe() {
                         <div ref={modalRef} className="bg-white p-6 rounded-lg shadow-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
                             <p>Subscription Type: <span className="font-bold">Standard</span></p>
-                            <p>Price: <span className="font-bold">&#8377;1299</span></p>
+                            <p>Price: <span className="font-bold">&#8377;1199</span></p>
                             <p>Name <span className="font-bold">{name}</span></p>
                             <p>Email <span className="font-bold">{email}</span></p>
                             <div className=" mt-4 flex justify-center">
@@ -445,7 +448,7 @@ function Subscribe() {
                         <div className="bg-white p-6 rounded-lg shadow-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
                             <p>Subscription Type: <span className="font-bold">Premium</span></p>
-                            <p>Price: <span className="font-bold">&#8377;2999</span></p>
+                            <p>Price: <span className="font-bold">&#8377;2899</span></p>
                             <p>Name <span className="font-bold">{name}</span></p>
                             <p>Email <span className="font-bold">{email}</span></p>
                             <div className=" mt-4 flex justify-center">
@@ -461,7 +464,7 @@ function Subscribe() {
                         <div className="bg-white p-6 rounded-lg shadow-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
                             <p>Subscription Type: <span className="font-bold">Ultimate</span></p>
-                            <p>Price: <span className="font-bold">&#8377;5999</span></p>
+                            <p>Price: <span className="font-bold">&#8377;5399</span></p>
                             <p>Name <span className="font-bold">{name}</span></p>
                             <p>Email <span className="font-bold">{email}</span></p>
                             <div className=" mt-4 flex justify-center">
@@ -472,39 +475,8 @@ function Subscribe() {
                     </div>
                 )}
             </div>
-            {log.isAuthenticated? (
-                      <div className="bg-[#00145e] w-full p-1 ">
-                      <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                          <div className='grid grid-cols-2 gap-4'>
-                              <div className='text-white justify-self-start'>
-                                 
-                              </div>
-                              <div className='text-white justify-self-end'>
-                                  <h2 className='pr-2'>Help & Support</h2>
-                                  <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                              </div>
-                          </div>
-                          <div className='text-white text-center pb-1'>
-                              <p>Copyright &copy; {new Date().getFullYear()}</p>
-                          </div>
-                      </footer>
-                  </div>
-            ):( <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className="pr-2">Help & Support</h2>
-                            <Link to='/contact-us' className="pl-2" >Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center '>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>)}
+           
+           <JSFooter/>
            
         </div>
     );

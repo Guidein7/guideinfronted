@@ -47,7 +47,7 @@ function Referrals() {
         "ngrok-skip-browser-warning": "69420"
       },
     }).then(response => {
-      setRegisteredEmployees(response.data);
+      setRegisteredEmployees(response.data.reverse());
     }).catch(error => {
       console.log(error);
     }).finally(() => setLoading(false));
@@ -99,8 +99,10 @@ function Referrals() {
                 <option value="IN_VERIFICATION">IN_VERIFICATION</option>
                 <option value="REFERRED">REFERRED</option>
                 <option value="REJECTED">REJECTED</option>
+                <option value="VERIFICATION_FAILED">VERIFICATION_FAILED</option>
               </select>
             </div>
+            <p className='mx-7 my-1'>{filteredReferrals.length} results</p>
             <div className="overflow-x-auto px-4 sm:px-6 lg:px-8">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead className="bg-gray-800 text-white">
@@ -124,7 +126,7 @@ function Referrals() {
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.mobileOfrequestedBy}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.jobPostedBy}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.mobileOfJobPostedBy}</td>
-                      <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.requestedOn}</td>
+                      <td className={`w-2/12 py-3 px-6 border-b border-gray-200 ${(item.status ==='REQUESTED' && item.requestedAgo === 'expired') ? 'text-red-500':''}`}>{item.requestedOn}</td>
                       <td onClick={() => handleClick(item)} className="w-2/12 py-3 px-6 border-b border-gray-200 cursor-pointer text-blue-500">{item.status}</td>
                     </tr>
                   ))}

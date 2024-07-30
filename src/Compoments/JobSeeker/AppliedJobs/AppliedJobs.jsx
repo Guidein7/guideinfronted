@@ -8,18 +8,16 @@ import { logoutUser } from '../Slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
-import { PiClipboard } from 'react-icons/pi';
+import JSFooter from '../NavBar/JSFooter';
 
 function AppliedJobs() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
+    const decoded = token? jwtDecode(token):null;
+    const email = decoded?decoded.sub:null;
     const [job, setJobs] = useState([])
     const [loading, setLoading] = useState(false)
     const[errorMessage,setErrorMessage] = useState('');
-
-    const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -27,9 +25,7 @@ function AppliedJobs() {
         dispatch(logoutUser());
     };
 
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
-    };
+   
 
     const appliedJobs = () => {
         setLoading(true);
@@ -71,6 +67,12 @@ function AppliedJobs() {
         navigate('/applied-referral-details', { state: { status } });//
     };
 
+    useEffect(() => {
+        if(!token){
+            navigate('/login')
+        }
+    },[token,navigate])
+
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
@@ -83,10 +85,10 @@ function AppliedJobs() {
                         <p className="mt-4 text-gray-900">Loading...</p>
                     </div>
                 ) : (
-                    <div>
-                        {errorMessage && (<p className='text-red-500 text-center'>{errorMessage}</p>)}
+                    <div className='flex flex-col flex-grow'>
+                        {errorMessage && (<p className='text-red-500 fixed left-1/2 px-4 bg-white transform -translate-x-1/2'>{errorMessage}</p>)}
                         {job.length === 0 ? (
-                            <p className='h-screen flex items-center justify-center'>No jobs applied yet.</p>
+                            <p className=' h-full flex items-center justify-center flex-grow'>No jobs applied yet.</p>
                         ) : (
                             <div>
                                 {job.map((status, index) => (
@@ -115,22 +117,8 @@ function AppliedJobs() {
 
 
             </div>
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+            <JSFooter/>
+
         </div>
 
     )

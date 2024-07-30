@@ -2,17 +2,18 @@
 import GuideinLogo from '../../../assets/GuideinLogo.png';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 import Policy from '../../../assets/Policy.pdf';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config';
+import EFooter from '../LandingPage/Footer';
 
 const EmployeeRegistration = () => {
   const [type, setType] = useState('password');
   const [buttonName, setButtonName] = useState('show');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const[unKnownError,setUnKnownError] = useState('')
+  const [unKnownError, setUnKnownError] = useState('')
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -38,17 +39,16 @@ const EmployeeRegistration = () => {
       ...prevData,
       [name]: value,
     }))
-   
+
   }
 
-   const validateField = (name, value) => {
+  const validateField = (name, value) => {
     let error = '';
     switch (name) {
       case 'username':
         if (!value) {
           error = 'Name is required';
-        }
-        else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
+        } else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
           error = 'Name should only contain alphabets';
         }
         break;
@@ -57,81 +57,76 @@ const EmployeeRegistration = () => {
           error = 'Mobile is required';
         } else if (value.trim().startsWith('+91') && !/^\+91\d+$/.test(value.trim())) {
           error = 'Mobile should contain only digits';
-        }
-        else if (value.length !== 13) {
-          error = 'Mobile number should be exactly 10 characters long'
+        } else if (value.length !== 13) {
+          error = 'Mobile number should be exactly 10 characters long';
         }
         break;
       case 'email':
         if (!value) {
-          error = 'Email is required'
-        }
-        else if (!/\S+@\S+\.\S+/.test(value.trim())) {
+          error = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(value.trim())) {
           error = 'Email is invalid';
         }
         break;
       case 'password':
         if (!value) {
-          error = 'Password is required'
-        }
-        else if (value.trim().length < 8) {
+          error = 'Password is required';
+        } else if (value.length < 8) {
           error = 'Password should be at least 8 characters long';
-        } else if (!/(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*/.test(value.trim())) {
-          error = 'Password should be the combination of digits letters and special characters';
+        } else if (!/(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*/.test(value)) {
+          error = 'Password should be the combination of digits, letters, and special characters';
         }
         break;
-        default:
-        error = ''
+      default:
+        error = '';
     }
-    setErrors(prevError => ({
-      ...prevError,
-      [name]: error,
-    }))
-  }
+    return error;
+  };
 
   const validateForm = () => {
     let valid = true;
+    const newErrors = {};
     Object.keys(formData).forEach(item => {
-      validateField(item, formData[item]);
-
-      if (formData[item] === '' || errors[item] !== '') {
+      const error = validateField(item, formData[item]);
+      newErrors[item] = error;
+      if (formData[item] === '' || error) {
         valid = false;
       }
-
-    })
+    });
+    setErrors(newErrors); // Update state with collected errors
     return valid;
-  }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     if (validateForm()) {
-      setLoading(true);
+     
       const role = "JOB_POSTER";
       const email = formData.email;
       const mobile = formData.mobile;
-      const registrationData = { ...formData, role:role };
-    
+      const registrationData = { ...formData, role: role };
+      setLoading(true);
       axios.post(`${config.api.baseURL}${config.api.jobPoster.register}`, registrationData).then(response => {
         const sessionUUID = response.data.sessionUUID
 
-        navigate(`/employee-verification`, { state: { email, mobile,sessionUUID} });
-        
+        navigate(`/employee-verification`, { state: { email, mobile, sessionUUID } });
+
       }).catch(error => {
-       
+        console.log(error)
         if (error.response && error.response.status === 409) {
           setErrorMessage("User already exists. Please try with a different email or mobile.");
         } else {
-          
+
           setUnKnownError('Error while submitting your request. Please try again.');
           setTimeout(() => {
             setUnKnownError('');
           }, 3000);
-        }  
+        }
       }).finally(() => setLoading(false))
     }
     else {
-     
-      
+
+
     }
   };
 
@@ -164,14 +159,14 @@ const EmployeeRegistration = () => {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="lg:block">
             <Link to="/employee-landingpage">
-              
+
               <img src={GuideinLogo} alt="Logo" className="h-8" />
             </Link>
           </div>
         </div>
       </nav>
       <div className="w-full max-w-xs mx-auto align-center lg:max-w-lg">
-      {unKnownError && (<p className='text-red-500'>{unKnownError}</p>)}
+        {unKnownError && (<p className='text-red-500'>{unKnownError}</p>)}
         <form
           className="border border-gray-300 shadow-md rounded px-6 lg:px-8 pt-6 pb-8 mt-4 mb-4"
           onSubmit={handleSubmit}
@@ -180,7 +175,7 @@ const EmployeeRegistration = () => {
           <h1 className=" font-bold text-center text-2xl">Sign up</h1>
           <p className="p-0 mt-0 mb-6  text-center">Earn Money by Referring Top Talent</p>
           <div className="mb-3">
-          <label className="block text-gray-700   mb-2" htmlFor="name">Full Name<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="name">Full Name<span className='text-red-500'>*</span></label>
             <input
               className={`shadow appearance-none border rounded w-full py-3  px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline ${errors.username ? 'border-red-500' : ''}`}
               id="name"
@@ -196,7 +191,7 @@ const EmployeeRegistration = () => {
             )}
           </div>
           <div className="mb-3">
-          <label className="block text-gray-700   mb-2" htmlFor="mobile">Mobile<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="mobile">Mobile<span className='text-red-500'>*</span></label>
             <input
               className={`shadow appearance-none border  rounded  w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.mobile ? 'border-red-500' : ''}`}
               id="mobile"
@@ -212,7 +207,7 @@ const EmployeeRegistration = () => {
             )}
           </div>
           <div className="mb-3">
-          <label className="block text-gray-700   mb-2" htmlFor="email">Email<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="email">Email<span className='text-red-500'>*</span></label>
             <input
               className={`shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
               id="email"
@@ -228,7 +223,7 @@ const EmployeeRegistration = () => {
             )}
           </div>
           <div className="relative mb-2">
-          <label className="block text-gray-700   mb-2" htmlFor="password">Password<span className='text-red-500'>*</span></label>
+            <label className="block text-gray-700   mb-2" htmlFor="password">Password<span className='text-red-500'>*</span></label>
             <input
               className={`shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : ''}`}
               id="password"
@@ -276,22 +271,7 @@ const EmployeeRegistration = () => {
           </p>
         </form>
       </div>
-      <div className="bg-[#00145e]  w-full  ">
-                <footer className=' sm:mx-auto max-w-screen-lg'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtact-us' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1 '>
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </footer>
-            </div>
+      <EFooter/>
     </div>
   );
 };

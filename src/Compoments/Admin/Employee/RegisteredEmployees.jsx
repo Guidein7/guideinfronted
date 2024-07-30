@@ -72,6 +72,7 @@ function RegisteredEmployees() {
         ) : (
           <div>
             <h1 className='font-bold my-2 mx-5'>Registered Employees</h1>
+            <p className='mx-7 my-1'>{registeredEmployees.length} results</p>
             <div className="overflow-x-auto px-4 sm:px-6 lg:px-8">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead className="bg-gray-800 text-white">

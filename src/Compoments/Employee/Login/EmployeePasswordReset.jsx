@@ -129,6 +129,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import GuideinLogo from '../../../assets/GuideinLogo.png'
 import config from '../../../config';
+import EFooter from '../LandingPage/Footer';
 
 const EmployeePasswordReset = () => {
     const [type, setType] = useState('password');
@@ -283,22 +284,7 @@ const EmployeePasswordReset = () => {
                     </form>
                 </div>
             </div>
-            <div className="bg-[#00145e]  w-full  ">
-                <footer className=' sm:mx-auto max-w-screen-lg'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtact-us' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1 '>
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </footer>
-            </div>
+            <EFooter/>
         </div>
     );
 };

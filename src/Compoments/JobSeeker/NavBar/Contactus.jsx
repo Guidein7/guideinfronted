@@ -2,6 +2,7 @@ import NavBar from "./NavBar";
 import emailicon from '../../../assets/emailicon.png'
 import callicon from '../../../assets/callicon.png'
 import { Link } from "react-router-dom";
+import JSFooter from "./JSFooter";
 
 function Contactus() {
     return(
@@ -15,7 +16,7 @@ function Contactus() {
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pt-10">
                 <div>
                     <img src={emailicon} alt='emailicon'/>
-                    <p>support@guidein.org</p>
+                    <p className="font-bold">support@guidein.org</p>
                 </div>
                 <div className="hidden lg:block">
                     <h1 className="text-3xl text-center ">Address</h1>
@@ -29,30 +30,14 @@ function Contactus() {
                    <div className="mx-auto">
                    <img src={callicon} alt='callicon' className="mx-auto"/>
                    </div>
-                    <p>+91 9392579230</p>
+                    <p className="font-bold  text-center">+91 9392579230</p>
                     <p></p>
                 </div>
             </div>
 
           </div>
            </div>
-           <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
-
+          <JSFooter/>
         </div>
     )
 }

@@ -1,29 +1,19 @@
-import GuideinLogo from '../../../assets/GuideinLogo.png'
 import { useEffect, useState } from 'react';
-import { MdOutlineCurrencyRupee, MdPolicy } from "react-icons/md";
-import { TiTickOutline } from "react-icons/ti";
-import { IoAlarmOutline } from "react-icons/io5";
-import { MdOutlineModelTraining } from "react-icons/md";
-import { HiOutlineLogout } from "react-icons/hi";
 import { logoutEmployee } from '../slices/employeeLoginSlice';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { IoMdLaptop } from "react-icons/io";
-import { CgProfile } from "react-icons/cg";
-import { IoIosArrowRoundDown } from "react-icons/io";
 import axios from 'axios';
 import config from '../../../config';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import SideBar from '../SideBar/SideBar';
-
-
+import Footer from '../SideBar/Footer'
 
 function Wallet() {
     const log = useSelector(state => state.emplog);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const claim = decoded.sub;
+    const decoded = token ? jwtDecode(token): null;
+    const claim = decoded? decoded.sub:null;
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -36,8 +26,13 @@ function Wallet() {
     const [lowBalanceMessage, setLowBalanceMessage] = useState('');
     const [withdrawInProgress, setWithDrawInProgress] = useState('')
     const [errorMessage, setErrorMessage] = useState('');
+   
 
-
+    useEffect(() => {
+        if(!token) {
+            navigate('/employee-login')
+        }
+    },[token,navigate])
 
     useEffect(() => {
         getwalletDetails();
@@ -47,11 +42,9 @@ function Wallet() {
     };
 
     const handleSaveClick = () => {
-
         const upiPattern = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
         if (!inputValue.trim()) {
             setError('UPI ID cannot be empty');
-
             return;
         }
 
@@ -60,8 +53,6 @@ function Wallet() {
             return;
         }
         setError('')
-        // Perform save operation with the updated inputValue, e.g., update state, send to server, etc.
-
         const formData = {
             email: claim,
             upiId: inputValue
@@ -71,9 +62,7 @@ function Wallet() {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-
         }).then(response => {
-
             getwalletDetails();
         }).catch(error => {
             if (error.response.status === 403) {
@@ -90,8 +79,7 @@ function Wallet() {
                 }, 2000);
             }
         }).finally(() => setLoading(false))
-
-        setIsEditing(false);
+          setIsEditing(false);
     };
 
     const handleChange = (e) => {
@@ -189,16 +177,9 @@ function Wallet() {
         }
     }
 
-
     const handleLogout = () => {
-        // Dispatch the logout action
         dispatch(logoutEmployee());
-        // Redirect to the login page after logout
         navigate('/employee-login');
-    };
-
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
     };
 
     return (
@@ -206,22 +187,21 @@ function Wallet() {
             <SideBar />
             <div className='flex-grow pt-10 lg:pt-2  ml-0 xl:ml-[20%] px-0 lg:px-10 mt-8 xl:mt-0'>
                 <h1 className='font-bold text-xl   ml-5'>Wallet</h1>
+                {lowBalanceMessage && (<p className='text-red-500 fixed  left-1/2 transform -translate-x-1/2 bg-white px-4 py-2'>{lowBalanceMessage}</p>)}
+                        {upiMessage && (<p className='text-red-500 fixed  left-1/2 transform -translate-x-1/2 bg-white px-4 py-2'>{upiMessage}</p>)}
+                        {withdrawInProgress && (<p className='text-red-500 fixed  left-1/2 transform -translate-x-1/2 bg-white px-4 py-2'>{withdrawInProgress}</p>)}
+                        {errorMessage && (<p className='text-red-500 fixed  left-1/2 transform -translate-x-1/2 bg-white px-4 py-2'>{errorMessage}</p>)}
 
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>) : (
                     <div>
-                        {lowBalanceMessage && (<p className='text-red-500  text-center'>{lowBalanceMessage}</p>)}
-                        {upiMessage && (<p className='text-red-500 text-center'>{upiMessage}</p>)}
-                        {withdrawInProgress && (<p className='text-red-500 fixed top-12 lg:top-2 bg-white p-3 text-center'>{withdrawInProgress}</p>)}
-                        {errorMessage && (<p className='text-red-500 fixed top-12 lg:top-2 bg-white p-3 text-center'>{errorMessage}</p>)}
+                       
                         <div className='grid grid-cols-1 md:grid-cols-3 gap-4 lg:my-5'>
                             <div className='bg-blue-500 text-white text-center py-5 rounded-lg flex-1 mx-10'>
-
                                 <p className=' text-lg'>Total Referrals</p>
                                 <span className=' text-lg'>{walletData.totalReferrals}</span>
-
                             </div>
                             <div className='bg-blue-500 text-white text-center rounded-lg py-5 flex-1 mx-10'>
 
@@ -249,7 +229,6 @@ function Wallet() {
 
                             </div>
                             <div className='bg-blue-500 text-white text-center rounded-lg py-5 flex-1 mx-10'>
-
                                 <p className=' text-lg'>Withdrawn in progress</p>
                                 <span className=' text-lg'>&#8377;{walletData.withdrawInProgress}</span>
 
@@ -258,7 +237,7 @@ function Wallet() {
 
                         <h1 className='font-bold text-lg mb-1 mt-4 mx-10'>Bank details</h1>
                         <div className='grid  grid-cols-1 mx-10  mb-10'>
-                            <p className=''>UPI Id/PhonePe/Gpay No</p>
+                            <p className=''>UPI Id/PhonePe/Gpay</p>
                             {isEditing ? (
                                 <div className='flex items-center'>
                                     <input
@@ -293,8 +272,8 @@ function Wallet() {
                             <h1 className='font-bold mt-2'>
                                 Transcation history
                             </h1>
-                            {walletData?.transactionHistory?.map((item, index) => (
-                                <div className='p-2 my-1 inline' key={index}>
+                                  {[...(walletData?.transactionHistory ?? [])].reverse().map((item, index) => (
+                                <div className='p-2 my-1 border-b-4 ' key={index}>
                                     <p>Date : {item.transactionOn}</p>
                                     <p>Amount : {item.amount}</p>
                                     <p>Transaction Id : {item.transactionId}</p>
@@ -305,22 +284,7 @@ function Wallet() {
                     </div>)}
 
             </div>
-            <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
-                <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4 ">
-                        <div className="text-white justify-self-start">
-
-                        </div>
-                        <div className="text-white justify-self-end">
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className="text-white text-center ">
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </div>
-            </footer>
+           <Footer/>
         </div>
 
     )

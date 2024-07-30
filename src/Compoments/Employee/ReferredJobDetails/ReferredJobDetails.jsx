@@ -1,31 +1,15 @@
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { useState, useRef, useEffect } from 'react';
+import { useState,  useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { jwtDecode } from 'jwt-decode'; // Remove curly braces
 import axios from 'axios';
 import { logoutEmployee } from '../slices/employeeLoginSlice';
-import { MdOutlineCurrencyRupee, MdPolicy } from "react-icons/md";
-import { TiTickOutline } from "react-icons/ti";
-import { IoAlarmOutline } from "react-icons/io5";
-import { MdOutlineModelTraining } from "react-icons/md";
-import { PiGlobe } from "react-icons/pi";
-import { IoFlashOutline } from "react-icons/io5";
-import { HiOutlineLogout } from "react-icons/hi";
-import { IoMdLaptop } from "react-icons/io";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import GuideinLogo from '../../../assets/GuideinLogo.png'
-import { CgProfile } from "react-icons/cg";
 import config from "../../../config";
 import SideBar from "../SideBar/SideBar";
-
-
-
-
+import Footer from "../SideBar/Footer";
 
 function ReferredJobDetails() {
     const log = useSelector(state => state.emplog);
     const token = log.data.token;
-    const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
     const dispatch = useDispatch();
     const { referredJob } = location.state;
@@ -34,28 +18,29 @@ function ReferredJobDetails() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [proof, setProof] = useState('')
-    const [errorMessage,setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
+    useEffect(() => {
+        if(!token){
+            navigate('/employee-login')
+        }
+    },[navigate,token])
 
     function base64ToBlob(base64, mime) {
         const byteCharacters = atob(base64);
         const byteNumbers = new Array(byteCharacters.length);
-
         for (let i = 0; i < byteCharacters.length; i++) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
-
         const byteArray = new Uint8Array(byteNumbers);
         return new Blob([byteArray], { type: mime });
     }
 
-    // Utility function to create a Blob URL from a Base64 string
     function createBlobUrl(base64, mime) {
         const blob = base64ToBlob(base64, mime);
         return URL.createObjectURL(blob);
     }
 
-    // Utility function to infer MIME type from Base64 string
     function getMimeType(base64) {
         if (base64.startsWith('/9j/')) {
             return 'image/jpeg';
@@ -72,12 +57,8 @@ function ReferredJobDetails() {
         }
     }
 
-
     useEffect(() => {
         getData();
-
-
-
     }, []);
 
     const getData = () => {
@@ -88,25 +69,23 @@ function ReferredJobDetails() {
                 "ngrok-skip-browser-warning": "69420"
             },
         }).then(response => {
-            
             setReferredJobdetails(response.data);
             setProof(response.data.proof);
         }).catch(error => {
-                if(error.response.status === 403) {
-                    setErrorMessage('session Expired');
-                    setTimeout(() => {
-                        setErrorMessage('');
-                        handleLogout();
-                    }, 2000);
-                }
-                else{
-                    setErrorMessage('Error fetching data');
-                    setTimeout(() => {
-                        setErrorMessage('');
-                    }, 2000);
-                }
-        })
-            .finally(() => setLoading(false))
+            if (error.response.status === 403) {
+                setErrorMessage('session Expired');
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+            }
+            else {
+                setErrorMessage('Error fetching data');
+                setTimeout(() => {
+                    setErrorMessage('');
+                }, 2000);
+            }
+        }).finally(() => setLoading(false))
     }
 
     const handleLogout = () => {
@@ -114,39 +93,30 @@ function ReferredJobDetails() {
         navigate('/employee-login');
     };
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
-
     const handleResumeView = () => {
         const pdfWindow = window.open('');
         pdfWindow.document.write('<iframe width="100%" height="100%" src="data:application/pdf;base64,' + encodeURI(referredJobDetails.candidateResume) + '"></iframe>');
     };
-    const handleBackClick = () => {
-        navigate(-1); // Go back to the previous page
-    };
-
+   
     const viewProof = () => {
-    const base64String = proof;
-    const mimeType = getMimeType(base64String);
-    const blobUrl = createBlobUrl(base64String, mimeType);
-    return blobUrl;
+        const base64String = proof;
+        const mimeType = getMimeType(base64String);
+        const blobUrl = createBlobUrl(base64String, mimeType);
+        return blobUrl;
     }
 
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
-           <SideBar/>
+            <SideBar />
             <div className='flex-grow pt-16 lg:pt-2 p-4 ml-0 xl:ml-[20%]'>
-
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>) : (
                     <div>
-                        {/* <IoMdArrowRoundBack onClick={handleBackClick} size={24} className=' cursor-pointer my-1' /> */}
                         <div className="mx-2  pt-2 lg:pt-0 ">
                             <h1 className="font-bold mb-3">CandidateDetails</h1>
-                            {errorMessage && (<p className="text-red-500 p-2 text-center fixed bg-white">{errorMessage}</p>)}
+                            {errorMessage && (<p className="text-red-500 py-2 px-4 fixed left-1/2 transform -translate-x-1/2  bg-white">{errorMessage}</p>)}
                             <p className="mb-2"> Full Name : {referredJobDetails.candidateName}</p>
                             <p className="mb-2">Email {referredJobDetails.candidateEmail}</p>
                             <p className="mb-2">mobile:{referredJobDetails.candidateMobile}</p>
@@ -158,43 +128,21 @@ function ReferredJobDetails() {
                             <p className="mb-2"> Company:{referredJobDetails.company}</p>
                             <p className="mb-2">Location: {referredJobDetails.jobLocation}</p>
                             <p className="mb-4">job PostedOn: {referredJobDetails.jobPostedOn}</p>
-
                             <h1 className="font-bold mb-2">Referral Details </h1>
                             {referredJobDetails.dateOfReferral && (<p className=" mb-2">Date Of Referral: {referredJobDetails.dateOfReferral}</p>)}
                             {referredJobDetails.methodOfReferral && (<p className="mb-2"> Method Of Referral: {referredJobDetails.methodOfReferral}</p>)}
-                                                      {referredJobDetails.proof && ( <p className="mb-2">uploaded proof:  <a href={viewProof()} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                            {referredJobDetails.proof && (<p className="mb-2">uploaded proof:  <a href={viewProof()} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                 View proof
                             </a></p>)}
-
-                            <p>Job Status: <span className={` ${referredJob.status === 'IN_VERIFICATION'?'text-yellow-500 font-bold':referredJob.status === 'REFERRED'?'text-green-500 font-bold':'text-red-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
-
+                            <p>Job Status: <span className={` ${referredJob.status === 'IN_VERIFICATION' ? 'text-yellow-500 font-bold' : referredJob.status === 'REFERRED' ? 'text-green-500 font-bold' : 'text-red-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
                             {referredJob.reason && (<p>Reason: <span className="">{referredJob.reason}</span></p>)}
                             <p className="mb-2">Comments: {referredJobDetails.comments}</p>
-
-
                         </div>
                     </div>
                 )}
-
             </div>
-            <footer className="bg-[#00145e]  p-1 ml-0 xl:ml-[20%]">
-                <div className="sm:mx-auto max-w-screen-lg">
-                    <div className="grid grid-cols-2 gap-4 ">
-                        <div className="text-white justify-self-start">
-
-                        </div>
-                        <div className="text-white justify-self-end">
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/econtactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className="text-white text-center ">
-                        <p>Copyright &copy; 2024</p>
-                    </div>
-                </div>
-            </footer>
+            <Footer/>
         </div>
     )
-
 }
 export default ReferredJobDetails;

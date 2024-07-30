@@ -1,27 +1,22 @@
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import GuideinLogo from '../../../assets/GuideinLogo.png'
 import { logoutUser } from "../Slices/loginSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import { PiEyeClosedFill } from 'react-icons/pi';
 import { FaFilePdf } from "react-icons/fa";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
-import { IoIosArrowBack } from "react-icons/io";
-
+import JSFooter from '../NavBar/JSFooter';
 
 function JobDetails() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
-    const mobile = decoded.mobile;
-    const name = decoded.username;
+    const decoded = token ? jwtDecode(token):null;
+    const email = decoded? decoded.sub: null;
+    const mobile =decoded? decoded.mobile:null;
+    const name = decoded?decoded.username:null;
     const [profileCompletionMessage, setProfileCompletionMessage] = useState('');
-    const [isOpen, setIsOpen] = useState(false);
     const [requested, setRequested] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
     const modalRef = useRef(null);
@@ -49,6 +44,12 @@ function JobDetails() {
     const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch();
     const [resumeUploadMessge,setResumeUploadMessage] = useState('')
+
+    useEffect(() => {
+        if(!token){
+            navigate('/login')
+        }
+    },[token,navigate])
 
     useEffect(() => {
         getProfileStatus();
@@ -199,11 +200,20 @@ function JobDetails() {
     };
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        const maxSize = 5 * 1024 * 1024;
         if (file && file.type !== 'application/pdf') {
             setResumeUploadMessage('please upload a pdf file')
             setTimeout(() => {
                 setResumeUploadMessage('')
             }, 2000);
+            e.target.value = null;
+            return;
+        }
+
+        if (file && file.size > maxSize) {
+            setResumeUploadMessage('File size exceeds 5 MB');
+            setTimeout(() => setResumeUploadMessage(''), 2000);
+            e.target.value = null;
             return;
         }
         setFormData({
@@ -249,6 +259,7 @@ function JobDetails() {
             }
 
         }).catch(error => {
+            console.log(error)
             if (error.response.status === 400) {
                 setShowDetails(false);
                 setIscredits(true);
@@ -325,9 +336,8 @@ function JobDetails() {
                 ) :(
                         <div>
                             
-                            <div className='pl-5 pt-14 '>
-                                {errorMessage && (<p className='fixed bg-white p-2 text-red-500 text-center'>{errorMessage}</p>)}
-                                {/* <h1 onClick={handleBackClick} className='flex text-blue-500 underline'> <IoIosArrowBack   size={20}  /><span>Back</span></h1> */}
+                            <div className='pl-5 pt-14 lg:pt-5 '>
+                                {errorMessage && (<p className='fixed left-1/2 transform -translate-x-1/2 px-4 bg-white py-2 text-red-500'>{errorMessage}</p>)}
                                 <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job.jobTitle}</h1>
                                 <p className='font-bold  my-1 lg:my-2'> {job.companyName}</p>
                                 <p className='my-1 lg:my-2'> {job.jobLocation} ({job.workMode})</p>
@@ -484,6 +494,7 @@ function JobDetails() {
                                                         name="resume"
                                                         onChange={handleFileChange}
                                                         ref={fileInputRef}
+                                                        accept="application/pdf"
                                                         className="hidden"
                                                     />
                                                     <p className="text-xs mt-1 mx-2">Only .PDF (5 MB)</p>
@@ -513,22 +524,9 @@ function JobDetails() {
                         </div>
                     )}
             </div>
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
+           
+            <JSFooter/>
 
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
         </div >
     );
 }

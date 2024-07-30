@@ -7,24 +7,29 @@ import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../Slices/loginSlice';
-
+import JSFooter from '../NavBar/JSFooter';
 
 function DashBoard() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
+    const decoded = token? jwtDecode(token):null;
+    const email =decoded? decoded.sub:null;
     const [loading, setLoading] = useState(false);
     const [dashboardDetails, setDashboardDetails] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if(!token) {
+            navigate('/login')
+        }
+    },[token,navigate])
+
     const handleLogout = () => {
         dispatch(logoutUser());
         navigate('/login');
     };
-
     const getDashboardDetails = () => {
         setLoading(true);
         axios.get(`${config.api.baseURL}${config.api.jobSeeker.getDashBoardDetails}${email}`, {
@@ -35,6 +40,7 @@ function DashBoard() {
         }
         ).then(response => {
             setDashboardDetails(response.data)
+            console.log(response)
         }).catch(error => {
 
             if (error.response.status === 403) {
@@ -44,10 +50,11 @@ function DashBoard() {
                     handleLogout();
                 }, 2000)
             }
+            else{
             setErrorMessage('Error while fething dashboard details Try again')
             setTimeout(() => setErrorMessage(''), 2000)
-        })
-            .finally(() => setLoading(false))
+            }
+        }).finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -69,7 +76,7 @@ function DashBoard() {
                 <p className="mt-4 text-gray-900">Loading...</p>
             </div>) : (
                 <div className='flex-grow ml-0 xl:ml-[20%] pt-20 lg:pt-2'>
-                    {errorMessage && (<p className='text-red-500'>{errorMessage}</p>)}
+                    {errorMessage && (<p className='text-red-500 fixed left-1/2 transform -translate-x-1/2 bg-white px-4 py-2'>{errorMessage}</p>)}
                     <h1 className='font-bold px-2 lg:ml-5 text-2xl '>Dashboard</h1>
 
                     {(!isActiveValue) && dashboardDetails.planHistory && (
@@ -97,12 +104,13 @@ function DashBoard() {
                         </div>
                         <div className='bg-blue-500 text-white py-5  flex-1 mx-10 rounded-lg'>
                             <h1 className='font-bold text-center text-lg'>Referrals Successful</h1>
-                            <h1 className='font-bold text-center text-lg'>{dashboardDetails.referralsSucessful}</h1>
+                            <h1 className='font-bold text-center text-lg'>{dashboardDetails.referralsSuccessful}</h1>
                         </div>
-                        {/* <div className='bg-blue-500 text-white py-7  flex-1 mx-5 rounded-lg'>
-    <h1 className='font-bold text-center text-lg'>Referrals Rejected</h1>
-    <h1 className='font-bold text-center text-lg'>0</h1>
-  </div> */}
+                        <div className='bg-blue-500 text-white py-5  flex-1 mx-10 rounded-lg'>
+                            <h1 className='font-bold text-center text-lg'> Total Successful Referrals</h1>
+                            <h1 className='font-bold text-center text-lg'>{dashboardDetails.totalReferralSuccessful}</h1>
+                        </div>
+                       
                     </div>
 
                     <div className='my-6  '>
@@ -110,12 +118,10 @@ function DashBoard() {
                         {[...(dashboardDetails?.planHistory ?? [])].reverse().map((item, index) => (
                             <div key={index} className='mx-4 border-b-4 py-2'>
 
-                                <p>Plan:          {item.plan}</p>
+                                <p>Plan: {item.plan}</p>
                                 <p>Subscribed On : {item.subscrideOn}</p>
                                 <p>Transaction Id: {item.transactionId}</p>
                                 <p>planStatus: {item.isActive ? 'active' : 'inactive'}</p>
-
-
                             </div>
                         )
                         )}
@@ -123,22 +129,9 @@ function DashBoard() {
                 </div>
             )}
 
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
 
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+            <JSFooter/>
+
         </div>
     );
 }

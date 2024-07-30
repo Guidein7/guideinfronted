@@ -7,14 +7,15 @@ import { logoutUser } from '../Slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import JSFooter from '../NavBar/JSFooter';
 
 function SavedJobs() {
     const [savedJobs, setSavedJobs] = useState([]);
     const [loading, setLoading] = useState(true); // Initially set to true
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
+    const decoded = token ?jwtDecode(token):null;
+    const email = decoded ? decoded.sub:null;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
@@ -22,6 +23,12 @@ function SavedJobs() {
     useEffect(() => {
         fetchSavedJobs();
     }, []);
+
+    useEffect(() => {
+        if(!token) {
+            navigate('/login')
+        }
+    },[token,navigate])
 
     const handleLogout = () => {
         navigate('/login');
@@ -88,7 +95,7 @@ function SavedJobs() {
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
             <div className="flex flex-grow flex-col ml-0 xl:ml-[20%] pt-20 lg:pt-5">
-                {errorMessage && (<p className='text-red-500 text-center'>{errorMessage}</p>)}
+                {errorMessage && (<p className='text-red-500 fixed left-1/2 transform -translate-x-1/2  bg-white px-4 py-2 text-center'>{errorMessage}</p>)}
                 <h1 className="text-xl mb-2 px-2 font-bold">Saved Jobs</h1>
                 {loading ? (
                     <div className="flex flex-col justify-center items-center h-screen">
@@ -126,27 +133,13 @@ function SavedJobs() {
                             </div>
                         ))
                     ) : (
-                        <p className='h-screen flex items-center justify-center'>No saved jobs found.</p>
+                        <p className=' flex flex-grow h-full flex items-center justify-center'>No saved jobs found.</p>
                     )
                 )}
             </div>
 
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+           <JSFooter/>
+
         </div>
     );
 }

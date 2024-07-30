@@ -3,24 +3,28 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import GuideinLogo from '../../../assets/GuideinLogo.png';
 import { logoutUser } from '../Slices/loginSlice';
 import { useDispatch } from 'react-redux';
-import { IoMdArrowRoundBack } from "react-icons/io";
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
+import JSFooter from '../NavBar/JSFooter';
 
 function AppliedRefeReferralDetails() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = jwtDecode(token);
-    const email = decoded.sub;
-    const name = decoded.username;
-    const [isOpen, setIsOpen] = useState(false);
+    const decoded = token? jwtDecode(token):null;
+    const email = decoded?decoded.sub:null;
+    const name =decoded? decoded.username:null;
     const location = useLocation();
     const { status } = location.state;
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!token){
+            navigate('/login')
+        }
+    },[token,navigate])
     const handleLogout = () => {
         navigate('/login');
         dispatch(logoutUser());
@@ -30,18 +34,13 @@ function AppliedRefeReferralDetails() {
     const [proof, setProof] = useState('');
     const [errorMessage, setErrorMessage] = useState('')
 
-    const toggleNavbar = () => {
-        setIsOpen(!isOpen);
-    };
+   
 
-    const handleBackClick = () => {
-        navigate(-1); // Go back to the previous page
-    };
+    
     useEffect(() => {
-
-
         getappliedReferraDetails();
     }, [])
+
     const getappliedReferraDetails = () => {
         setLoading(true)
         axios.get(`${config.api.baseURL}${config.api.jobSeeker.getAppliedReferral}${status.referralId}`, {
@@ -92,13 +91,11 @@ function AppliedRefeReferralDetails() {
         return new Blob([byteArray], { type: mime });
     }
 
-    // Utility function to create a Blob URL from a Base64 string
     function createBlobUrl(base64, mime) {
         const blob = base64ToBlob(base64, mime);
         return URL.createObjectURL(blob);
     }
-
-    // Utility function to infer MIME type from Base64 string
+    
     function getMimeType(base64) {
         if (base64.startsWith('/9j/')) {
             return 'image/jpeg';
@@ -111,12 +108,9 @@ function AppliedRefeReferralDetails() {
         } else if (base64.startsWith('JVBERi0')) {
             return 'application/pdf';
         } else {
-            return 'application/octet-stream'; // Default to binary if unknown
+            return 'application/octet-stream'; 
         }
     }
-
-
-
     function viweProfile() {
         const base64String = proof;
         const mimeType = getMimeType(base64String);
@@ -124,17 +118,11 @@ function AppliedRefeReferralDetails() {
         return blobUrl;
 
     }
-
-
-
-
-
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
             <div className='flex-grow ml-0 xl:ml-[20%] pt-16 lg:pt-5'>
-                {errorMessage && <p className='text-red text-center'>{errorMessage}</p>}
-                {/* <IoMdArrowRoundBack onClick={handleBackClick} size={24} className='mx-10 cursor-pointer my-1  ' /> */}
+                {errorMessage && <p className='text-red-500 fixed left-1/2 px-4 py-2 bg-white transform -translate-x-1/2'>{errorMessage}</p>}
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                     <p className="mt-4 text-gray-900">Loading...</p>
@@ -170,22 +158,8 @@ function AppliedRefeReferralDetails() {
                     </div>
                 )}
             </div>
-            <div className="bg-[#00145e] w-full p-1 ">
-                <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-                    <div className='grid grid-cols-2 gap-4'>
-                        <div className='text-white justify-self-start'>
-                           
-                        </div>
-                        <div className='text-white justify-self-end'>
-                            <h2 className='pr-2'>Help & Support</h2>
-                            <Link to='/contactus' className='pl-2'>Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='text-white text-center pb-1'>
-                        <p>Copyright &copy; {new Date().getFullYear()}</p>
-                    </div>
-                </footer>
-            </div>
+           <JSFooter/>
+
         </div>
     );
 }

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../Slices/loginSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import JFooter from "../LandingPage/JFooter";
 
 const Login = () => {
     const [type, setType] = useState('password');
@@ -72,15 +73,14 @@ const Login = () => {
                 formData = { email: '', mobile: formattedMobile, password, role };
             }
 
-           
+
 
             try {
                 const action = login(formData);
                 const resultAction = await dispatch(action);
                 const response = resultAction.payload;
-                console.log(response);
                 if (response.status === 200) {
-                   
+
                     navigate('/home');
                 }
                 else if (response.status === 403) {
@@ -94,7 +94,7 @@ const Login = () => {
                 setTimeout(() => {
                     setErrorMessage('');
                 }, 3000);
-               
+
             }
         }
     };
@@ -114,7 +114,7 @@ const Login = () => {
                 {errorMessage && (<p className="text-red-500 text-center">{errorMessage}</p>)}
                 <form className=" border border-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-3" onSubmit={handleSubmit}>
                     <h1 className="font-bold text-center text-2xl mb-3">Sign in</h1>
-                   
+
                     <div className="mb-4">
                         <label className="block text-gray-700  mb-2" htmlFor="inputValue">
                             Email or Mobile
@@ -142,6 +142,7 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             type={type}
                             placeholder="Enter Password"
+                            autoComplete="false"
                         />
                         <p onClick={passwordView} className="absolute top-0 right-0 mt-8 mr-2 px-3 py-2 text-blue-700 cursor-pointer">
                             {buttonName}
@@ -189,23 +190,7 @@ const Login = () => {
 
 
             )}
-
-<div className="bg-[#00145e] w-full p-1 ">
-        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='text-white justify-self-start'>
-
-            </div>
-            <div className='text-white justify-self-end'>
-              <h2 className='pr-2'>Help & Support</h2>
-              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
-            </div>
-          </div>
-          <div className='text-white text-center '>
-            <p>Copyright &copy; {new Date().getFullYear()}</p>
-          </div>
-        </footer>
-      </div>
+            <JFooter />
         </div>
     );
 };

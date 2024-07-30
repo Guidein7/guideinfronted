@@ -5,6 +5,7 @@ import axios from 'axios';
 import Policy from '../../../assets/Policy.pdf';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config';
+import JFooter from '../LandingPage/JFooter';
 
 const Registration = () => {
   const [type, setType] = useState('password');
@@ -40,14 +41,13 @@ const Registration = () => {
    
   }
 
-   const validateField = (name, value) => {
+  const validateField = (name, value) => {
     let error = '';
     switch (name) {
       case 'username':
         if (!value) {
           error = 'Name is required';
-        }
-        else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
+        } else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
           error = 'Name should only contain alphabets';
         }
         break;
@@ -56,52 +56,50 @@ const Registration = () => {
           error = 'Mobile is required';
         } else if (value.trim().startsWith('+91') && !/^\+91\d+$/.test(value.trim())) {
           error = 'Mobile should contain only digits';
-        }
-        else if (value.length !== 13) {
-          error = 'Mobile number should be exactly 10 characters long'
+        } else if (value.length !== 13) {
+          error = 'Mobile number should be exactly 10 characters long';
         }
         break;
       case 'email':
         if (!value) {
-          error = 'Email is required'
-        }
-        else if (!/\S+@\S+\.\S+/.test(value.trim())) {
+          error = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(value.trim())) {
           error = 'Email is invalid';
         }
         break;
       case 'password':
         if (!value) {
-          error = 'Password is required'
-        }
-        else if (value.trim().length < 8) {
+          error = 'Password is required';
+        } else if (value.length < 8) {
           error = 'Password should be at least 8 characters long';
-        } else if (!/(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*/.test(value.trim())) {
-          error = 'Password should be the combination of digits letters and special characters';
+        } else if (!/(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*/.test(value)) {
+          error = 'Password should be the combination of digits, letters, and special characters';
         }
         break;
-        default:
-        error = ''
+      default:
+        error = '';
     }
-    setErrors(prevError => ({
-      ...prevError,
-      [name]: error,
-    }))
-  }
-
+    return error;
+  };
+  
   const validateForm = () => {
     let valid = true;
+    const newErrors = {};
     Object.keys(formData).forEach(item => {
-      validateField(item, formData[item]);
-      if (formData[item] === '' || errors[item] !== '') {
+      const error = validateField(item, formData[item]);
+      newErrors[item] = error;
+      if (formData[item] === '' || error) {
         valid = false;
       }
-    })
+    });
+    setErrors(newErrors); // Update state with collected errors
     return valid;
-  }
+  };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {   
+    if (validateForm()) {  
       const email = formData.email;
       const mobile = formData.mobile;
       const role = "JOB_SEEKER";
@@ -119,7 +117,7 @@ const Registration = () => {
             setUnKnownError('');
           }, 3000);
         }  
-      }).finally(() => setLoading(false))
+      }).finally(() => setLoading(false))   
     }
   };
   const handleBlur = (e) => {
@@ -159,9 +157,8 @@ const Registration = () => {
       </nav>
       <div className="w-full max-w-xs mx-auto align-center lg:max-w-lg">
         {unKnownError && (<p className='text-red-500'>{unKnownError}</p>)}
-        <form
+        <form onSubmit={handleSubmit}
           className="bg-gray border border-gray-300 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 mt-4"
-          onSubmit={handleSubmit}
           noValidate
         >
           <h1 className=" font-bold text-center text-2xl">Sign up</h1>
@@ -226,27 +223,12 @@ const Registration = () => {
           <p className="text-xs">By clicking on Join now, you are agree to the <a href={Policy} className="text-blue-700" target="_blank" rel="noopener noreferrer">Terms and conditions</a></p>
           {errorMessage && <p className="text-red-500 text-sm italic">{errorMessage}</p>}
           <div className="text-center mt-5">
-            <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6">Join Now</button>
+            <button  className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6">Join Now</button>
           </div>
           <p className="">Already have an account? <Link to="/login" className="text-blue-700">Sign in</Link></p>
         </form>
       </div>
-      <div className="bg-[#00145e] w-full p-1 ">
-        <footer className='sm:mx-auto max-w-screen-lg ml-0 xl:ml-[20%]'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='text-white justify-self-start'>
-
-            </div>
-            <div className='text-white justify-self-end'>
-              <h2 className='pr-2'>Help & Support</h2>
-              <Link className='pl-2' to='/contact-us'>Contact Us</Link>
-            </div>
-          </div>
-          <div className='text-white text-center '>
-            <p>Copyright &copy; {new Date().getFullYear()}</p>
-          </div>
-        </footer>
-      </div>
+      <JFooter/>
     </div>
   );
 };

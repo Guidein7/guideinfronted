@@ -1,5 +1,3 @@
-
-
 import GuideinLogo from '../../../assets/GuideinLogo.png'
 import { useEffect, useState,useRef } from 'react';
 import { MdOutlineCurrencyRupee, MdPolicy } from "react-icons/md";
@@ -12,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoMdLaptop } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-import { IoIosArrowRoundDown } from "react-icons/io";
 import axios from 'axios';
 import config from '../../../config';
 import { useSelector } from 'react-redux';
@@ -24,10 +21,18 @@ const SideBar = () => {
   const dispatch = useDispatch();
   const log = useSelector(state => state.emplog);
   const token = log.data.token;
-  const decoded = jwtDecode(token);
-  const claim = decoded.sub;
+  const [logoutConfirmation, setLogoutConfirmation] = useState(false);
+  const modalRef = useRef(null);
+  useEffect(() => {
+    if(!token){
+        navigate('/employee-login');
+    }
+},[token,navigate])
+
+const decoded = token ? jwtDecode(token) : null;
+const claim = decoded ? decoded.sub : null;
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  setIsOpen(!isOpen);
 };
 
 const[errorMessage,setErrorMessage] = useState('')
@@ -43,7 +48,6 @@ const sidebarRef = useRef(null);
       },
   })
       .then(response => {
-          console.log(response);
           if (response.status === 200) {
             navigate('/wallet')
               
@@ -58,7 +62,18 @@ const sidebarRef = useRef(null);
       })
       .catch(error => {
          
-              console.error('Error fetching profile:', error);
+             if(error.response.status === 403) {
+                setErrorMessage('session Expired')
+                setTimeout(()=> {
+                    setErrorMessage('');
+                },3000)
+             }
+             else {
+                setErrorMessage('Error Fetching Data')
+                setTimeout(()=> {
+                    setErrorMessage('');
+                },3000)
+             }
           
 
       })
@@ -66,7 +81,6 @@ const sidebarRef = useRef(null);
   }
 
 const handleLogout = () => {
-  
   dispatch(logoutEmployee());
   navigate('/employee-login');
 };
@@ -90,6 +104,11 @@ const handleClickOutside = (event) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  const logoutModal = () => {
+    toggleSidebar();
+    setLogoutConfirmation(true);
+  }
 return(
   <div className='bg-[#f8f9fa]  w-full fixed top-0 sm:left-0 py-8 md:bg-transparent md:relative md:py-0'>
      <button
@@ -166,7 +185,7 @@ return(
                         </li>
                         <li>
                             <a
-                                onClick={handleLogout}
+                                onClick={logoutModal}
                                 className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-700 group">
                                 <span className="text-xl mr-2">
                                     <HiOutlineLogout />
@@ -182,6 +201,19 @@ return(
           <img src={GuideinLogo} alt="logo" className='h-8' />
         </Link>
       </div>
+      {logoutConfirmation && (
+        <div ref={modalRef} className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
+          <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
+            <div className="text-center mt-2">
+              <p>Are you sure you want to logout?</p>
+              <div className='my-2'>
+              <button className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2" onClick={handleLogout}>Logout</button>
+              <button className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded mr-2" onClick={() => setLogoutConfirmation(false)}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
   </div>
 )
 
