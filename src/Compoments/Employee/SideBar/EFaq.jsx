@@ -18,7 +18,7 @@ const EFAQ = () => {
     },
     {
       question: "Is there a deadline to refer a candidate after receiving a referral request?",
-      answer: "Yes, you must refer the candidate within 5 days of receiving the referral request. If you are not able to refer within 7 days referral request will be deleted from your account."
+      answer: "Yes, you must refer the candidate within 5 days of receiving the referral request. If you are not able to refer within 5 days referral request will be deleted from your account."
     },
     {
       question: "How can I withdraw my earnings?",
@@ -30,10 +30,10 @@ const EFAQ = () => {
     <div className=''>
         <SideBar/>
     <div className="max-w-4xl mx-auto pt-20 lg:pt-5 lg:ml-[20%]">
-      <h1 className="text-2xl lg:text-3xl font-bold pl-5  mb-6">Frequently Asked Questions</h1>
+      <h1 className="text-xl lg:text-3xl font-bold pl-5  mb-6">Frequently Asked Questions</h1>
       {faqs.map((faq, index) => (
         <div key={index} className="mb-4 p-4 border rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-2">{faq.question}</h2>
+          <h2 className="lg:text-xl font-semibold mb-2">{faq.question}</h2>
           <p>{faq.answer}</p>
         </div>
       ))}

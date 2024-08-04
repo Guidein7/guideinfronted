@@ -30,10 +30,10 @@ const JReferralFAQ = () => {
     <div>
         <NavBar/>
     <div className="max-w-4xl mx-auto lg:ml-[20%] pt-20 lg:pt-5">
-      <h1 className="text-2xl lg:text-3xl  font-bold mb-6 pl-5">Frequently Asked Questions</h1>
+      <h1 className="text-xl lg:text-3xl  font-bold mb-6 pl-5">Frequently Asked Questions</h1>
       {faqs.map((faq, index) => (
         <div key={index} className="mb-4 p-4 border rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-2">{faq.question}</h2>
+          <h2 className=" lg:text-xl font-semibold mb-2">{faq.question}</h2>
           <p>{faq.answer}</p>
         </div>
       ))}

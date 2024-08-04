@@ -13,11 +13,11 @@ import JSFooter from '../NavBar/JSFooter';
 function AppliedJobs() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = token? jwtDecode(token):null;
-    const email = decoded?decoded.sub:null;
+    const decoded = token ? jwtDecode(token) : null;
+    const email = decoded ? decoded.sub : null;
     const [job, setJobs] = useState([])
     const [loading, setLoading] = useState(false)
-    const[errorMessage,setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -25,7 +25,7 @@ function AppliedJobs() {
         dispatch(logoutUser());
     };
 
-   
+
 
     const appliedJobs = () => {
         setLoading(true);
@@ -36,26 +36,26 @@ function AppliedJobs() {
             },
         }
         ).then(response => {
-           
+
             setJobs(response.data.reverse())
 
         })
             .catch(error => {
-                if(error.response.status === 403) {
+                if (error.response.status === 403) {
                     setErrorMessage('session Expired')
                     setTimeout(() => {
                         setErrorMessage('')
                         handleLogout();
                     }, 2000);
                 }
-                else{
+                else {
                     setErrorMessage('Error while Loading applied jobs')
                     setTimeout(() => {
                         setErrorMessage('')
                         handleLogout();
                     }, 2000);
-                } 
-                     
+                }
+
             })
             .finally(() => setLoading(false))
     }
@@ -68,10 +68,10 @@ function AppliedJobs() {
     };
 
     useEffect(() => {
-        if(!token){
+        if (!token) {
             navigate('/login')
         }
-    },[token,navigate])
+    }, [token, navigate])
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
@@ -96,7 +96,13 @@ function AppliedJobs() {
                                         <div className="mb-4 md:mb-0">
                                             <h2 className='text-lg font-semibold'>{status.jobTitle}</h2>
                                             <p className='text-sm'>Company: {status.companyName}</p>
-                                            <p className='text-sm'>Location: {status.jobLocation}</p>
+                                            <p className='text-sm'>Location:  {
+                                                status.jobLocation
+                                                    .split(',')
+                                                    .map(location => location.trim())
+                                                    .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                    .join(', ')
+                                            }</p>
                                             <p className='text-sm'>Job Type: {status.jobType}</p>
                                             <p className='text-sm'>Experience: {status.experienceRequired}</p>
 
@@ -117,7 +123,7 @@ function AppliedJobs() {
 
 
             </div>
-            <JSFooter/>
+            <JSFooter />
 
         </div>
 

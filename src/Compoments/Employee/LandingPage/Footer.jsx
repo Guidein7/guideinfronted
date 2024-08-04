@@ -7,7 +7,7 @@ function EFooter() {
                 <div className='text-white my-auto justify-self-start'>
                    <Link to='/employee-faqs' className="ml-1 text-sm">FAQ</Link>
                 </div>
-                <div className='text-white md:text-center text-sm my-auto'>
+                <div className='text-white text-start md:text-center text-sm my-auto'>
                 <p>Copyright &copy; {new Date().getFullYear()}</p>
             </div>
                 <div className='text-white text-sm  justify-self-end'>

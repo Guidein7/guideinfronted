@@ -12,8 +12,8 @@ import JSFooter from '../NavBar/JSFooter';
 function DashBoard() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = token? jwtDecode(token):null;
-    const email =decoded? decoded.sub:null;
+    const decoded = token ? jwtDecode(token) : null;
+    const email = decoded ? decoded.sub : null;
     const [loading, setLoading] = useState(false);
     const [dashboardDetails, setDashboardDetails] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
@@ -21,10 +21,10 @@ function DashBoard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!token) {
+        if (!token) {
             navigate('/login')
         }
-    },[token,navigate])
+    }, [token, navigate])
 
     const handleLogout = () => {
         dispatch(logoutUser());
@@ -40,7 +40,6 @@ function DashBoard() {
         }
         ).then(response => {
             setDashboardDetails(response.data)
-            console.log(response)
         }).catch(error => {
 
             if (error.response.status === 403) {
@@ -50,9 +49,9 @@ function DashBoard() {
                     handleLogout();
                 }, 2000)
             }
-            else{
-            setErrorMessage('Error while fething dashboard details Try again')
-            setTimeout(() => setErrorMessage(''), 2000)
+            else {
+                setErrorMessage('Error while fething dashboard details Try again')
+                setTimeout(() => setErrorMessage(''), 2000)
             }
         }).finally(() => setLoading(false))
     }
@@ -81,8 +80,8 @@ function DashBoard() {
 
                     {(!isActiveValue) && dashboardDetails.planHistory && (
                         <div className='text-center mb-5'>
-                            <h1 className='mb-2'> Your are not subscribed </h1>
-                            <Link to='/subscribe' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300   rounded text-sm px-14 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe</Link>
+                            <h1 className='mb-2'> You don't have an active subscription </h1>
+                            <Link to='/subscribe' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300   rounded  px-20 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe</Link>
                         </div>
                     )}
                     <div className='grid grid-cols-1  md:grid-cols-3 gap-4 lg:my-8'>
@@ -110,9 +109,9 @@ function DashBoard() {
                             <h1 className='font-bold text-center text-lg'> Total Successful Referrals</h1>
                             <h1 className='font-bold text-center text-lg'>{dashboardDetails.totalReferralSuccessful}</h1>
                         </div>
-                       
-                    </div>
 
+                    </div>
+                    {dashboardDetails?.planHistory?.length > 0 && (
                     <div className='my-6  '>
                         <h1 className='font-bold mt-2 mx-4'>Plan History</h1>
                         {[...(dashboardDetails?.planHistory ?? [])].reverse().map((item, index) => (
@@ -126,11 +125,12 @@ function DashBoard() {
                         )
                         )}
                     </div>
+                    )}
                 </div>
             )}
 
 
-            <JSFooter/>
+            <JSFooter />
 
         </div>
     );

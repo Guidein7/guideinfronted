@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import GuideinLogo from '../../../assets/GuideinLogo.png';
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -17,8 +17,8 @@ const EmployeeLogin = () => {
     const log = useSelector(state => state.emplog);
     const navigate = useNavigate();
     const [loger, setLoger] = useState('');
-    const[isVerifedUser,setIsVerifiedUser] = useState(false);
-    const[errorMessage, setErrorMessage]  = useState('')
+    const [isVerifedUser, setIsVerifiedUser] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('')
     const modalRef = useRef(null);
 
     if (log.isLoading) {
@@ -65,7 +65,7 @@ const EmployeeLogin = () => {
         if (validateForm()) {
             const role = "JOB_POSTER";
             let formData;
-    
+
             if (isValidEmail(inputValue)) {
                 formData = { email: inputValue, mobile: '', password, role };
             } else {
@@ -73,27 +73,27 @@ const EmployeeLogin = () => {
                 formData = { email: '', mobile: formattedMobile, password, role };
             }
 
-    
+
             try {
                 const action = employeeLogin(formData);
                 const resultAction = await dispatch(action);
                 const response = resultAction.payload;
-    
+
                 if (response.status === 200) {
                     navigate('/employee-home');
                 }
-                else if(response.status === 403){
-                        setLoger("Invalid email or password");
+                else if (response.status === 403) {
+                    setLoger("Invalid email or password");
                 }
-                else if(response.status === 401){
+                else if (response.status === 401) {
                     setIsVerifiedUser(true);
                 }
             } catch (error) {
                 setErrorMessage('Error while submitting your request. Please try again.');
                 setTimeout(() => {
-                  setErrorMessage('');
+                    setErrorMessage('');
                 }, 3000);
-                console.error("Error:", error);
+               
             }
         }
     };
@@ -102,7 +102,7 @@ const EmployeeLogin = () => {
             <nav className="bg-[#f8f9fa] py-4">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <div className="lg:block">
-                        <Link to='/employee-landingpage'>
+                        <Link to='/employee'>
                             <img src={GuideinLogo} alt="Logo" className="h-8" />
                         </Link>
                     </div>
@@ -148,9 +148,9 @@ const EmployeeLogin = () => {
                             <p className="text-red-500 text-xs italic">{errors.password}</p>
                         )}
                     </div>
-                    <Link to='/employee-forgot-password' className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mb-6">
+                    {/* <Link to='/employee-forgot-password' className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mb-6">
                         Forgot Password?
-                    </Link>
+                    </Link> */}
                     <div>
                         <p className="text-red-500">{loger}</p>
                     </div>
@@ -163,32 +163,32 @@ const EmployeeLogin = () => {
                 </form>
             </div>
             {isVerifedUser && (
-                        <div
-                            className="fixed top-0 left-0 w-full h-screen bg-gray-500 bg-opacity-50 flex justify-center items-center"
-                            ref={modalRef}
+                <div
+                    className="fixed top-0 left-0 w-full h-screen bg-gray-500 bg-opacity-50 flex justify-center items-center"
+                    ref={modalRef}
+                >
+                    <div className="relative bg-white p-5 rounded shadow-md w-full max-w-md">
+                        <span
+                            className="absolute top-2 right-2 text-xl cursor-pointer"
+                            onClick={() => setIsVerifiedUser(false)}
                         >
-                            <div className="relative bg-white p-5 rounded shadow-md w-full max-w-md">
-                                <span
-                                    className="absolute top-2 right-2 text-xl cursor-pointer"
-                                    onClick={() => isVerifedUser(false)}
-                                >
-                                    &times;
-                                </span>
-                                <p className="text-red-700">
-                                    You are not the verified user please verify your details.
-                                </p>
-                                <div className="text-center mt-2">
-                                    <Link to="/job-poster-verification" className="bg-blue-700 text-white p-2 rounded">
-                                        verify
-                                    </Link>
-                                </div>
-                            </div>
+                            &times;
+                        </span>
+                        <p className="text-red-700">
+                            You are not the verified user please verify your details.
+                        </p>
+                        <div className="text-center mt-2">
+                            <Link to="/job-poster-verification" className="bg-blue-700 text-white p-2 rounded">
+                                verify
+                            </Link>
                         </div>
+                    </div>
+                </div>
 
 
-                    )}
+            )}
 
-                        <EFooter/>
+            <EFooter />
         </div>
     );
 };

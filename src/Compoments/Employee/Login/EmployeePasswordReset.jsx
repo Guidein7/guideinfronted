@@ -205,7 +205,7 @@ const EmployeePasswordReset = () => {
             <nav className="bg-[#f8f9fa] py-4 w-full">
                 <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
                     <div className="lg:block">
-                        <Link to='/employee-landingpage'>
+                        <Link to='/employee'>
                             <img src={GuideinLogo} alt="Logo" className="h-8" />
                         </Link>
                     </div>

@@ -151,13 +151,13 @@ const Login = () => {
                             <p className="text-red-500 text-xs italic">{errors.password}</p>
                         )}
                     </div>
-                    <Link to='/forgot-password' className="inline-block align-baseline  text-sm text-blue-700 hover:text-blue-800 mb-6">
+                    {/* <Link to='/forgot-password' className="inline-block align-baseline  text-sm text-blue-700 hover:text-blue-800 mb-6">
                         Forgot Password?
-                    </Link>
+                    </Link> */}
                     <div>
                         <p className="text-red-500">{loger}</p>
                     </div>
-                    <div className="text-center">
+                    <div className="text-center mt-4">
                         <button className="bg-blue-700  text-white py-1 px-7 rounded mb-6" type="submit">
                             Sign In
                         </button>
@@ -173,7 +173,7 @@ const Login = () => {
                     <div className="relative bg-white p-5 rounded shadow-md w-full max-w-md">
                         <span
                             className="absolute top-2 right-2 text-xl cursor-pointer"
-                            onClick={() => isVerifedUser(false)}
+                            onClick={() => setIsVerifiedUser(false)}
                         >
                             &times;
                         </span>

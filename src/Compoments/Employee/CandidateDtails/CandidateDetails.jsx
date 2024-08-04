@@ -18,7 +18,7 @@ function CandidateDetails() {
     const [isOpen, setIsOpen] = useState(false);
     const [refer, setRefer] = useState(false);
     const [reject, setReject] = useState(false);
-    const { candidate } = location.state;
+    const { candidate } = location.state || {};
     const [loading, setLoading] = useState(false);
     const [candidateDetails, setCandidateDetails] = useState({});
     const [showReferMessage, setShowReferMessage] = useState(false)
@@ -27,8 +27,8 @@ function CandidateDetails() {
         comments: ""
     });
     const [formData, setFormData] = useState({
-        name: candidate.candidateName,
-        positionAppliedFOR: candidate.referralFor,
+        name: candidate?.candidateName,
+        positionAppliedFOR: candidate?.referralFor,
         companyName: '',
         dateOfReferral: '',
         methodOfReferral: '',
@@ -42,7 +42,11 @@ function CandidateDetails() {
         if (!token) {
             navigate('/employee-login');
         }
-    }, [token, navigate]);
+        else if(!candidate?.referralId){
+            navigate(-1);
+
+        }
+    }, [token, navigate,candidate]);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -243,15 +247,20 @@ function CandidateDetails() {
                     (<div className=''>
                         <div className=' lg:p-4 rounded mb-2'>
                             <h1 className='font-bold text-center text-xl mb-3'>Candidate Details</h1>
-                            <p className='mb-1'>Full Name : <span>{candidateDetails.candidateName}</span></p>
-                            <p className='mb-1'>Mail Id : <span>{candidateDetails.candidateEmail}</span></p>
-                            <p className='mb-1'>Mobile Number : <span>{candidateDetails.candidateMobile}</span></p>
+                            <p className='mb-1'>Full Name: <span>{candidateDetails.candidateName}</span></p>
+                            <p className='mb-1'>Mail Id: <span>{candidateDetails.candidateEmail}</span></p>
+                            <p className='mb-1'>Mobile Number: <span>{candidateDetails.candidateMobile}</span></p>
                             <p className='mb-1'>Candidate Experience: {candidateDetails.candidateExperience}</p>
                             <p >Resume: <span className='text-blue-500 cursor-pointer' onClick={handleResumeView}>{candidateDetails.candidateName}.pdf</span></p>
                             <h1 className='font-bold mt-2'>Referral Requested for</h1>
                             <p className='mb-1'>Job Role: <span className=''>{candidateDetails.referralFor}</span></p>
                             <p className='mb-1'>Company: {candidateDetails.company}</p>
-                            <p className='mb-1'>Location: {candidateDetails.jobLocation}</p>
+                            <p className='mb-1'>Location: {candidateDetails?.jobLocation
+                                                    ?.split(',')
+                                                    ?.map(location => location.trim())
+                                                    ?.filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                    ?.join(', ')
+                                            } </p>
                             <p>Experience: {candidateDetails.experienceRequired}</p>
                             <p>Posted On: {candidateDetails.jobPostedOn}</p>
                             <div className='flex mt-4'>

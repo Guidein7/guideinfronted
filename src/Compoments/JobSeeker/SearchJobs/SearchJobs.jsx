@@ -32,15 +32,15 @@ function SearchJobs() {
     const dispatch = useDispatch();
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = token? jwtDecode(token):null;
-    const email = decoded?decoded.sub:null;
+    const decoded = token ? jwtDecode(token) : null;
+    const email = decoded ? decoded.sub : null;
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!token){
+        if (!token) {
             navigate('/login')
         }
-    },[token,navigate])
+    }, [token, navigate])
     useEffect(() => {
         fetchJobs();
     }, []);
@@ -57,15 +57,14 @@ function SearchJobs() {
                 }
             );
             setJobs(response.data.reverse());
-           
+
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 setSaveJobMessage('session Expired');
-                setTimeout(() =>  
-                    {
-                        setSaveJobMessage('');
-                        handleLogout();
-                     } ,2000);
+                setTimeout(() => {
+                    setSaveJobMessage('');
+                    handleLogout();
+                }, 2000);
             } else {
                 setSaveJobMessage('Error while fetching jobs');
                 setTimeout(() => setSaveJobMessage(''), 2000);
@@ -81,7 +80,7 @@ function SearchJobs() {
     const handleSaveJob = async (jobId) => {
         setLoading(true);
 
-        axios.post( `${config.api.baseURL}${config.api.jobSeeker.saveJob}`,{},{
+        axios.post(`${config.api.baseURL}${config.api.jobSeeker.saveJob}`, {}, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -98,7 +97,7 @@ function SearchJobs() {
             setTimeout(() => setSaveJobMessage(''), 2000)
 
         }).finally(() => setLoading(false))
-        
+
     };
     const handleClick = (job) => {
         navigate('/job-details', { state: { job } });
@@ -109,8 +108,12 @@ function SearchJobs() {
             ...prevFilters,
             [name]: value
         }));
-        setCurrentPage(1); 
+        setCurrentPage(1);
     };
+
+    
+
+        
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between pt-14 lg:pt-0">
             <NavBar />
@@ -183,10 +186,10 @@ function SearchJobs() {
 
                     {jobs.length > 0 && (
                         <h1 className=" mb-2 mx-2 md:text-left  lg:pt-0">
-                              {filteredJobs.length} results
+                            {filteredJobs.length} results
                         </h1>
                     )}
-                    {jobs.length === 0 ? (<h1 className="flex  flex-grow h-full  items-center justify-center">No Jobs avaliable right now</h1>) :
+                    {filteredJobs.length === 0 ? (<h1 className="flex  flex-grow h-full  items-center justify-center">No Jobs Found</h1>) :
                         (<div>
                             {currentJobs.map((job, index) => (
                                 <div key={index} className="bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -198,7 +201,13 @@ function SearchJobs() {
                                             {job.jobTitle}
                                         </p>
                                         <p className="text-sm md:text-left">Company: {job.companyName}</p>
-                                        <p className="text-sm md:text-left">Location: {job.jobLocation} ({job.workMode})</p>
+                                        <p className="text-sm md:text-left">Location: {
+                                            job.jobLocation
+                                                .split(',')
+                                                .map(location => location.trim())
+                                                .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                .join(', ')
+                                        } ({job.workMode})</p>
                                         <p className="text-sm md:text-left">JobType: {job.jobType}</p>
                                         <p className="text-sm md:text-left">Experience: {job.experienceRequired}</p>
                                         <p className="text-sm md:text-left">Posted by: {job.jobPosterName}</p>
@@ -212,7 +221,7 @@ function SearchJobs() {
                                         >
                                             {job.saved ? 'Saved' : 'Save'}
                                         </button>
-                                        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => handleClick(job)}>{job.status === 'UN_REQUESTED'? 'Request Referral':'Referral Requested'}</button>
+                                        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => handleClick(job)}>{job.status === 'UN_REQUESTED' ? 'Request Referral' : 'Referral Requested'}</button>
                                     </div>
                                 </div>
                             ))}
@@ -222,42 +231,42 @@ function SearchJobs() {
 
                 </div>
             )}
-           {jobs.length > 10 && (
-    <div className="flex justify-center mt-4 mb-2">
-        {currentPage > 1 && (
-            <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                className="px-4 py-2 mx-1 bg-gray-300 rounded"
-            >
-                Previous
-            </button>
-        )}
-        {Array.from({ length: totalPages }, (_, index) => {
-            if (index + 1 === currentPage || (index + 1 >= currentPage - 1 && index + 1 <= currentPage + 1)) {
-                return (
-                    <button
-                        key={index}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={`px-4 py-2 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-                    >
-                        {index + 1}
-                    </button>
-                );
-            }
-            return null;
-        })}
-        {currentPage < totalPages && (
-            <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                className="px-4 py-2 mx-1 bg-gray-300 rounded"
-            >
-                Next
-            </button>
-        )}
-    </div>
-)}
+            {jobs.length > 10 && (
+                <div className="flex justify-center my-3 ml-0 xl:ml-[20%]">
+                    {currentPage > 1 && (
+                        <button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className="px-4 py-2 mx-1 bg-gray-300 rounded"
+                        >
+                            Previous
+                        </button>
+                    )}
+                    {Array.from({ length: totalPages }, (_, index) => {
+                        if (index + 1 === currentPage || (index + 1 >= currentPage - 1 && index + 1 <= currentPage + 1)) {
+                            return (
+                                <button
+                                    key={index}
+                                    onClick={() => handlePageChange(index + 1)}
+                                    className={`px-4 py-2 mx-1 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+                                >
+                                    {index + 1}
+                                </button>
+                            );
+                        }
+                        return null;
+                    })}
+                    {currentPage < totalPages && (
+                        <button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className="px-4 py-2 mx-1 bg-gray-300 rounded"
+                        >
+                            Next
+                        </button>
+                    )}
+                </div>
+            )}
 
-<JSFooter/>
+            <JSFooter />
         </div>
     );
 

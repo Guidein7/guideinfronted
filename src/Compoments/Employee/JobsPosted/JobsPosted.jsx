@@ -15,6 +15,7 @@ import Footer from '../SideBar/Footer';
 
 
 const cities = [
+    { value: 'Others', label: 'Others' },
     { value: 'Bangalore', label: 'Bangalore' },
     { value: 'Hyderabad', label: 'Hyderabad' },
     { value: 'Mumbai', label: 'Mumbai' },
@@ -40,6 +41,7 @@ const cities = [
     { value: 'Thiruvananthapuram', label: 'Thiruvananthapuram' },
     { value: 'Vadorara', label: 'Vadorara' },
     { value: 'Guwahati', label: 'Guwahati' },
+
 ]
 
 function JobsPosted() {
@@ -71,6 +73,7 @@ function JobsPosted() {
         jobPostedBy: claim,
         otherJobTitle: ''
     });
+    const [customCity, setCustomCity] = useState('');
     const [jobs, setJobs] = useState([]);
     const [profileComplete, setProfileComplete] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -158,7 +161,7 @@ function JobsPosted() {
                     setProfileComplete(true);
                 }
                 else if (response.status === 204) {
-                    setProfileCompleteMessage('please complete profile to post a job')
+                    setProfileCompleteMessage('Complete profile to post a job')
                 }
             })
             .catch(error => {
@@ -250,14 +253,72 @@ function JobsPosted() {
             [id]: value
         }));
     };
-
     const handleCityChange = (selectedOptions) => {
-        const selectedCities = selectedOptions ? selectedOptions.map(option => option.value).join(', ') : '';
-        setFormData({
-            ...formData,
-            jobLocation: selectedCities
-        });
+        const selectedCities = selectedOptions ? selectedOptions.map(option => option.value) : [];
+        if (selectedCities.includes('Others')) {
+            setCustomCity('');
+            setFormData({
+                ...formData,
+                jobLocation: selectedCities.filter(city => city !== 'Others').join(', ') + ', Others'
+            });
+        } else {
+            setFormData({
+                ...formData,
+                jobLocation: selectedCities.join(', ')
+            });
+            setCustomCity(''); // Reset custom city when "Others" is deselected
+        }
     };
+
+    const handleCustomCityChange = (e) => {
+        const value = e.target.value;
+        setCustomCity(value);
+    };
+
+    const handleCustomCityBlur = (e) => {
+        const value = e.target.value;
+        if (formData.jobLocation.includes('Others')) {
+            setFormData({
+                ...formData,
+                jobLocation: formData.jobLocation.replace(/Others,? ?/g, '') + ', Others, ' + value
+            });
+        } else {
+            setFormData({
+                ...formData,
+                jobLocation: value
+            });
+        }
+    };
+
+
+
+
+    // const handleCustomCityChange = (e) => {
+    //     const value = e.target.value;
+    //     setCustomCity(value);
+    //     // Ensure 'Others' is included and update jobLocation with custom city
+    //     setFormData(prevFormData => {
+    //         const updatedJobLocation = prevFormData.jobLocation.replace(/,? Others/g, '');
+    //         return {
+    //             ...prevFormData,
+    //             jobLocation: `${updatedJobLocation}${updatedJobLocation && value ? ', ' : ''}${value}`
+    //         };
+    //     });
+    // };
+
+    // const handleCustomCityChange = (e) => {
+    //     const value = e.target.value;
+    //     setCustomCity(value);
+    //     setFormData(prevFormData => {
+    //         const updatedJobLocation = prevFormData.jobLocation.replace(/,?\s*Others/, '');
+    //         return {
+    //             ...prevFormData,
+    //             jobLocation: `${updatedJobLocation}${updatedJobLocation && value ? ', ' : ''}${value}`
+    //         };
+    //     });
+    // };
+
+
 
     const handleJobTitleChange = (selectedOption) => {
         if (selectedOption.value === 'Others') {
@@ -272,7 +333,7 @@ function JobsPosted() {
         if (isEditing) {
             const updateddata = { ...formData, jobId: editJobId };
             if (formData.jobTitle === 'Others') {
-                 updateddata.jobTitle = formData.otherJobTitle;
+                updateddata.jobTitle = formData.otherJobTitle;
             }
             setLoading(true);
             axios.put(`${config.api.baseURL}${config.api.jobPoster.updateJob}`, JSON.stringify(updateddata), {
@@ -305,9 +366,9 @@ function JobsPosted() {
 
         } else {
             setLoading(true);
-            const updatedformData = { ...formData};
+            const updatedformData = { ...formData };
             if (formData.jobTitle === 'Others') {
-                 updatedformData.jobTitle = formData.otherJobTitle;
+                updatedformData.jobTitle = formData.otherJobTitle;
             }
             axios.post(`${config.api.baseURL}${config.api.jobPoster.saveJob}`, JSON.stringify(updatedformData), {
                 headers: {
@@ -455,14 +516,14 @@ function JobsPosted() {
                             <h2 className='text-2xl font-semibold mb-4'>{isEditing ? 'Edit Job' : 'Post a New Job'}</h2>
                             <form onSubmit={handleFormSubmit}>
                                 <div className='mb-4'>
-                                <label htmlFor="jobTitle">Job Title<span className='text-red-500'>*</span></label>
-                                <Select
-                                    id="jobTitle"
-                                    options={jobTitles.map(title => ({ value: title, label: title }))}
-                                    onChange={handleJobTitleChange}
-                                    value={{ value: formData.jobTitle, label: formData.jobTitle }}
-                                    required
-                                />
+                                    <label htmlFor="jobTitle">Job Title<span className='text-red-500'>*</span></label>
+                                    <Select
+                                        id="jobTitle"
+                                        options={jobTitles.map(title => ({ value: title, label: title }))}
+                                        onChange={handleJobTitleChange}
+                                        value={{ value: formData.jobTitle, label: formData.jobTitle }}
+                                        required
+                                    />
                                 </div>
 
                                 {formData.jobTitle === 'Others' && (
@@ -507,6 +568,23 @@ function JobsPosted() {
                                         className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
                                         required
                                     />
+                                    {formData.jobLocation.includes('Others') && (
+                                        <div className='mt-4'>
+                                            <label htmlFor='customCity' className='block text-sm font-medium text-gray-700'>
+                                                Please Specify the City<span className='text-red-500'>*</span>
+                                            </label>
+                                            <input
+                                                type='text'
+                                                id='customCity'
+                                                placeholder='Enter city name'
+                                                value={customCity}
+                                                onChange={handleCustomCityChange}
+                                                onBlur={handleCustomCityBlur}
+                                                className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
+                                                required
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className='mb-4'>
                                     <label htmlFor='jobType' className='block text-sm font-medium text-gray-700'>
@@ -630,11 +708,17 @@ function JobsPosted() {
                         <div className='flex flex-col flex-grow'>
                             {currentJobs.length > 0 ? (
                                 currentJobs.map(job => (
-                                    <div key={job.jobId} className='bg-white p-4 rounded shadow-md mb-2 flex justify-between'>
+                                    <div key={job.jobId} className='bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row gap-2 justify-between'>
                                         <div>
                                             <h2 className='text-lg font-semibold'>{job.jobTitle}</h2>
                                             <p className='text-sm'>Company: {job.companyName}</p>
-                                            <p className='text-sm'>Location: {job.jobLocation} {`(${job.workMode})`}</p>
+                                            <p className='text-sm'>Location:   {
+                                                job?.jobLocation
+                                                    .split(',')
+                                                    .map(location => location.trim())
+                                                    .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                    .join(', ')
+                                            } {`(${job.workMode})`}</p>
                                             <p className='text-sm'>Experience: {job.experienceRequired}</p>
                                             <p className='text-sm'>Posted on: {job.postedOn}</p>
                                             {job.disabledByAdmin && (<p className='text-xsm text-red-500'>This job was disabled by admin</p>)}
@@ -658,13 +742,15 @@ function JobsPosted() {
 
 
             </div >
+            {currentJobs.length > 10 && (
             <Pagination
                 totalJobs={jobs.length}
                 jobsPerPage={jobsPerPage}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
             />
-           <Footer/>
+)}
+            <Footer />
         </div >
     );
 }

@@ -84,7 +84,7 @@ const EmployeeLandingPage = () => {
                         </button>
                     </div>
                     <div className='lg:block'>
-                        <Link to='/employee-landingpage'>
+                        <Link to='/employee'>
                             <img src={GuideinLogo} alt='logo' className='h-8' />
                         </Link>
                     </div>
@@ -221,7 +221,7 @@ const EmployeeLandingPage = () => {
                                     <p className='text-lg text-[#3E454B] font-bold' >Step 5</p>
                                     <div className='flex flex-col gap-2 justify-center items-center'>
                                         <p className='text-base text-[#3E454B] font-bold' >Earn Money</p>
-                                        <p className='text-justify md:text-center text-base text-[#3E454B]' >Once the referral is validated, money is credited to your Guidein wallet.</p>
+                                        <p className='text-justify md:text-center text-base text-[#3E454B]' >Once the referral is validated, money is credited to your Guidein wallet, regardless of candidate selection</p>
                                     </div>
                                 </div>
                             </div>

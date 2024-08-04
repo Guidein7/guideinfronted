@@ -12,10 +12,10 @@ import JSFooter from '../NavBar/JSFooter';
 function JobDetails() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = token ? jwtDecode(token):null;
-    const email = decoded? decoded.sub: null;
-    const mobile =decoded? decoded.mobile:null;
-    const name = decoded?decoded.username:null;
+    const decoded = token ? jwtDecode(token) : null;
+    const email = decoded ? decoded.sub : null;
+    const mobile = decoded ? decoded.mobile : null;
+    const name = decoded ? decoded.username : null;
     const [profileCompletionMessage, setProfileCompletionMessage] = useState('');
     const [requested, setRequested] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
@@ -25,9 +25,9 @@ function JobDetails() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
     const [isProfileCompleted, setIsProfileCompleted] = useState(false);
-    const { job } = location.state;
-    const jobId = job.jobId;
-    const jobPostedBy = job.jobPostedBy;
+    const { job } = location.state || {};
+    const jobId = job? job.jobId: null;
+    const jobPostedBy = job ? job.jobPostedBy : null;
     const [jobStatus, setJobStatus] = useState('')
     const [formData, setFormData] = useState({
         resume: null,
@@ -39,17 +39,20 @@ function JobDetails() {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [subscribeMessage, setSubscribeMessage] = useState(false);
     const [isCredits, setIscredits] = useState(false);
-    const [savedJob, setSavedJob] = useState(job.saved)
+    const [savedJob, setSavedJob] = useState( job?job.saved:null)
     const [uploadedResumeURL, setUploadedResumeURL] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch();
-    const [resumeUploadMessge,setResumeUploadMessage] = useState('')
+    const [resumeUploadMessge, setResumeUploadMessage] = useState('')
 
     useEffect(() => {
-        if(!token){
+        if (!token) {
             navigate('/login')
         }
-    },[token,navigate])
+        else if(!job?.jobId){
+            navigate(-1);
+        }
+    }, [token, navigate,job])
 
     useEffect(() => {
         getProfileStatus();
@@ -65,31 +68,31 @@ function JobDetails() {
                 "ngrok-skip-browser-warning": "69420"
             },
         })
-        .then(response => {
-           if (response.status === 200) {
-                setIsProfileCompleted(true)
-                setProfile(response.data)
-            }
-            else if (response.status === 204) {
-                setIsProfileCompleted(false);
-            }
-        })
-        .catch(error => {
-            if (error.response.status === 403) {
-                setErrorMessage('session Expired');
-                setTimeout(() => {
-                    setErrorMessage('')
-                    handleLogout();
-                }, 2000);
-            }
-            else {
-                setErrorMessage('Error while fetching profile');
-                setTimeout(() => {
-                    setErrorMessage('')
-                }, 2000);
-            }
-        })
-        .finally(() => setLoading(false));
+            .then(response => {
+                if (response.status === 200) {
+                    setIsProfileCompleted(true)
+                    setProfile(response.data)
+                }
+                else if (response.status === 204) {
+                    setIsProfileCompleted(false);
+                }
+            })
+            .catch(error => {
+                if (error.response.status === 403) {
+                    setErrorMessage('session Expired');
+                    setTimeout(() => {
+                        setErrorMessage('')
+                        handleLogout();
+                    }, 2000);
+                }
+                else {
+                    setErrorMessage('Error while fetching profile');
+                    setTimeout(() => {
+                        setErrorMessage('')
+                    }, 2000);
+                }
+            })
+            .finally(() => setLoading(false));
     }
 
     const checkSubscription = () => {
@@ -259,13 +262,12 @@ function JobDetails() {
             }
 
         }).catch(error => {
-            console.log(error)
             if (error.response.status === 400) {
                 setShowDetails(false);
                 setIscredits(true);
             }
 
-          else  if (error.response.status === 403) {
+            else if (error.response.status === 403) {
                 setErrorMessage('session Expired');
                 setTimeout(() => {
                     setErrorMessage('')
@@ -279,7 +281,7 @@ function JobDetails() {
                 }, 2000);
             }
         })
-         .finally(() => setLoading(false))
+            .finally(() => setLoading(false))
     }
 
     const fetchJobs = async () => {
@@ -333,199 +335,211 @@ function JobDetails() {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                         <p className="mt-4 text-gray-900">Loading...</p>
                     </div>
-                ) :(
-                        <div>
-                            
-                            <div className='pl-5 pt-14 lg:pt-5 '>
-                                {errorMessage && (<p className='fixed left-1/2 transform -translate-x-1/2 px-4 bg-white py-2 text-red-500'>{errorMessage}</p>)}
-                                <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job.jobTitle}</h1>
-                                <p className='font-bold  my-1 lg:my-2'> {job.companyName}</p>
-                                <p className='my-1 lg:my-2'> {job.jobLocation} ({job.workMode})</p>
-                                <p className='my-1 lg:my-2'>Job Type: {job.jobType}</p>
-                                <p className='my-1 lg:my-2'>Experience: {job.experienceRequired}</p>
-                                <p className='my-1 lg:my-2'>Posted on: {job.postedOn}</p>
-                                <p className='font-bold my-3 lg:my-4'>Know more about the job</p>
-                                <a className='text-blue-700 underline break-words my-1' target="_blank" href={job.jobDescriptionLink} style={{ wordWrap: 'break-word' }}>{job.jobDescriptionLink}</a>
-                                <h1 className='font-bold my-3 lg:my-4'>Job Posted By</h1>
-                                <p> Employee Name: <span className='font-bold my-1 lg:my-2'> {job.jobPosterName}</span></p>
-                                <p className='my-1 lg:my-2'>Company: <span>{job.companyName}</span></p>
-                                <div className='my-2 lg:my-4'>
+                ) : (
+                    <div>
+
+                        <div className='pl-5 pt-14 lg:pt-5 '>
+                            {errorMessage && (<p className='fixed left-1/2 transform -translate-x-1/2 px-4 bg-white py-2 text-red-500'>{errorMessage}</p>)}
+                            <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job?.jobTitle}</h1>
+                            <p className='font-bold  my-1 lg:my-2'> {job?.companyName}</p>
+                            <p className='my-1 lg:my-2'>  {
+                                job?.jobLocation
+                                    .split(',')
+                                    .map(location => location.trim())
+                                    .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                    .join(', ')
+                            } ({job?.workMode})</p>
+                            <p className='my-1 lg:my-2'>Job Type: {job?.jobType}</p>
+                            <p className='my-1 lg:my-2'>Experience: {job?.experienceRequired}</p>
+                            <p className='my-1 lg:my-2'>Posted on: {job?.postedOn}</p>
+                            <p className='font-bold my-3 lg:my-4'>Know more about the job</p>
+                            <a className='text-blue-700 underline break-words my-1' target="_blank" href={job?.jobDescriptionLink} style={{ wordWrap: 'break-word' }}>{job?.jobDescriptionLink}</a>
+                            <h1 className='font-bold my-3 lg:my-4'>Job Posted By</h1>
+                            <p> Employee Name: <span className='font-bold my-1 lg:my-2'> {job?.jobPosterName}</span></p>
+                            <p className='my-1 lg:my-2'>Company: <span>{job?.companyName}</span></p>
+                            <div className='my-2 lg:my-4'>
+                                <button
+                                    onClick={toggleRequest}
+                                    className={` ${jobStatus === 'REQUESTED' ? 'bg-blue-500 hover:bg-blue-500 text-white px-4 py-2 rounded' : jobStatus === 'REFERRED' ? 'bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded' : jobStatus === 'IN_VERIFICATION' ? 'bg-yellow-500 hover:bg-yellow-500 text-white px-4 py-2 rounded' : (jobStatus === 'REJECTED' || jobStatus === 'VERIFICATION_FAILED') ? 'bg-red-500 hover:bg-red-500 text-white px-4 py-2 rounded' : 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'}`}
+                                    disabled={jobStatus !== 'UN_REQUESTED'}
+                                >
+                                    {jobStatus === 'UN_REQUESTED' ? 'Request Referral' : jobStatus}
+                                </button>
+                                {jobStatus === 'UN_REQUESTED' && (
                                     <button
-                                        onClick={toggleRequest}
-                                        className={` ${jobStatus === 'REQUESTED'?'bg-blue-500 hover:bg-blue-500 text-white px-4 py-2 rounded':jobStatus === 'REFERRED'?'bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded':jobStatus === 'IN_VERIFICATION'?'bg-yellow-500 hover:bg-yellow-500 text-white px-4 py-2 rounded':(jobStatus === 'REJECTED'|| jobStatus === 'VERIFICATION_FAILED')?'bg-red-500 hover:bg-red-500 text-white px-4 py-2 rounded':'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'}`}
-                                        disabled={jobStatus !== 'UN_REQUESTED'}
+                                        onClick={handleSaveJob}
+                                        className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 `}
+                                        disabled={savedJob}
                                     >
-                                        {jobStatus === 'UN_REQUESTED' ? 'Request Referral' : jobStatus}
+                                        {savedJob ? 'Saved' : 'Save'}
                                     </button>
-                                    {jobStatus === 'UN_REQUESTED' && (
-                                        <button
-                                            onClick={handleSaveJob}
-                                            className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 `}
-                                            disabled={savedJob}
-                                        >
-                                            {savedJob ? 'Saved' : 'Save'}
-                                        </button>
-                                    )}
+                                )}
+                            </div>
+                        </div>
+
+                        {profileCompletionMessage && (
+                            <div className="text-red-700 font-bold text-center mb-4">
+                                {profileCompletionMessage}
+                            </div>
+                        )}
+
+                        {requested && (
+                            <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
+                                <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
+                                    <h1 className="text-lg font-bold text-center mb-4">You are requesting a job referral for</h1>
+                                    <div>
+                                        <h1 className='text-xl font-bold  mb-2'>{job.jobTitle}</h1>
+                                        <p className='font-bold  mb-2'> {job.companyName}</p>
+                                        <p className='mb-2'> {
+                                            job.jobLocation
+                                                .split(',')
+                                                .map(location => location.trim())
+                                                .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                .join(', ')
+                                        } ({job.workMode})</p>
+                                        <p className='mb-2'>Experience: {job.experienceRequired}</p>
+                                        <p className='mb-2'>Posted on: {job.postedOn}</p>
+                                    </div>
+                                    <div className='flex justify-center mt-4'>
+                                        <button className='bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2' onClick={() => setRequested(false)}>Cancel</button>
+                                        <button className='bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded' onClick={confirmDetails}>Confirm</button>
+                                    </div>
                                 </div>
                             </div>
+                        )}
 
-                            {profileCompletionMessage && (
-                                <div className="text-red-700 font-bold text-center mb-4">
-                                    {profileCompletionMessage}
-                                </div>
-                            )}
-
-                            {requested && (
-                                <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
-                                    <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-                                        <h1 className="text-lg font-bold text-center mb-4">You are requesting a job referral for</h1>
-                                        <div>
-                                            <h1 className='text-xl font-bold  mb-2'>{job.jobTitle}</h1>
-                                            <p className='font-bold  mb-2'> {job.companyName}</p>
-                                            <p className='mb-2'> {job.jobLocation} ({job.workMode})</p>
-                                            <p className='mb-2'>Experience: {job.experienceRequired}</p>
-                                            <p className='mb-2'>Posted on: {job.postedOn}</p>
-                                        </div>
-                                        <div className='flex justify-center mt-4'>
-                                            <button className='bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2' onClick={() => setRequested(false)}>Cancel</button>
-                                            <button className='bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded' onClick={confirmDetails}>Confirm</button>
-                                        </div>
+                        {subscribeMessage && (
+                            <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
+                                <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
+                                    <span className="absolute top-2 right-2 text-xl cursor-pointer" onClick={() => setSubscribeMessage(false)}>&times;</span>
+                                    <p className="text-red-700 text-center">Please subscribe with us to request a referral</p>
+                                    <div className="text-center mt-2">
+                                        <Link to="/subscribe" className="bg-blue-700 text-white p-2 rounded">Subscribe</Link>
                                     </div>
                                 </div>
-                            )}
+                            </div>
+                        )}
 
-                            {subscribeMessage && (
-                                <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
-                                    <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
-                                        <span className="absolute top-2 right-2 text-xl cursor-pointer" onClick={() => setSubscribeMessage(false)}>&times;</span>
-                                        <p className="text-red-700 text-center">Please subscribe with us to request a referral</p>
-                                        <div className="text-center mt-2">
-                                            <Link to="/subscribe" className="bg-blue-700 text-white p-2 rounded">Subscribe</Link>
+                        {isCredits && (
+                            <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
+                                <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
+                                    <span className="absolute top-2 right-2 text-xl cursor-pointer" onClick={() => setIscredits(false)}>&times;</span>
+                                    <p className="text-red-700">You have already used all your referral credits.</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {successMessage && (
+                            <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
+                                <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
+                                    <p className="text-green-700">Your referral request was submitted successfully. You will be notified via SMS once you are referred.</p>
+                                    <div className="text-center mt-2">
+                                        <button className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2" onClick={() => setSuccessMessage(false)}>Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {showDetails && (
+                            <div
+                                className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2 sm:px-4 md:px-6 modal"
+                                ref={modalRef}
+                            >
+                                <div className="bg-white p-5 rounded shadow-md w-full max-w-md sm:max-w-lg md:max-w-2xl modal-content max-h-[90vh] overflow-y-auto">
+                                    <h1 className="text-xl font-bold text-center mb-4">Confirm your Details</h1>
+                                    {resumeUploadMessge && (<p className='text-center bg-white p-2 text-red-500 mx-auto'>{resumeUploadMessge}</p>)}
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                <strong>Full Name</strong><span className="text-red-700">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                className="w-full px-3 py-2 border rounded-md"
+                                                readOnly
+                                            />
                                         </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {isCredits && (
-                                <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
-                                    <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
-                                        <span className="absolute top-2 right-2 text-xl cursor-pointer" onClick={() => setIscredits(false)}>&times;</span>
-                                        <p className="text-red-700">You have already used all your referral credits.</p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {successMessage && (
-                                <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2">
-                                    <div className="bg-white p-5 rounded shadow-md w-full max-w-md relative">
-                                        <p className="text-green-700">Your referral request was submitted successfully. You will be notified via SMS once you are referred.</p>
-                                        <div className="text-center mt-2">
-                                            <button className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2" onClick={() => setSuccessMessage(false)}>Close</button>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                <strong>Email</strong><span className="text-red-700">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={email}
+                                                className="w-full px-3 py-2 border rounded-md"
+                                                readOnly
+                                            />
                                         </div>
-                                    </div>
-                                </div>
-                            )}
-                            {showDetails && (
-                                <div
-                                    className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center px-2 sm:px-4 md:px-6 modal"
-                                    ref={modalRef}
-                                >
-                                    <div className="bg-white p-5 rounded shadow-md w-full max-w-md sm:max-w-lg md:max-w-2xl modal-content max-h-[90vh] overflow-y-auto">
-                                        <h1 className="text-xl font-bold text-center mb-4">Confirm your Details</h1>
-                                        {resumeUploadMessge && (<p className='text-center bg-white p-2 text-red-500 mx-auto'>{resumeUploadMessge}</p>)}
-                                        <form onSubmit={handleSubmit}>
-                                            <div className="mb-4">
-                                                <label className="block text-gray-700 text-sm font-medium mb-1">
-                                                    <strong>Full Name</strong><span className="text-red-700">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={name}
-                                                    className="w-full px-3 py-2 border rounded-md"
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="mb-4">
-                                                <label className="block text-gray-700 text-sm font-medium mb-1">
-                                                    <strong>Email</strong><span className="text-red-700">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={email}
-                                                    className="w-full px-3 py-2 border rounded-md"
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="mb-4">
-                                                <label className="block text-gray-700 text-sm font-medium mb-1">
-                                                    <strong>Mobile</strong><span className="text-red-700">*</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={mobile}
-                                                    className="w-full px-3 py-2 border rounded-md"
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="mb-6">
-                                                <label className="block text-gray-700 text-sm font-medium mb-1">
-                                                    <strong>Resume</strong>
-                                                </label>
-                                                {!isNewResumeUploaded && (
-                                                    <p className="cursor-pointer flex items-center text-blue-500 mb-2" onClick={handleResumeView}>
-                                                        <FaFilePdf className="mr-2" /> <span>{name}.pdf</span>
-                                                    </p>
-                                                )}
-                                                {resumeFileName && (
-                                                    <a href={uploadedResumeURL} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-                                                        {resumeFileName}
-                                                    </a>
-                                                )}
-                                                <div className="mt-2">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => fileInputRef.current.click()}
-                                                        className="bg-blue-700 text-white px-4 py-2 rounded focus:outline-none"
-                                                    >
-                                                        Update Resume
-                                                    </button>
-                                                    <input
-                                                        type="file"
-                                                        name="resume"
-                                                        onChange={handleFileChange}
-                                                        ref={fileInputRef}
-                                                        accept="application/pdf"
-                                                        className="hidden"
-                                                    />
-                                                    <p className="text-xs mt-1 mx-2">Only .PDF (5 MB)</p>
-                                                </div>
-                                            </div>
-                                            <div className="text-center">
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                <strong>Mobile</strong><span className="text-red-700">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={mobile}
+                                                className="w-full px-3 py-2 border rounded-md"
+                                                readOnly
+                                            />
+                                        </div>
+                                        <div className="mb-6">
+                                            <label className="block text-gray-700 text-sm font-medium mb-1">
+                                                <strong>Resume</strong>
+                                            </label>
+                                            {!isNewResumeUploaded && (
+                                                <p className="cursor-pointer flex items-center text-blue-500 mb-2" onClick={handleResumeView}>
+                                                    <FaFilePdf className="mr-2" /> <span>{name}.pdf</span>
+                                                </p>
+                                            )}
+                                            {resumeFileName && (
+                                                <a href={uploadedResumeURL} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                                                    {resumeFileName}
+                                                </a>
+                                            )}
+                                            <div className="mt-2">
                                                 <button
                                                     type="button"
-                                                    onClick={showDetailsClose}
-                                                    className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2"
+                                                    onClick={() => fileInputRef.current.click()}
+                                                    className="bg-blue-700 text-white px-4 py-2 rounded focus:outline-none"
                                                 >
-                                                    Cancel
+                                                    Update Resume
                                                 </button>
-                                                <button
-                                                    type="submit"
-                                                    className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded mr-2"
-                                                >
-                                                    Submit
-                                                </button>
+                                                <input
+                                                    type="file"
+                                                    name="resume"
+                                                    onChange={handleFileChange}
+                                                    ref={fileInputRef}
+                                                    accept="application/pdf"
+                                                    className="hidden"
+                                                />
+                                                <p className="text-xs mt-1 mx-2">Only .PDF (5 MB)</p>
                                             </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                        <div className="text-center">
+                                            <button
+                                                type="button"
+                                                onClick={showDetailsClose}
+                                                className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded mr-2"
+                                            >
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                            )}
+                            </div>
+                        )}
 
 
-                        </div>
-                    )}
+                    </div>
+                )}
             </div>
-           
-            <JSFooter/>
+
+            <JSFooter />
 
         </div >
     );

@@ -150,8 +150,9 @@ const NavBar = () => {
             <div className="text-center mt-2">
               <p>Are you sure you want to logout?</p>
               <div className='my-2'>
-              <button className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2" onClick={handleLogout}>Logout</button>
-              <button className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded mr-2" onClick={() => setLogoutConfirmation(false)}>Close</button>
+             
+              <button className="border border-black  px-4 py-1.5 rounded mr-2" onClick={() => setLogoutConfirmation(false)}>Close</button>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded mr-2" onClick={handleLogout}>Logout</button>
               </div>
             </div>
           </div>

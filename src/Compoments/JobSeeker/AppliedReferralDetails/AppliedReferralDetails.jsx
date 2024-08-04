@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { logoutUser } from '../Slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import NavBar from '../NavBar/NavBar';
@@ -12,33 +12,38 @@ import JSFooter from '../NavBar/JSFooter';
 function AppliedRefeReferralDetails() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = token? jwtDecode(token):null;
-    const email = decoded?decoded.sub:null;
-    const name =decoded? decoded.username:null;
+    const decoded = token ? jwtDecode(token) : null;
+    const name = decoded ? decoded.username : null;
     const location = useLocation();
-    const { status } = location.state;
+    const { status } = location.state || {};
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!token){
+        if (!token) {
             navigate('/login')
+        } else if (!status?.referralId) {
+            navigate(-1); // Go back to the previous page
         }
-    },[token,navigate])
+    }, [token, navigate, status])
+
     const handleLogout = () => {
         navigate('/login');
         dispatch(logoutUser());
     };
+
     const [loading, setLoading] = useState(false);
     const [referralDetails, setReferralDetails] = useState({})
     const [proof, setProof] = useState('');
     const [errorMessage, setErrorMessage] = useState('')
 
-   
 
-    
+
+
     useEffect(() => {
-        getappliedReferraDetails();
+        if (status?.referralId) {
+            getappliedReferraDetails();
+        }
     }, [])
 
     const getappliedReferraDetails = () => {
@@ -62,15 +67,15 @@ function AppliedRefeReferralDetails() {
                 }, 2000);
 
             }
-            setErrorMessage('error while fetching data');
-            setTimeout(() => {
-                setErrorMessage('');
-                handleLogout();
-            }, 2000);
+            else {
+                setErrorMessage('error while fetching data');
+                setTimeout(() => {
+                    setErrorMessage('');
+                    handleLogout();
+                }, 2000);
+            }
 
-
-        })
-            .finally(() => setLoading(false))
+        }).finally(() => setLoading(false))
     }
 
     const handleResumeView = () => {
@@ -95,7 +100,7 @@ function AppliedRefeReferralDetails() {
         const blob = base64ToBlob(base64, mime);
         return URL.createObjectURL(blob);
     }
-    
+
     function getMimeType(base64) {
         if (base64.startsWith('/9j/')) {
             return 'image/jpeg';
@@ -108,7 +113,7 @@ function AppliedRefeReferralDetails() {
         } else if (base64.startsWith('JVBERi0')) {
             return 'application/pdf';
         } else {
-            return 'application/octet-stream'; 
+            return 'application/octet-stream';
         }
     }
     function viweProfile() {
@@ -130,7 +135,13 @@ function AppliedRefeReferralDetails() {
                     <div className='pl-5'>
                         <h1 className='text-xl lg:text-2xl font-bold  my-1'>{referralDetails.jobTitle}</h1>
                         <p className='font-bold  my-1 lg:my-2'> {referralDetails.companyName}</p>
-                        <p className='my-1 lg:my-2'> {referralDetails.jobLocation} ({referralDetails
+                        <p className='my-1 lg:my-2'> {
+                            referralDetails?.jobLocation
+                                ?.split(',')
+                                ?.map(location => location.trim())
+                                ?.filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                ?.join(', ')
+                        } ({referralDetails
                             .workMode})</p>
                         <p className='my-1 lg:my-2'>Job Type: {referralDetails.jobType}</p>
                         <p className='my-1 lg:my-2'>Experience: {referralDetails.experienceRequired}</p>
@@ -139,7 +150,7 @@ function AppliedRefeReferralDetails() {
                         <p> Job Link: <a className='text-blue-700 underline break-words my-1' target="_blank" href={referralDetails.jobDescriptionLink} style={{ wordWrap: 'break-word' }}>{referralDetails.jobDescriptionLink}</a></p>
                         <p className='my-1 lg:my-2'>Job Posted by: {referralDetails.jobPosterName}</p>
                         <h1 className='font-bold'>Referral Details:</h1>
-                        <p>Current Status: <span className={`my-1 lg:my-2 ${referralDetails.currentStatus === 'REFERRED'?'text-green-500 font-bold':referralDetails.currentStatus === 'IN_PROGRESS'?'text-yellow-500  font-bold':referralDetails.currentStatus === 'REQUESTED'?'text-blue-500 font-bold':'text-red-500 font-bold'}`}> {referralDetails.currentStatus}</span></p>
+                        <p>Current Status: <span className={`my-1 lg:my-2 ${referralDetails.currentStatus === 'REFERRED' ? 'text-green-500 font-bold' : referralDetails.currentStatus === 'IN_PROGRESS' ? 'text-yellow-500  font-bold' : referralDetails.currentStatus === 'REQUESTED' ? 'text-blue-500 font-bold' : 'text-red-500 font-bold'}`}> {referralDetails.currentStatus}</span></p>
                         {referralDetails.reason && (
                             <p className='my-1 lg:my-2'>Reason: {referralDetails.reason}</p>
                         )}
@@ -158,7 +169,7 @@ function AppliedRefeReferralDetails() {
                     </div>
                 )}
             </div>
-           <JSFooter/>
+            <JSFooter />
 
         </div>
     );

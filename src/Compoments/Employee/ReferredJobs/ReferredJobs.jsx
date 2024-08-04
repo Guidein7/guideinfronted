@@ -96,6 +96,9 @@ function ReferredJobs() {
                                             <div className='flex flex-col space-y-2 md:space-y-0'>
                                                 <p className='text-sm md:text-base'>Referral Requested On: {referredJob.requestedOn}</p>
                                                 <p className={`text-sm `}>Current Status: <span className={` ${referredJob.status === 'IN_VERIFICATION' ? 'text-yellow-500 font-bold' : referredJob.status === 'REFERRED' ? 'text-green-700 font-bold' : 'text-red-500 font-bold'}`}>{referredJob.status}</span></p>
+                                                {referredJob?.status === 'REJECTED' || referredJob?.status === 'VERIFICATION_FAILED' && (
+                                                <p>Reason: {referredJob?.reason}</p>
+                                            )}
                                             </div>
                                         </div>
                                     ))}

@@ -312,6 +312,7 @@ function Profile() {
                                             onChange={handleInputChange}
                                             className='w-full px-3 py-2 border rounded-md'
                                             required
+                                            readOnly
 
                                         />
                                     </div>
@@ -324,6 +325,7 @@ function Profile() {
                                             onChange={handleInputChange}
                                             className='w-full px-3 py-2 border rounded-md'
                                             required
+                                            readOnly
 
                                         />
                                     </div>
@@ -336,6 +338,7 @@ function Profile() {
                                             onChange={handleInputChange}
                                             className='w-full px-3 py-2 border rounded-md'
                                             required
+                                            readOnly
 
                                         />
                                     </div>

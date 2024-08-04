@@ -37,7 +37,7 @@ const LandingPage = () => {
   }, [showSideNav]);
 
   const handleEarnMoneyClick = () => {
-    window.open('/employee-landingpage', '_blank');
+    window.open('/employee', '_blank');
   };
 
   const NavLinks = ({ className = '' }) => (
@@ -65,7 +65,7 @@ const LandingPage = () => {
   );
 
   return (
-    <div className='bg-[#f5faff] min-h-screen flex flex-col justify-between'>
+    <div className='bg-[#f5faff] min-h-screen flex flex-col'>
       <nav className="bg-[#f8f9fa] py-4 w-full fixed z-50">
         <div className='max-w-7xl mx-auto px-4 flex justify-between items-center'>
           <div className='block lg:hidden'>
@@ -98,17 +98,25 @@ const LandingPage = () => {
         </div>
       </div>
       <div className=' flex flex-col pt-24 flex-grow gradient-container'>
-      <div className='text-center  p-2 lg:p-2 my-2'>
+        <div className='text-center  p-2 lg:p-2 mb-2'>
           <h1 className='font-bold text-xl my-2'>To Get Referral</h1>
-          <Link to='/subscribej' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-10 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe Now</Link>
+          <div className='text-center flex  md:flex-row justify-center items-center gap-4'>
+            <Link to='/register' className='text-white bg-[#244AD1] hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-2.5 w-36 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>
+              Register now
+            </Link>
+            <Link to='/login' className='text-[#244AD1] bg-[#FFFFFF] hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none w-36 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-2.5  dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
+              Login 
+            </Link>
+          </div>
+
         </div>
 
         <div className='grid grid cols-1 gap-5 mt-5 lg:mt-10'>
           <h1 className=' text-center font-bold text-xl lg:text-3xl '>Get Hired Faster with Trusted Referrals</h1>
           <div>
             <p className='text-center text-base m-0 p-0  lg:text-xl paragraph'>Don't wait for connections to get a referral. Get referred instantly <span className='md:hidden'>and
-            increase your chances of landing your dream job right away!</span></p> <p className='hidden md:block text-center text-sm lg:text-xl paragraph m-0 p-0'>and
-              increase your chances of landing your dream job right away!</p>
+              increase your chances of landing your dream job right away!</span></p> <p className='hidden md:block text-center text-sm lg:text-xl paragraph m-0 p-0'>and
+                increase your chances of landing your dream job right away!</p>
           </div>
           <div className='relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 lg:mt-14 mx-10 mb-12'>
             <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12'>
@@ -125,18 +133,19 @@ const LandingPage = () => {
                 <p className='text-base text-[#F5FAFF]'>Browse through available job postings from employees ready to refer candidates.</p>
               </div>
             </div>
-            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12'>
-              <h1 className='numbers'>3</h1>
-              <div>
-                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Instant Referral</h1>
-                <p className='text-base text-[#F5FAFF]'>Employees in our network will refer you right away. You'll be notified as soon as it’s done.</p>
-              </div>
-            </div>
+
             <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12 '>
-              <h1 className='numbers'>4</h1>
+              <h1 className='numbers'>3</h1>
               <div>
                 <h1 className='text-2xl text-[#F5FAFF] font-bold'>Request a Referral</h1>
                 <p className='text-base text-[#F5FAFF]'>Fill in job details and upload your resume for immediate visibility to our employee network.</p>
+              </div>
+            </div>
+            <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12'>
+              <h1 className='numbers'>4</h1>
+              <div>
+                <h1 className='text-2xl text-[#F5FAFF] font-bold'>Instant Referral</h1>
+                <p className='text-base text-[#F5FAFF]'>Employees in our network will refer you right away. You'll be notified as soon as it’s done.</p>
               </div>
             </div>
             <div className='relative box-gradient rounded-3xl px-6 pb-6 pt-12 '>
@@ -149,7 +158,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-    <JFooter/>
+      <JFooter />
     </div>
   );
 };

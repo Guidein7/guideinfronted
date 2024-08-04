@@ -114,7 +114,13 @@ function SavedJobs() {
                                         {job.jobTitle}
                                     </p>
                                     <p className="text-sm md:text-left">Company: {job.companyName}</p>
-                                    <p className="text-sm md:text-left">Location: {job.jobLocation} ({job.workMode})</p>
+                                    <p className="text-sm md:text-left">Location:  {
+            job.jobLocation
+                .split(',')
+                .map(location => location.trim())
+                .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                .join(', ')
+        }({job.workMode})</p>
                                     <p className="text-sm md:text-left">JobType: {job.jobType}</p>
                                     <p className="text-sm md:text-left">Experience: {job.experienceRequired}</p>
                                     <p className="text-sm md:text-left">Posted by: {job.jobPostedBy}</p>

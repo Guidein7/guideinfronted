@@ -121,7 +121,7 @@ function App() {
         
 
 
-        <Route path='/employee-landingpage' element={<EmployeeLandingPage/>}/>
+        <Route path='/employee' element={<EmployeeLandingPage/>}/>
         <Route path='/employee-register' element={<EmployeeRegistration/>} />
         <Route path='employee-login' element={<EmployeeLogin/>}/>
         <Route path='/employee-forgot-password' element={<EmployeeForgetPassword/>}/>

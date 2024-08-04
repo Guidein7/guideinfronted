@@ -12,8 +12,8 @@ function ReferredJobDetails() {
     const token = log.data.token;
     const location = useLocation();
     const dispatch = useDispatch();
-    const { referredJob } = location.state;
-    const referralId = referredJob.referralId;
+    const { referredJob } = location.state || {};
+    const referralId = referredJob ? referredJob.referralId: null;
     const [referredJobDetails, setReferredJobdetails] = useState({});
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
@@ -24,7 +24,10 @@ function ReferredJobDetails() {
         if(!token){
             navigate('/employee-login')
         }
-    },[navigate,token])
+        else if(!referredJob?.referralId){
+            navigate(-1);
+        }
+    },[navigate,token,referredJob])
 
     function base64ToBlob(base64, mime) {
         const byteCharacters = atob(base64);
@@ -122,11 +125,16 @@ function ReferredJobDetails() {
                             <p className="mb-2">mobile:{referredJobDetails.candidateMobile}</p>
                             <p className="mb-2"> Experience: {referredJobDetails.candidateExperience}</p>
                             <p className="mb-2">Resume: <span className="cursor-pointer text-blue-500" onClick={handleResumeView}>{referredJobDetails.candidateName}.pdf</span></p>
-                            <p className="mb-4">Requested on: {referredJob.requestedOn}</p>
+                            <p className="mb-4">Requested on: {referredJobDetails.requestedOn}</p>
                             <h1 className="font-bold mb-2">Referral requested For</h1>
                             <p className=" mb-2">JobTitle: {referredJobDetails.referralFor}</p>
                             <p className="mb-2"> Company:{referredJobDetails.company}</p>
-                            <p className="mb-2">Location: {referredJobDetails.jobLocation}</p>
+                            <p className="mb-2">Location: {referredJobDetails?.jobLocation
+                                                    ?.split(',')
+                                                    .map(location => location.trim())
+                                                    .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                    .join(', ')
+                                            }</p>
                             <p className="mb-4">job PostedOn: {referredJobDetails.jobPostedOn}</p>
                             <h1 className="font-bold mb-2">Referral Details </h1>
                             {referredJobDetails.dateOfReferral && (<p className=" mb-2">Date Of Referral: {referredJobDetails.dateOfReferral}</p>)}
@@ -134,8 +142,8 @@ function ReferredJobDetails() {
                             {referredJobDetails.proof && (<p className="mb-2">uploaded proof:  <a href={viewProof()} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                 View proof
                             </a></p>)}
-                            <p>Job Status: <span className={` ${referredJob.status === 'IN_VERIFICATION' ? 'text-yellow-500 font-bold' : referredJob.status === 'REFERRED' ? 'text-green-500 font-bold' : 'text-red-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
-                            {referredJob.reason && (<p>Reason: <span className="">{referredJob.reason}</span></p>)}
+                            <p>Job Status: <span className={` ${referredJobDetails.status === 'IN_VERIFICATION' ? 'text-yellow-500 font-bold' : referredJobDetails.status === 'REFERRED' ? 'text-green-500 font-bold' : 'text-green-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
+                            {referredJobDetails.reason && (<p>Reason: <span className="">{referredJobDetails.reason}</span></p>)}
                             <p className="mb-2">Comments: {referredJobDetails.comments}</p>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
@@ -34,7 +34,7 @@ function Home() {
 
     const handleLogout = () => {
         dispatch(logoutUser());
-         navigate('/login');
+        navigate('/login');
     };
 
     const checkSubscription = () => {
@@ -78,7 +78,7 @@ function Home() {
             }
         }).then(response => {
             const lastFourItems = response.data.slice(-3);
-            setJobs(lastFourItems);
+            setJobs(lastFourItems.reverse());
         }).catch(error => {
             if (error.response.status === 403) {
                 setErrorMessage('Session Expired');
@@ -133,7 +133,12 @@ function Home() {
                                                     {job.jobTitle}
                                                 </p>
                                                 <p className="text-sm md:text-left">Company: {job.companyName}</p>
-                                                <p className="text-sm md:text-left">Location: {job.jobLocation} ({job.workMode})</p>
+                                                <p className="text-sm md:text-left">Location: {
+                                                    job.jobLocation
+                                                        .split(',')
+                                                        .map(location => location.trim())
+                                                        .filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                        .join(', ')} ({job.workMode})</p>
                                                 <p className="text-sm md:text-left">Experience: {job.experienceRequired}</p>
                                                 <p className="text-sm md:text-left">Posted by: {job.jobPostedBy}</p>
                                                 <p className="text-sm md:text-left">Posted on: {job.postedOn}</p>
@@ -151,7 +156,7 @@ function Home() {
                     </div>
                 )}
             </div>
-          <JSFooter/>
+            <JSFooter />
         </div>
 
     )

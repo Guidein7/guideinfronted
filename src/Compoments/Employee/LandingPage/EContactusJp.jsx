@@ -76,7 +76,7 @@ function EContactUsJp() {
                         </button>
                     </div>
                     <div className='lg:block'>
-                        <Link to='/employee-landingpage'>
+                        <Link to='/employee'>
                             <img src={GuideinLogo} alt='logo' className='h-8 lg:h-8' />
                         </Link>
                     </div>

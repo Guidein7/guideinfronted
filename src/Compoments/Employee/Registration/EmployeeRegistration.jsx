@@ -109,7 +109,8 @@ const EmployeeRegistration = () => {
       axios.post(`${config.api.baseURL}${config.api.jobPoster.register}`, registrationData).then(response => {
         const sessionUUID = response.data.sessionUUID
 
-        navigate(`/employee-verification`, { state: { email, mobile, sessionUUID } });
+        // navigate(`/employee-verification`, { state: { email, mobile, sessionUUID } });
+        navigate('/employee-login');
 
       }).catch(error => {
         console.log(error)
@@ -158,7 +159,7 @@ const EmployeeRegistration = () => {
       <nav className="bg-[#f8f9fa] py-4 mb-1">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="lg:block">
-            <Link to="/employee-landingpage">
+            <Link to="/employee">
 
               <img src={GuideinLogo} alt="Logo" className="h-8" />
             </Link>

@@ -14,6 +14,7 @@ import axios from 'axios';
 import config from '../../../config';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
+import { MdError } from "react-icons/md";
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,9 +36,45 @@ const claim = decoded ? decoded.sub : null;
   setIsOpen(!isOpen);
 };
 
-const[errorMessage,setErrorMessage] = useState('')
+const[errorMessage,setErrorMessage] = useState('');
+const[completeProfileMessage,setProfileCompletionMessage] = useState('')
 const sidebarRef = useRef(null);
   const buttonRef = useRef(null);
+
+  const fetchProfileMessage = () => {
+    axios.get(`${config.api.baseURL}${config.api.jobPoster.getProfile}${claim}`, {
+      headers: {
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "69420",
+      },
+  })
+      .then(response => {
+          if (response.status === 200) {
+            setProfileCompletionMessage('') 
+          }
+          else if(response.status === 204){
+            setProfileCompletionMessage('Complete profile to post a job')
+          }
+      })
+      .catch(error => {
+             if(error.response.status === 403) {
+                setErrorMessage('session Expired')
+                setTimeout(()=> {
+                    setErrorMessage('');
+                    handleLogout();
+                },3000)
+             }
+             else {
+                setErrorMessage('Error Fetching Data')
+                setTimeout(()=> {
+                    setErrorMessage('');
+                },3000)
+             }
+          
+
+      })
+      
+  }
 
 
   const fetchProfile = () => {
@@ -53,7 +90,7 @@ const sidebarRef = useRef(null);
               
           }
           else if(response.status === 204){
-           setErrorMessage(' please complete profile before go to wallet');
+           setErrorMessage(' Please complete profile before go to wallet');
            setTimeout(()=> {
             setErrorMessage('');
            },3000)
@@ -64,6 +101,7 @@ const sidebarRef = useRef(null);
          
              if(error.response.status === 403) {
                 setErrorMessage('session Expired')
+                handleLogout();
                 setTimeout(()=> {
                     setErrorMessage('');
                 },3000)
@@ -93,6 +131,12 @@ const handleClickOutside = (event) => {
       setIsOpen(false);
     }
   };
+
+  useEffect(() => {
+fetchProfileMessage();
+  },[])
+
+  
 
   useEffect(() => {
     if (isOpen) {
@@ -132,8 +176,12 @@ return(
                                 className="flex items-center p-2 pl-2 text-gray-900 rounded-lg  border shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700 group">
 
                                 <span> <CgProfile className='mx-2' /></span>
-                                <span>Profile </span>
+                                <span >Profile </span>
+                               
                             </Link>
+                            <div className='text-center'>
+                              {completeProfileMessage && (  <p className='text-xs text-red-500 flex justify-center items-center mt-1'><MdError /><span>{completeProfileMessage}</span> </p>)}
+                              </div>
                         </li>
 
 
@@ -207,8 +255,8 @@ return(
             <div className="text-center mt-2">
               <p>Are you sure you want to logout?</p>
               <div className='my-2'>
-              <button className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2" onClick={handleLogout}>Logout</button>
-              <button className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded mr-2" onClick={() => setLogoutConfirmation(false)}>Close</button>
+              <button className="border border-black  px-4 py-1.5 rounded mr-2" onClick={() => setLogoutConfirmation(false)}>Close</button>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded mr-2" onClick={handleLogout}>Logout</button>
               </div>
             </div>
           </div>
