@@ -162,7 +162,7 @@ const Registration = () => {
           className="bg-gray border border-gray-300 shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 mt-4"
           noValidate
         >
-          <h1 className=" font-bold text-center text-2xl">Sign up</h1>
+          <h1 className=" font-bold text-center text-2xl">Sign up as Jobseeker</h1>
           <p className="p-0 mt-0 mb-6 text-lg text-center">Let's get your dream Job</p>
           <div className="mb-3">
             <label className="block text-gray-700   mb-2" htmlFor="name">Full Name<span className='text-red-500'>*</span></label>

@@ -113,7 +113,7 @@ const Login = () => {
             <div className="w-full max-w-xs lg:max-w-lg mx-auto">
                 {errorMessage && (<p className="text-red-500 text-center">{errorMessage}</p>)}
                 <form className=" border border-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-3" onSubmit={handleSubmit}>
-                    <h1 className="font-bold text-center text-2xl mb-3">Sign in</h1>
+                    <h1 className="font-bold text-center text-2xl mb-3">Jobseeker Sign in</h1>
 
                     <div className="mb-4">
                         <label className="block text-gray-700  mb-2" htmlFor="inputValue">

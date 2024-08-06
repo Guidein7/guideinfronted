@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { logoutEmployee } from '../slices/employeeLoginSlice';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -81,7 +81,8 @@ function JobsPosted() {
     const [profileError, setProfileError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [updateMessage, setUpdateMessage] = useState('');
-
+    const [isTouched, setIsTouched] = useState({});
+    const [errors, setErrors] = useState({});
     const jobTitles = ["Others",
         "Account Executive", "Account Manager", "Accountant", "Administrative Assistant",
         "Advertising Manager", "Aerospace Engineer", "Agile Coach", "Analyst", "Android Developer",
@@ -139,6 +140,8 @@ function JobsPosted() {
         "Underwriter", "User Experience Researcher", "Veterinarian", "Video Game Designer",
         "Warehouse Manager", "Web Designer", "Web Developer", "Writer"
     ];
+
+    const jobTitleRef = useRef(null);
 
     useEffect(() => {
         fetchJobs();
@@ -266,7 +269,7 @@ function JobsPosted() {
                 ...formData,
                 jobLocation: selectedCities.join(', ')
             });
-            setCustomCity(''); // Reset custom city when "Others" is deselected
+            setCustomCity(''); 
         }
     };
 
@@ -290,117 +293,148 @@ function JobsPosted() {
         }
     };
 
-
-
-
-    // const handleCustomCityChange = (e) => {
-    //     const value = e.target.value;
-    //     setCustomCity(value);
-    //     // Ensure 'Others' is included and update jobLocation with custom city
-    //     setFormData(prevFormData => {
-    //         const updatedJobLocation = prevFormData.jobLocation.replace(/,? Others/g, '');
-    //         return {
-    //             ...prevFormData,
-    //             jobLocation: `${updatedJobLocation}${updatedJobLocation && value ? ', ' : ''}${value}`
-    //         };
-    //     });
-    // };
-
-    // const handleCustomCityChange = (e) => {
-    //     const value = e.target.value;
-    //     setCustomCity(value);
-    //     setFormData(prevFormData => {
-    //         const updatedJobLocation = prevFormData.jobLocation.replace(/,?\s*Others/, '');
-    //         return {
-    //             ...prevFormData,
-    //             jobLocation: `${updatedJobLocation}${updatedJobLocation && value ? ', ' : ''}${value}`
-    //         };
-    //     });
-    // };
-
-
-
     const handleJobTitleChange = (selectedOption) => {
         if (selectedOption.value === 'Others') {
             setFormData(prevFormData => ({ ...prevFormData, jobTitle: 'Others', otherJobTitle: '' }));
         } else {
             setFormData(prevFormData => ({ ...prevFormData, jobTitle: selectedOption.value, otherJobTitle: '' }));
         }
+        
     };
+    
+    const validate = () => {
+        let newErrors = {};
+        if (!formData.jobTitle) {
+            newErrors.jobTitle = 'Job title is required';
+        }
+        if (formData.jobTitle === 'Others' && !formData.otherJobTitle) {
+            newErrors.otherJobTitle = 'Please specify the job title';
+        }
+        if (!formData.companyName) {
+            newErrors.companyName = 'Company name is required';
+        }
+        if (!formData.jobLocation) {
+            newErrors.jobLocation = 'Job location is required';
+        }
+        // if (formData.jobLocation.includes('Others') && !formData.customCity) {
+        //     newErrors.customCity = 'Please specify the city';
+        // }
+        if (!formData.jobType) {
+            newErrors.jobType = 'Job type is required';
+        }
+        if (!formData.workMode) {
+            newErrors.workMode = 'Work mode is required';
+        }
+        if (!formData.jobDescriptionLink) {
+            newErrors.jobDescriptionLink = 'Job description link is required';
+        }
+        if (!formData.educationLevel) {
+            newErrors.educationLevel = 'Education level is required';
+        }
+        if (!formData.experienceRequired) {
+            newErrors.experienceRequired = 'Experience required is required';
+        }
+        setErrors(newErrors);
+        return newErrors;
+    };
+
+    const scrollToFirstError = (errorFields) => {
+        if (errorFields.jobTitle && jobTitleRef.current) {
+          jobTitleRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        const validationErrors =  validate();
+        if (Object.keys(validationErrors).length === 0) {
+            if (isEditing) {
+                const updateddata = { ...formData, jobId: editJobId };
+                if (formData.jobTitle === 'Others') {
+                    updateddata.jobTitle = formData.otherJobTitle;
+                }
+                setLoading(true);
+                axios.put(`${config.api.baseURL}${config.api.jobPoster.updateJob}`, JSON.stringify(updateddata), {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(response => {
+                    setUpdateMessage('Job updated successfully');
+                    setTimeout(() => {
+                        setUpdateMessage('');
+                    }, 2000);
+                    fetchJobs();
+                }).catch(error => {
+                    if (error.response.status === 403) {
+                        setErrorMessage('session Expired')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                            handleLogout();
+                        }, 2000);
+                    }
+                    else {
+                        setErrorMessage('Failed to update Job');
+                        setTimeout(() => {
+                            setErrorMessage('');
+                        }, 2000);
+                    }
+                }).finally(() => setLoading(false));
 
-        if (isEditing) {
-            const updateddata = { ...formData, jobId: editJobId };
-            if (formData.jobTitle === 'Others') {
-                updateddata.jobTitle = formData.otherJobTitle;
+            } else {
+
+                const updatedformData = { ...formData };
+                if (formData.jobTitle === 'Others') {
+                    updatedformData.jobTitle = formData.otherJobTitle;
+                }
+                setLoading(true);
+                axios.post(`${config.api.baseURL}${config.api.jobPoster.saveJob}`, JSON.stringify(updatedformData), {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(response => {
+                    setUpdateMessage('Job posted successfully');
+                    setTimeout(() => {
+                        setUpdateMessage('');
+                    }, 2000);
+                    fetchJobs();
+                    toggleForm();
+                }).catch(error => {
+                    if (error.response.status === 403) {
+                        setErrorMessage('session Expired')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                            handleLogout();
+                        }, 2000);
+                    }
+                    else {
+                        setErrorMessage('Failed to post a job')
+                        setTimeout(() => {
+                            setErrorMessage('')
+                        }, 2000);
+                    }
+                }).finally(() => setLoading(false));
             }
-            setLoading(true);
-            axios.put(`${config.api.baseURL}${config.api.jobPoster.updateJob}`, JSON.stringify(updateddata), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            }).then(response => {
-                setUpdateMessage('Job updated successfully');
-                setTimeout(() => {
-                    setUpdateMessage('');
-                }, 2000);
-                fetchJobs();
-
-            }).catch(error => {
-                if (error.response.status === 403) {
-                    setErrorMessage('session Expired')
-                    setTimeout(() => {
-                        setErrorMessage('')
-                        handleLogout();
-                    }, 2000);
-                }
-                else {
-                    setErrorMessage('Failed to update Job');
-                    setTimeout(() => {
-                        setErrorMessage('');
-                    }, 2000);
-                }
-            }).finally(() => setLoading(false));
-
-        } else {
-            setLoading(true);
-            const updatedformData = { ...formData };
-            if (formData.jobTitle === 'Others') {
-                updatedformData.jobTitle = formData.otherJobTitle;
-            }
-            axios.post(`${config.api.baseURL}${config.api.jobPoster.saveJob}`, JSON.stringify(updatedformData), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            }).then(response => {
-                setUpdateMessage('Job posted successfully');
-                setTimeout(() => {
-                    setUpdateMessage('');
-                }, 2000);
-                fetchJobs();
-                toggleForm();
-            }).catch(error => {
-                if (error.response.status === 403) {
-                    setErrorMessage('session Expired')
-                    setTimeout(() => {
-                        setErrorMessage('')
-                        handleLogout();
-                    }, 2000);
-                }
-                else {
-                    setErrorMessage('Failed to post a job')
-                    setTimeout(() => {
-                        setErrorMessage('')
-                    }, 2000);
-                }
-            }).finally(() => setLoading(false));
+            setIsEditing(false);
+            setEditJobId(null)
+            toggleForm();
         }
-        setIsEditing(false);
-        setEditJobId(null)
-        toggleForm();
+        else {
+            setIsTouched({
+                jobTitle: true,
+                otherJobTitle: formData.jobTitle === 'Others',
+                companyName: true,
+                jobLocation: true,
+                customCity: formData.jobLocation.includes('Others'),
+                jobType: true,
+                workMode: true,
+                jobDescriptionLink: true,
+                educationLevel: true,
+                experienceRequired: true,
+            });
+            scrollToFirstError(validationErrors);
+        }
     };
 
     const handleDisableEnable = async (jobId, enabled) => {
@@ -443,7 +477,6 @@ function JobsPosted() {
                 }
             )
                 .then(response => {
-
                     fetchJobs();
                 })
                 .catch(error => {
@@ -514,8 +547,8 @@ function JobsPosted() {
                     <div className='modal-overlay'>
                         <div className='modal-content'>
                             <h2 className='text-2xl font-semibold mb-4'>{isEditing ? 'Edit Job' : 'Post a New Job'}</h2>
-                            <form onSubmit={handleFormSubmit}>
-                                <div className='mb-4'>
+                            <form onSubmit={handleFormSubmit} >
+                                <div className='mb-4' ref={jobTitleRef}>
                                     <label htmlFor="jobTitle">Job Title<span className='text-red-500'>*</span></label>
                                     <Select
                                         id="jobTitle"
@@ -524,6 +557,8 @@ function JobsPosted() {
                                         value={{ value: formData.jobTitle, label: formData.jobTitle }}
                                         required
                                     />
+                                    {isTouched.jobTitle && errors.jobTitle && <span style={{ color: 'red' }}>{errors.jobTitle}</span>}
+
                                 </div>
 
                                 {formData.jobTitle === 'Others' && (
@@ -538,6 +573,8 @@ function JobsPosted() {
                                             className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
                                             required
                                         />
+                                        {isTouched.otherJobTitle && errors.otherJobTitle && <span style={{ color: 'red' }}>{errors.otherJobTitle}</span>}
+
                                     </div>
                                 )}
 
@@ -554,6 +591,8 @@ function JobsPosted() {
                                         readOnly
                                         required
                                     />
+                                    {isTouched.companyName && errors.companyName && <span style={{ color: 'red' }}>{errors.companyName}</span>}
+
                                 </div>
                                 <div className='mb-4'>
                                     <label htmlFor='jobLocation' className='block text-sm font-medium text-gray-700'>
@@ -568,6 +607,8 @@ function JobsPosted() {
                                         className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
                                         required
                                     />
+                                    {isTouched.jobLocation && errors.jobLocation && <span style={{ color: 'red' }}>{errors.jobLocation}</span>}
+
                                     {formData.jobLocation.includes('Others') && (
                                         <div className='mt-4'>
                                             <label htmlFor='customCity' className='block text-sm font-medium text-gray-700'>
@@ -583,6 +624,8 @@ function JobsPosted() {
                                                 className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
                                                 required
                                             />
+                                            {/* {isTouched.customCity && errors.customCity && <span style={{ color: 'red' }}>{errors.customCity}</span>} */}
+
                                         </div>
                                     )}
                                 </div>
@@ -607,6 +650,8 @@ function JobsPosted() {
                                         <option value='Consultant'>Consultant</option>
                                         <option value='Apprenticeship'>Apprenticeship</option>
                                     </select>
+                                    {isTouched.jobType && errors.jobType && <span style={{ color: 'red' }}>{errors.jobType}</span>}
+
                                 </div>
                                 <div className='mb-4'>
                                     <label htmlFor='workMode' className='block text-sm font-medium text-gray-700'>
@@ -624,6 +669,8 @@ function JobsPosted() {
                                         <option value='onsite'>Onsite</option>
                                         <option value='remote'>Remote</option>
                                     </select>
+                                    {isTouched.workMode && errors.workMode && <span style={{ color: 'red' }}>{errors.workMode}</span>}
+
                                 </div>
                                 <div className='mb-4'>
                                     <label htmlFor='jobDescriptionLink' className='block text-sm font-medium text-gray-700'>
@@ -637,6 +684,8 @@ function JobsPosted() {
                                         className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
                                         required
                                     />
+                                    {isTouched.jobDescriptionLink && errors.jobDescriptionLink && <span style={{ color: 'red' }}>{errors.jobDescriptionLink}</span>}
+
                                 </div>
                                 <h2 className='text-xl font-semibold mb-4'>Requirements</h2>
                                 <div className='mb-4'>
@@ -658,6 +707,8 @@ function JobsPosted() {
                                         <option value='Doctorate'>Doctorate</option>
                                         <option value='Diploma/Certification'>Diploma/Certification</option>
                                     </select>
+                                    {isTouched.educationLevel && errors.educationLevel && <span style={{ color: 'red' }}>{errors.educationLevel}</span>}
+
                                 </div>
                                 <div className='mb-4'>
                                     <label htmlFor='experienceRequired' className='block text-sm font-medium text-gray-700'>
@@ -677,6 +728,8 @@ function JobsPosted() {
                                         <option value='5-7 years'>5-7 years</option>
                                         <option value='7+ years'>7+ years</option>
                                     </select>
+                                    {isTouched.experienceRequired && errors.experienceRequired && <span style={{ color: 'red' }}>{errors.experienceRequired}</span>}
+
                                 </div>
                                 <div className='flex justify-end'>
                                     <button
@@ -743,13 +796,13 @@ function JobsPosted() {
 
             </div >
             {currentJobs.length > 10 && (
-            <Pagination
-                totalJobs={jobs.length}
-                jobsPerPage={jobsPerPage}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-            />
-)}
+                <Pagination
+                    totalJobs={jobs.length}
+                    jobsPerPage={jobsPerPage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
+            )}
             <Footer />
         </div >
     );

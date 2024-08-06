@@ -140,7 +140,7 @@ function Home() {
                                                         .filter(location => location.toLowerCase() !== 'others' && location !== '')
                                                         .join(', ')} ({job.workMode})</p>
                                                 <p className="text-sm md:text-left">Experience: {job.experienceRequired}</p>
-                                                <p className="text-sm md:text-left">Posted by: {job.jobPostedBy}</p>
+                                                <p className="text-sm md:text-left">Posted by: {job.jobPosterName}</p>
                                                 <p className="text-sm md:text-left">Posted on: {job.postedOn}</p>
                                             </div>
                                         </div>

@@ -396,6 +396,8 @@ function Profile() {
                                     <div className="mb-2 lg:mb-1">
                                         {!profile ? (
                                             <div>
+                                         <label className='block text-start lg:mb-1'>Upload Resume<span className='text-red-700'>*</span></label>
+
                                                 <input
                                                     type="file"
                                                     name="resume"

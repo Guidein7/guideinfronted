@@ -173,7 +173,7 @@ const EmployeeRegistration = () => {
           onSubmit={handleSubmit}
           noValidate
         >
-          <h1 className=" font-bold text-center text-2xl">Sign up</h1>
+          <h1 className=" font-bold text-center text-2xl">Sign up as Employee</h1>
           <p className="p-0 mt-0 mb-6  text-center">Earn Money by Referring Top Talent</p>
           <div className="mb-3">
             <label className="block text-gray-700   mb-2" htmlFor="name">Full Name<span className='text-red-500'>*</span></label>

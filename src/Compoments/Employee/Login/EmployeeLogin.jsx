@@ -111,7 +111,7 @@ const EmployeeLogin = () => {
             {errorMessage && (<p>{errorMessage}</p>)}
             <div className="w-full max-w-xs lg:max-w-lg mx-auto">
                 <form className="border border-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-                    <h1 className="font-bold text-center text-2xl mb-3">Sign in</h1>
+                    <h1 className="font-bold text-center text-2xl mb-3"> Employee Sign in</h1>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2" htmlFor="inputValue">
                             Email or Mobile
