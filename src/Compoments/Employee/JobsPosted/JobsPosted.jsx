@@ -795,14 +795,14 @@ function JobsPosted() {
 
 
             </div >
-            {currentJobs.length > 10 && (
+          
                 <Pagination
                     totalJobs={jobs.length}
                     jobsPerPage={jobsPerPage}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                 />
-            )}
+            
             <Footer />
         </div >
     );
