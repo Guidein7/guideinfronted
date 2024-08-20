@@ -9,4 +9,4 @@ Currently, two official plugins are available:
 check docker file
 
 
-jenkins update
+jenkins updates
