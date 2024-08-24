@@ -84,6 +84,13 @@ const AdminHome = () => {
                 <Link to='/subscribed-users' className='font-bold text-center text-purple-500 cursor-pointer my-2'>Subscribed Users</Link>
                 <p className='bg-purple-200 w-10 h-10 rounded-full flex justify-center items-center mx-auto'>{data.totalSubscribedUsers}</p>
               </div>
+              <div className=' mt-2'>
+              <div className=''>
+              <Link  className='font-bold text-purple-500 cursor-pointer text-center'>Total Subscriptions</Link>
+                <p className='bg-purple-200 rounded-full w-10 h-10 flex justify-center items-center mx-auto'>{data.totalSubscriptions                }</p>
+                </div>
+
+             </div>
             </div>
           </div>
           <div className='bg-white p-4 my-2 h-auto'>

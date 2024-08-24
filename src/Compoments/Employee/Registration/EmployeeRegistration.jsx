@@ -107,13 +107,11 @@ const EmployeeRegistration = () => {
       const registrationData = { ...formData, role: role };
       setLoading(true);
       axios.post(`${config.api.baseURL}${config.api.jobPoster.register}`, registrationData).then(response => {
-        const sessionUUID = response.data.sessionUUID
-
-        // navigate(`/employee-verification`, { state: { email, mobile, sessionUUID } });
-        navigate('/employee-login');
-
+        const sessionUUID =""
+        navigate(`/employee-verification`, { state: { email, mobile, sessionUUID } });
+       
       }).catch(error => {
-        console.log(error)
+  
         if (error.response && error.response.status === 409) {
           setErrorMessage("User already exists. Please try with a different email or mobile.");
         } else {

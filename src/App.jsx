@@ -65,6 +65,12 @@ import FAQ from './Compoments/Employee/LandingPage/Faqs'
 import EFAQ from './Compoments/Employee/SideBar/EFaq'
 import ReferralFAQ from './Compoments/JobSeeker/LandingPage/ReferralFaq'
 import JReferralFAQ from './Compoments/JobSeeker/NavBar/JReferralFaq'
+import JobseekerViewProfile from './Compoments/Admin/JobSeeker/JobseekerViewProfile'
+import JobposterViewProfile from './Compoments/Admin/Employee/JobposterViewProfile'
+import NotFound from './Compoments/NotFound'
+import { ScrollRestoration } from "react-router-dom";
+
+
 
 
 function App() { 
@@ -88,9 +94,10 @@ function App() {
     
     <>
     
-    
+   
     
       <Routes>
+      
         
         <Route path='/' element={<LandingPage/>}/>
         <Route path='/register' element={<Registration/>}/>
@@ -108,7 +115,7 @@ function App() {
         <Route path='/search-jobs' element={<SearchJobs/>} />
         <Route path='/profile' element={<Profile/>} />
         <Route path='/saved-jobs' element={<SavedJobs/>} />
-        <Route path="/job-details" element={<JobDetails/>} />
+        <Route path='/job-details/:jobPostedBy/:jobId' element={<JobDetails/>} />
         <Route path="/applied-referrals" element={<AppliedJobs/>} />
         <Route path="/subscribe" element={<Subscribe/>} />
         <Route path="/applied-referral-details" element={<AppliedRefeReferralDetails/>} />
@@ -162,16 +169,22 @@ function App() {
         <Route path='/emp-wallet-details' element={<EmpWalletDetails/>}/>
         <Route path='/disabled-jobs' element={<DisabledJobs/>}/>
         <Route path='/disabled-jobdetails' element={<DisabledJobDetails/>}/>
+        <Route path='/jsview-profile/:name/:mail' element={<JobseekerViewProfile/>}/>
+        <Route path='/jpview-profile/:name/:mail' element={<JobposterViewProfile/>}/>
 
         <Route path='/sample' element={<Sample/>}/>
         <Route path='/sample' element={<Sample/>}/>
 
 
 
+      <Route path='*' element={<NotFound/>} />
 
         
 
       </Routes>
+      
+
+     
      
  
     </>

@@ -74,7 +74,7 @@ function DashBoard() {
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
                 <p className="mt-4 text-gray-900">Loading...</p>
             </div>) : (
-                <div className='flex-grow ml-0 xl:ml-[20%] pt-20 lg:pt-2'>
+                <div className='flex-grow ml-0 lg:ml-[20%] pt-20   lg:pt-14'>
                     {errorMessage && (<p className='text-red-500 fixed left-1/2 transform -translate-x-1/2 bg-white px-4 py-2'>{errorMessage}</p>)}
                     <h1 className='font-bold px-2 lg:ml-5 text-2xl '>Dashboard</h1>
 
@@ -84,7 +84,7 @@ function DashBoard() {
                             <Link to='/subscribe' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300   rounded  px-20 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Subscribe</Link>
                         </div>
                     )}
-                    <div className='grid grid-cols-1  md:grid-cols-3 gap-4 lg:my-8'>
+                    <div className='grid grid-cols-1  md:grid-cols-3 gap-2 lg:my-8'>
                         <div className='bg-blue-500 text-white py-5  flex-1 mx-10 rounded-lg'>
                             <h1 className='font-bold text-center text-lg'>Total Referrals</h1>
                             <h1 className='font-bold text-center text-lg'>{dashboardDetails.totalReferrals}</h1>

@@ -106,9 +106,8 @@ const Registration = () => {
       const registrationData = { ...formData, role:role };
       setLoading(true);
       axios.post(`${config.api.baseURL}${config.api.jobSeeker.register}`, registrationData).then(response => {
-        const sessionUUID = response.data.sessionUUID
-        // navigate(`/verification`, { state: { email, mobile, sessionUUID} });
-        navigate('/login');
+        const sessionUUID = "";
+        navigate(`/verification`, { state: { email, mobile, sessionUUID} });
       }).catch(error => {
         if (error.response && error.response.status === 409) {
           setErrorMessage("User already exists. Please try with a different email or mobile.");

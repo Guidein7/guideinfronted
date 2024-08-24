@@ -1,5 +1,7 @@
 
 
+
+
 import React, { useState } from 'react';
 import { Link,useNavigate,useLocation} from 'react-router-dom';
 import GuideinLogo from '../../../assets/GuideinLogo.png'
@@ -7,110 +9,136 @@ import axios from 'axios';
 import config from '../../../config';
 import EFooter from '../LandingPage/Footer';
 
+function EmployeePasswordResetVerification() {
+    const [otp, setOtp] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [otpMessage, setOtpMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
+    const location = useLocation();
+    const { email, mobile } = location.state;
+    const navigate = useNavigate();
+    const[successMessage,setSuccessMessage] = useState('')
+    const [Loading, setLoading] = useState(false);
 
-const EmployeePasswordResetVerification = () => {
-  const [otp, setOtp] = useState('');
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const navigate = useNavigate()
-   const location = useLocation();
-   const {email,mobile} = location.state;
-
-   const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const role = "JOB_POSTER";
-    const verifyData = { email, mobile, otp, role };
-    axios.post(`${config.api.baseURL}${config.api.jobPoster.verification}`, verifyData)
-        .then(response => {
-            console.log(response);
-            if (response.status === 200) {
-                setSuccessMessage("Successfully verified");
-                setTimeout(() => {
-                    setSuccessMessage('');
-                    navigate('/employee-reset-password',{state:{email,mobile}})
-                }, 2000);
-            } else {
-                setError("Invalid OTP. Please try again.");
-            }
-        })
-        .catch(error => {
-            console.log(error);
-            setError("An error occurred while verifying the OTP. Please try again.");
-        })
-        .finally(() => setLoading(false));
-};
-
-const handleResendOtp = async () => {
-  const role ="JOB_POSTER";
-  const formData = {email,mobile,role}
-      axios.post(`${config.api.baseURL}${config.api.jobPoster.resendOtp}`,formData).then(response => {
-        
-            console.log('OTP resent successfully');
-              setSuccessMessage("OTP sent successfully");
-              setTimeout(() => {
-                  setSuccessMessage('');
-              }, 2000);
-            }).catch(error => {
-             setError("Error Occured try again");})
-};
-
-  return (
-    <div className="bg-[#f5faff] min-h-screen  flex flex-col justify-between">
-    <nav className="bg-[#f8f9fa] py-4">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-            <div className="lg:block">
-                <Link to='/employee'>
-                    <img src={GuideinLogo} alt="Logo" className="h-8" />
-                </Link>
+    if (Loading) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+                <p className="mt-4 text-gray-900">Loading...</p>
             </div>
-        </div>
-    </nav>
-    <div className="w-full max-w-sm  mx-auto p-4 pt-6 md:p-6 lg:p-12">
-      
-      <form onSubmit={handleSubmit} className='bg-white rounded p-4'>
-        <label className="block mb-2" htmlFor="otp">
-          Enter OTP
-        </label>
-        <input
-          type="text"
-          id="otp"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Enter the OTP sent to your email"  required maxLength={6}
-        />
-        {error && (
-          <div className="text-red-500 text-sm mb-2">{error}</div>
-        )}
-           {successMessage && <div className="text-green-500 text-sm mb-2">{successMessage}</div>}
-        <div className='mt-4 '>
-        <button 
-           type="submit"
-           className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-           disabled={loading}
-         >
-           {loading ? 'Verifying...' : 'Verify OTP'}
-         </button>
-         <button
-           type="button"
-           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-           onClick={handleResendOtp}
-           
-         >
-           Resend OTP
-         </button>
-         <div className='text-center mt-4'>
-        <Link to='/employee-forgot-password' className='text-blue-500' >back</Link>
-        </div>
-        </div>
-       
-      </form>
-    </div>
-    <EFooter/>
-    </div>
-  );
-};
+        );
+    }
 
+
+    const getLastFourDigits = (mobileNumber) => {
+        return mobileNumber.slice(-4);
+    };
+
+    const lastFourDigits = getLastFourDigits(mobile);
+    const resendVerification = () => {
+        const role = "JOB_POSTER";
+        const formData = { email, mobile, role }
+        setLoading(true);
+        axios.post(`${config.api.baseURL}${config.api.jobPoster.resendOtp}`, formData).then(response => {
+            if (response.status === 200) {
+                setOtpMessage('Otp sent successfully');
+                setTimeout(() => {
+                    setOtpMessage('');
+                }, 2000)
+            }
+        }).catch(error => {
+            setOtpMessage('Error while sending otp please try again');
+            setTimeout(() => {
+                setOtpMessage('');
+            }, 2000)
+
+        }).finally(() => setLoading(false));
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setError("");
+
+        if (!otp) {
+            setErrorMessage('OTP is required');
+            return;
+        }
+        setErrorMessage('');
+        const role = "JOB_POSTER"
+        const verifyData = { email, mobile, otp, role };
+
+        setLoading(true)
+        axios.post(`${config.api.baseURL}${config.api.jobPoster.verification}`, verifyData)
+            .then(response => {
+                if (response.status === 200) {
+                    setSuccessMessage("Successfully verified");
+                    setTimeout(() => {
+                        setSuccessMessage('');
+                        navigate('/employee-reset-password',{state:{email,mobile}})
+                    }, 2000);
+                }
+                
+            })
+            .catch(error => {
+              
+                if (error.response?.status === 401) {
+                    setError('invalid otp')
+                    setTimeout(() => {
+                        setError('')
+                    }, 2000)
+                }
+                else {
+                    setError("An error occurred while verifying the OTP. Please try again.");
+                }
+            }).finally(() => setLoading(false))
+    };
+    return (
+        <div className="bg-[#f5faff] min-h-screen  flex flex-col justify-between">
+            <nav className="bg-[#f8f9fa] py-4 mb-1">
+                <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                    <div className="lg:block">
+                        <Link to="/employee">
+                            {' '}
+                            <img src={GuideinLogo} alt="Logo" className="h-8" />{' '}
+                        </Link>
+                    </div>
+                </div>
+            </nav>
+            {otpMessage && (
+                <p className='text-green-400 text-center'>{otpMessage}</p>
+            )}
+            <div className="w-full max-w-sm lg:max-w-md mx-auto flex align-center">
+
+
+                <form className="bg-white  shadow-md align-center rounded p-6 w-80 lg:w-full mx-auto mb-4" onSubmit={handleSubmit}>
+                    <h1 className='font-bold text-center mb-6'>Verification </h1>
+                    <p className='text-sm mb-5'>We have sent an OTP to your mobile number xxxxxx<span>{lastFourDigits}</span>.</p>
+
+                    <div className="mb-4">
+
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="otp" name="otp" value={otp} onChange={(e) =>{setOtp(e.target.value);setErrorMessage('')}} type="text" placeholder="Enter OTP" maxLength={6} />
+                        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+                    </div>
+
+                    <div className="text-center">
+                        <button className="bg-blue-700 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6 mx-2" type="submit"   >
+                            Verify
+                        </button>
+                        <button className="bg-orange-400 text-white p-2 rounded" type="button" onClick={resendVerification} >
+                            Resend OTP
+                        </button>
+                    </div>
+                    {error && <div className="text-red-500 text-center">{error}</div>}
+                    {successMessage && <div className="text-green-500 text-center">{successMessage}</div>}
+                    <div className='text-center mt-4'>
+                    <Link to='/employee-forgot-password' className='text-blue-500' >back</Link>
+                    </div>
+             </form>
+            </div>
+            <EFooter />
+        </div>
+    );
+}
 export default EmployeePasswordResetVerification;
+

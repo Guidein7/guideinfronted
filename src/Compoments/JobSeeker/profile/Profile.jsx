@@ -13,10 +13,10 @@ function Profile() {
     const navigate = useNavigate();
     const log = useSelector(state => state.log);
     const token = log.data.token;
-    const decoded = token? jwtDecode(token):null;
-    const email = decoded?decoded.sub:null;
-    const mobile = decoded?decoded.mobile:null;
-    const name = decoded?decoded.username:null;
+    const decoded = token ? jwtDecode(token) : null;
+    const email = decoded ? decoded.sub : null;
+    const mobile = decoded ? decoded.mobile : null;
+    const name = decoded ? decoded.username : null;
     const [isOpen, setIsOpen] = useState(false);
     const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -37,10 +37,10 @@ function Profile() {
     const [uploadedResumeURL, setUploadedResumeURL] = useState(null);
     const [errorMessage, setErrorMessage] = useState('')
     useEffect(() => {
-        if(!token){
+        if (!token) {
             navigate('/login')
         }
-    },[token,navigate])
+    }, [token, navigate])
 
     useEffect(() => {
         getProfile();
@@ -226,7 +226,7 @@ function Profile() {
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>
             ) : (
-                <div className='flex-grow ml-0 xl:ml-[20%] pt-16 lg:pt-0'>
+                <div className='flex-grow ml-0 lg:ml-[20%] pt-16 lg:pt-0'>
                     <div >
 
 
@@ -282,15 +282,17 @@ function Profile() {
 
 
                                 </div>
-                                <div className='mb-2 lg:mb-3'>
-                                    <label className='block text-start lg:mb-1'>Linkedin URL </label>
-                                    <input
-                                        type='text'
-                                        value={profile.linkedInUrl}
-                                        className='w-full px-3 py-2 border rounded-md'
-                                        readOnly
-                                    />
-                                </div>
+                                {profile?.linkedInUrl && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Linkedin URL </label>
+                                        <input
+                                            type='text'
+                                            value={profile.linkedInUrl}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
 
                                 <div className='text-start flex flex-row mb-2 lg:mb-3'>
                                     <span > Resume: </span>
@@ -378,25 +380,26 @@ function Profile() {
                                             <option value='7+ Years'>7+ Years</option>
                                         </select>
                                     </div>
-                                    <div className='mb-2 lg:mb-3'>
-                                        <label className='block text-start lg:mb-1'>Linkedin URL<span className='text-red-700'>*</span></label>
-                                        <input
-                                            type='text'
-                                            id='linkedInUrl'
-                                            name='linkedInUrl'
-                                            value={formData.linkedInUrl}
-                                            onChange={handleInputChange}
-                                            className='w-full px-3 py-2 border rounded-md'
-                                            required
-                                        />
+                                    <div className='mb-4'>
+                                            <label className='block text-gray-700 bold text-start'>LinkedIn URL(<a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer" className=" text-blue-500">
+                                                click here to get
+                                            </a>)</label>
+                                            <input
+                                                type='text'
+                                                name='linkedInUrl'
+                                                value={formData.linkedInUrl}
+                                                onChange={handleInputChange}
+                                                className='w-full px-3 py-2 border rounded-md'
 
-                                    </div>
+                                            />
+
+                                        </div>
 
 
                                     <div className="mb-2 lg:mb-1">
                                         {!profile ? (
                                             <div>
-                                         <label className='block text-start lg:mb-1'>Upload Resume<span className='text-red-700'>*</span></label>
+                                                <label className='block text-start lg:mb-1'>Upload Resume<span className='text-red-700'>*</span></label>
 
                                                 <input
                                                     type="file"
@@ -473,7 +476,7 @@ function Profile() {
             )}
 
 
-<JSFooter/>
+            <JSFooter />
         </div>
     );
 }

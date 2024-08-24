@@ -78,7 +78,7 @@ function EmployeeProfile() {
 
     }
 
-    
+
 
     const handleLogout = () => {
         dispatch(logoutEmployee());
@@ -220,7 +220,7 @@ function EmployeeProfile() {
                                                 readOnly
                                             />
                                         </div>
-                                       {profile.linkedInUrl && ( <div className='mb-2'>
+                                        {profile.linkedInUrl && (<div className='mb-2'>
                                             <label className='block  text-start'>LinkedIn URL</label>
                                             <input
                                                 type='url'
@@ -308,17 +308,17 @@ function EmployeeProfile() {
 
                                         <div className='mb-4'>
                                             <label className='block text-gray-700 bold text-start'>LinkedIn URL(<a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer" className=" text-blue-500">
-            click here to get
-        </a>)</label>
+                                                click here to get
+                                            </a>)</label>
                                             <input
                                                 type='text'
                                                 name='linkedInUrl'
                                                 value={formData.linkedInUrl}
                                                 onChange={handleInputChange}
                                                 className='w-full px-3 py-2 border rounded-md'
-                                                
+
                                             />
-                                            
+
                                         </div>
                                         {isEditing && (
                                             <button className=' bg-red-700 hover:bg-red-800 text-white px-4 py-1.5 rounded mr-2' onClick={cancelButton} >Cancel</button>
@@ -344,7 +344,7 @@ function EmployeeProfile() {
                     {errorMessage}
                 </div>
             )}
-            <Footer/>
+            <Footer />
         </div>
 
     );

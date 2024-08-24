@@ -241,7 +241,7 @@ function Subscribe() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col ">
             <NavBar />
-            <div className={`flex-grow pt-24 ml-0 xl:ml-[20%]`}>
+            <div className={`flex-grow pt-24 ml-0 lg:ml-[20%]`}>
                 {successMessage && (
                     <div className="fixed lg:top-0 left-0 w-full text-green-700 font-bold text-2xl text-center py-4 z-20">
                         {successMessage}

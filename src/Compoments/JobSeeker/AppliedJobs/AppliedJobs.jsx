@@ -76,7 +76,7 @@ function AppliedJobs() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className='flex flex-grow flex-col ml-0 xl:ml-[20%] pt-16 lg:pt-5'>
+            <div className='flex flex-grow flex-col ml-0 lg:ml-[20%] pt-16 lg:pt-5'>
 
                 <h1 className='font-bold m-2 text-lg'>Applied Jobs</h1>
                 {loading ? (

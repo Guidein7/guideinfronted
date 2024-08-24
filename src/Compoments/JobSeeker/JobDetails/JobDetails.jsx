@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link, useParams, useSearchParams } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { logoutUser } from "../Slices/loginSlice";
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,13 @@ import { FaFilePdf } from "react-icons/fa";
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
 import JSFooter from '../NavBar/JSFooter';
+import { error } from 'jquery';
+import { Buffer } from 'buffer';
+import { CiShare2 } from "react-icons/ci";
+import { FaRegBookmark } from "react-icons/fa6";
+import { MdOutlineShare } from "react-icons/md";
+import BookmarkIcon from './Bookmark';
+
 
 function JobDetails() {
     const log = useSelector(state => state.log);
@@ -16,52 +23,114 @@ function JobDetails() {
     const email = decoded ? decoded.sub : null;
     const mobile = decoded ? decoded.mobile : null;
     const name = decoded ? decoded.username : null;
-    const [profileCompletionMessage, setProfileCompletionMessage] = useState('');
-    const [requested, setRequested] = useState(false);
-    const [showDetails, setShowDetails] = useState(false);
-    const modalRef = useRef(null);
-    const [loading, setLoading] = useState(false);
-    const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const params = useParams();
+    const jobId = Number(params.jobId);
+    const jobPostedBy = Buffer.from(params.jobPostedBy, 'base64').toString('ascii');
+
+    const [loading, setLoading] = useState(false);
+    const [job, setJob] = useState(null);  // State to hold the specific job
     const [profile, setProfile] = useState(null);
     const [isProfileCompleted, setIsProfileCompleted] = useState(false);
-    const { job } = location.state || {};
-    const jobId = job? job.jobId: null;
-    const jobPostedBy = job ? job.jobPostedBy : null;
-    const [jobStatus, setJobStatus] = useState('')
-    const [formData, setFormData] = useState({
-        resume: null,
-    });
-    const fileInputRef = useRef();
-    const [isNewResumeUploaded, setIsNewResumeUploaded] = useState(false)
-    const [resumeFileName, setResumeFileName] = useState('')
     const [successMessage, setSuccessMessage] = useState(false);
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [subscribeMessage, setSubscribeMessage] = useState(false);
-    const [isCredits, setIscredits] = useState(false);
-    const [savedJob, setSavedJob] = useState( job?job.saved:null)
-    const [uploadedResumeURL, setUploadedResumeURL] = useState(null);
+    const [requested, setRequested] = useState(false);
+    const [showDetails, setShowDetails] = useState(false);
+    const [profileCompletionMessage, setProfileCompletionMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const dispatch = useDispatch();
+    const [formData, setFormData] = useState({
+        resume: null,
+    });
+    const [uploadedResumeURL, setUploadedResumeURL] = useState(null);
+    const [isNewResumeUploaded, setIsNewResumeUploaded] = useState(false)
+    const [resumeFileName, setResumeFileName] = useState('')
     const [resumeUploadMessge, setResumeUploadMessage] = useState('')
-
+    const [isCredits, setIscredits] = useState(false);
+    const modalRef = useRef(null);
+    const fileInputRef = useRef();
+    const [savedJobMessage, setSavedJobMessage] = useState('');
     useEffect(() => {
         if (!token) {
-            navigate('/login')
+            if (window.location.pathname !== '/login') { // Prevent overwriting intendedPath
+                const intendedPath = window.location.pathname;
+                localStorage.setItem('intendedPath', intendedPath);
+              
+               
+            }
+            navigate('/login');
         }
-        else if(!job?.jobId){
-            navigate(-1);
-        }
-    }, [token, navigate,job])
+    }, [token, navigate]);
+
+
+
+
+    const [searchParams] = useSearchParams();
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyLink = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            setCopied(true);
+            setTimeout(() => {
+                setCopied(false);
+            }, 2000); // Reset the message after 2 seconds
+        }).catch((err) => {
+            
+        });
+    };
+
+    // const title = searchParams.get('title');
+
+    // if (title) {
+    //     document.title = title;
+    // }
+
+    const fetchJobs = () => {
+        setLoading(true);
+        axios.get(`${config.api.baseURL}${config.api.jobSeeker.fetchJobs}${email}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "ngrok-skip-browser-warning": "69420"
+            }
+        })
+            .then(response => {
+                const foundJob = response.data.find(item => item.jobId === jobId && item.jobPostedBy === jobPostedBy);
+                setJob(foundJob);
+
+            })
+            .catch(error => {
+                if (error.response.status === 403) {
+                    setErrorMessage('Session expired');
+                    setTimeout(() => {
+                        setErrorMessage('');
+                        handleLogout();
+                    }, 2000);
+                } else {
+                    setErrorMessage('Error while fetching profile');
+                    setTimeout(() => {
+                        setErrorMessage('')
+                    }, 2000);
+                }
+            }).finally(() => {
+                setLoading(false)
+
+
+            });
+    };
 
     useEffect(() => {
-        getProfileStatus();
+
         fetchJobs();
+        getProfileStatus();
         checkSubscription();
-    }, []);
+
+    }, [jobId]);
+
 
     const getProfileStatus = () => {
-        setLoading(true);
+
         axios.get(`${config.api.baseURL}${config.api.jobSeeker.getProfile}${email}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -76,6 +145,7 @@ function JobDetails() {
                 else if (response.status === 204) {
                     setIsProfileCompleted(false);
                 }
+
             })
             .catch(error => {
                 if (error.response.status === 403) {
@@ -92,11 +162,12 @@ function JobDetails() {
                     }, 2000);
                 }
             })
-            .finally(() => setLoading(false));
+
     }
 
+
     const checkSubscription = () => {
-        setLoading(true)
+
         axios.get(`${config.api.baseURL}${config.api.jobSeeker.checkSubscription}${email}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -106,11 +177,11 @@ function JobDetails() {
         }).then(response => {
             if (response.status === 200) {
                 setIsSubscribed(true)
-                setProfile(response.data)
             }
             else if (response.status === 204) {
                 setIsSubscribed(false);
             }
+
         }).catch(error => {
             if (error.response.status === 403) {
                 setErrorMessage('session Expired');
@@ -125,8 +196,7 @@ function JobDetails() {
                     setErrorMessage('')
                 }, 2000);
             }
-        }).finally(() => setLoading(false));
-
+        })
     }
 
     const handleLogout = () => {
@@ -169,6 +239,10 @@ function JobDetails() {
             }
         ).then(response => {
             fetchJobs();
+            setSavedJobMessage('job saved')
+            setTimeout(() => {
+                setSavedJobMessage('');
+            }, 2000);
         }).catch(error => {
             if (error.response.status === 403) {
                 setErrorMessage('session Expired');
@@ -188,6 +262,34 @@ function JobDetails() {
         })
     };
 
+    const handleRemoveSavedJob = (jobId) => {
+        setLoading(true);
+        axios.delete(`${config.api.baseURL}${config.api.jobSeeker.removeSavedJobs}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "ngrok-skip-browser-warning": "69420"
+            },
+            params: {
+                jobId: jobId,
+                email: email
+            }
+        })
+            .then(response => {
+                fetchJobs();
+                setSavedJobMessage('job removed');
+                setTimeout(() => {
+                    setSavedJobMessage('')
+                }, 2000);
+            })
+            .catch(error => {
+                setErrorMessage('Error while removing the job');
+                setTimeout(() => {
+                    setErrorMessage('');
+                }, 2000);
+
+            }).finally(() => setLoading(false))
+    };
+
     function base64ToBlob(base64, mime) {
         const byteCharacters = atob(base64);
         const byteNumbers = new Array(byteCharacters.length);
@@ -198,9 +300,12 @@ function JobDetails() {
         return new Blob([byteArray], { type: mime });
     }
     const handleResumeView = () => {
-        const pdfWindow = window.open('');
-        pdfWindow.document.write('<iframe width="100%" height="100%" src="data:application/pdf;base64,' + encodeURI(profile.resume) + '"></iframe>');
+        if (profile?.resume) {
+            const pdfWindow = window.open('');
+            pdfWindow.document.write('<iframe width="100%" height="100%" src="data:application/pdf;base64,' + encodeURI(profile.resume) + '"></iframe>');
+        }
     };
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         const maxSize = 5 * 1024 * 1024;
@@ -283,40 +388,6 @@ function JobDetails() {
         })
             .finally(() => setLoading(false))
     }
-
-    const fetchJobs = async () => {
-        setLoading(true);
-        axios.get(
-            `${config.api.baseURL}${config.api.jobSeeker.fetchJobs}${email}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "69420"
-                }
-            }
-        ).then(response => {
-            const jobi = response.data.find(jobsi => jobsi.jobId === jobId);
-            if (jobi) {
-                setJobStatus(jobi.status);
-                setSavedJob(jobi.saved);
-            }
-        }).catch(error => {
-            if (error.response.status === 403) {
-                setErrorMessage('session Expired');
-                setTimeout(() => {
-                    setErrorMessage('')
-                    handleLogout();
-                }, 2000);
-            }
-            else {
-                setErrorMessage('Error while fetching jobs');
-                setTimeout(() => {
-                    setErrorMessage('')
-                }, 2000);
-            }
-        }).finally(() => setLoading(false))
-
-    };
     const showDetailsClose = () => {
         setIsNewResumeUploaded(false);
         setResumeFileName('');
@@ -326,10 +397,19 @@ function JobDetails() {
         setShowDetails(false);
     }
 
+
+
+    
+      // Usage
+      
+      
+
+
+
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className='flex-grow ml-0 xl:ml-[20%]'>
+            <div className='flex-grow ml-0 lg:ml-[20%]'>
                 {loading ? (
                     <div className="flex flex-col justify-center items-center h-screen">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
@@ -337,45 +417,66 @@ function JobDetails() {
                     </div>
                 ) : (
                     <div>
+                        {job ? (
+                            <div className='flex justify-between'>
+                                <div className=' pt-16 lg:pt-5 '>
+                                    <div className='pl-5'>
+                                        {errorMessage && (<p className='fixed left-1/2 transform -translate-x-1/2 px-4 bg-white py-2 text-red-500'>{errorMessage}</p>)}
+                                        <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job?.jobTitle}</h1>
+                                        <p className='font-bold  my-1 lg:my-2'> {job?.companyName}</p>
+                                        <p className='my-1 lg:my-2'>  {
+                                            job?.jobLocation
+                                                ?.split(',')
+                                                ?.map(location => location.trim())
+                                                ?.filter(location => location.toLowerCase() !== 'others' && location !== '')
+                                                ?.join(', ')
+                                        } ({job?.workMode})</p>
+                                        <p className='my-1 lg:my-2'>Job Type: {job?.jobType}</p>
+                                        <p className='my-1 lg:my-2'>Experience: {job?.experienceRequired}</p>
+                                        <p className='my-1 lg:my-2'>Posted on: {job?.postedOn}</p>
+                                        <p className='font-bold my-3 lg:my-4'>Know more about the job</p>
+                                        <a className='text-blue-700 underline break-words my-1' target="_blank" href={job?.jobDescriptionLink} style={{ wordWrap: 'break-word' }}>{job?.jobDescriptionLink}</a>
+                                        <h1 className='font-bold my-3 lg:my-4'>Job Posted By</h1>
+                                        <p> Employee Name: <span className='font-bold my-1 lg:my-2'> {job?.jobPosterName}</span></p>
+                                        <p className='my-1 lg:my-2'>Company: <span>{job?.companyName}</span></p>
+                                        <div className='my-2 lg:my-4 flex items-center'>
+                                            <button
+                                                onClick={toggleRequest}
+                                                className={` ${job?.status === 'REQUESTED' ? 'bg-blue-500 hover:bg-blue-500 text-white px-4 py-2 rounded' : job?.status === 'REFERRED' ? 'bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded' : job?.status === 'IN_VERIFICATION' ? 'bg-yellow-500 hover:bg-yellow-500 text-white px-4 py-2 rounded' : (job?.status === 'REJECTED' || job?.status === 'VERIFICATION_FAILED') ? 'bg-red-500 hover:bg-red-500 text-white px-4 py-2 rounded' : 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'}`}
+                                                disabled={job?.status !== 'UN_REQUESTED'}
+                                            >
+                                                {job.status === 'UN_REQUESTED' ? 'Request Referral' : job.status}
+                                            </button>
 
-                        <div className='pl-5 pt-14 lg:pt-5 '>
-                            {errorMessage && (<p className='fixed left-1/2 transform -translate-x-1/2 px-4 bg-white py-2 text-red-500'>{errorMessage}</p>)}
-                            <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job?.jobTitle}</h1>
-                            <p className='font-bold  my-1 lg:my-2'> {job?.companyName}</p>
-                            <p className='my-1 lg:my-2'>  {
-                                job?.jobLocation
-                                    .split(',')
-                                    .map(location => location.trim())
-                                    .filter(location => location.toLowerCase() !== 'others' && location !== '')
-                                    .join(', ')
-                            } ({job?.workMode})</p>
-                            <p className='my-1 lg:my-2'>Job Type: {job?.jobType}</p>
-                            <p className='my-1 lg:my-2'>Experience: {job?.experienceRequired}</p>
-                            <p className='my-1 lg:my-2'>Posted on: {job?.postedOn}</p>
-                            <p className='font-bold my-3 lg:my-4'>Know more about the job</p>
-                            <a className='text-blue-700 underline break-words my-1' target="_blank" href={job?.jobDescriptionLink} style={{ wordWrap: 'break-word' }}>{job?.jobDescriptionLink}</a>
-                            <h1 className='font-bold my-3 lg:my-4'>Job Posted By</h1>
-                            <p> Employee Name: <span className='font-bold my-1 lg:my-2'> {job?.jobPosterName}</span></p>
-                            <p className='my-1 lg:my-2'>Company: <span>{job?.companyName}</span></p>
-                            <div className='my-2 lg:my-4'>
-                                <button
-                                    onClick={toggleRequest}
-                                    className={` ${jobStatus === 'REQUESTED' ? 'bg-blue-500 hover:bg-blue-500 text-white px-4 py-2 rounded' : jobStatus === 'REFERRED' ? 'bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded' : jobStatus === 'IN_VERIFICATION' ? 'bg-yellow-500 hover:bg-yellow-500 text-white px-4 py-2 rounded' : (jobStatus === 'REJECTED' || jobStatus === 'VERIFICATION_FAILED') ? 'bg-red-500 hover:bg-red-500 text-white px-4 py-2 rounded' : 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'}`}
-                                    disabled={jobStatus !== 'UN_REQUESTED'}
-                                >
-                                    {jobStatus === 'UN_REQUESTED' ? 'Request Referral' : jobStatus}
-                                </button>
-                                {jobStatus === 'UN_REQUESTED' && (
-                                    <button
-                                        onClick={handleSaveJob}
-                                        className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 `}
-                                        disabled={savedJob}
-                                    >
-                                        {savedJob ? 'Saved' : 'Save'}
-                                    </button>
-                                )}
-                            </div>
-                        </div>
+                                            <div className="flex flex-col items-center justify-center ml-4">
+                                                <div className="h-12 w-12 p-2 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer" onClick={job.saved ? () => handleRemoveSavedJob(job.jobId) : handleSaveJob}>
+                                                <BookmarkIcon saved={job.saved} />
+
+                                                </div>
+                                                {/* {savedJobMessage && (
+                                                    <p className="text-sm mt-1 text-center">{savedJobMessage}</p>
+                                                )} */}
+                                            </div>
+
+                                            <div onClick={handleCopyLink} className='cursor-pointer flex flex-col justify-center ml-4'>
+                                                <MdOutlineShare size={24} className='tex-black' />
+                                                {copied && (
+                                                    <p className="text-black-500 mt-2 text-sm lg:mt-0">Link copied!</p>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>) : (<div className='min-h-screen flex justify-center items-center'>
+                                <p>no job found</p>
+
+                            </div>)}
 
                         {profileCompletionMessage && (
                             <div className="text-red-700 font-bold text-center mb-4">

@@ -65,10 +65,10 @@ const NavBar = () => {
   }
 
   return (
-    <div className='bg-[#f8f9fa] z-40 md:z-0 w-full fixed top-0 sm:left-0 py-8 md:bg-transparent md:relative md:py-0'>
+    <div className='bg-[#f8f9fa] z-40 lg:z-0 w-full fixed top-0 sm:left-0 py-8 lg:bg-transparent lg:relative lg:py-0'>
       <button
         ref={buttonRef}
-        className="fixed top-2 left-2 z-50 p-2  text-gray-900 bg-white rounded-md  shadow-md xl:hidden"
+        className="fixed top-2 left-2 z-50 p-2 text-gray-900 bg-white rounded-md shadow-md lg:hidden"
         onClick={toggleSidebar}
         aria-label="Toggle sidebar"
       >
@@ -76,7 +76,8 @@ const NavBar = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
       </button>
-      <div ref={sidebarRef} className={`fixed top-0 left-0 h-full w-2/4 md:w-2/5 xl:w-1/5 z-40 transition-transform ${isOpen ? '' : '-translate-x-full'} bg-white xl:shadow-2xl xl:translate-x-0 dark:bg-gray-800`} aria-label="Sidebar">
+      <div ref={sidebarRef} className={`fixed top-0 left-0 h-full w-2/4 md:w-1/5 lg:w-1/5 z-40 transition-transform ${isOpen ? '' : '-translate-x-full'} bg-white lg:shadow-2xl lg:translate-x-0 dark:bg-gray-800`}
+ aria-label="Sidebar">
         <div className="h-full p-5  pb-4 overflow-y-auto bg-white ">
           <div>
             <Link to='/home'><img src={GuideinLogo} alt="logo" className='h-8 mx-auto hidden lg:block' /></Link>
@@ -138,7 +139,7 @@ const NavBar = () => {
           </ul>
         </div>
       </div>
-      <div className="fixed top-2 right-2 z-20 xl:hidden">
+      <div className="fixed top-2 right-2 z-20 lg:hidden">
         <Link to='/home'>
           <img src={GuideinLogo} alt="logo" className='h-8' />
         </Link>

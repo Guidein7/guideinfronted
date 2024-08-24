@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import config from '../../../config';
 import axios from 'axios';
 import AdminNavBar from '../NavBar/AdminNavBar';
+import { Link } from 'react-router-dom';
 
 function SubscribedUsers() {
   const log = useSelector(state => state.adminlog);
@@ -105,6 +106,7 @@ function SubscribedUsers() {
                     <th className="w-3/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mail ID</th>
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Subscribed Plan</th>
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Date of Subscription</th>
+                   
                   </tr>
                 </thead>
                 <tbody className="text-gray-700">

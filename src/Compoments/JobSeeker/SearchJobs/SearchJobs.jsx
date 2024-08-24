@@ -8,27 +8,10 @@ import { jwtDecode } from "jwt-decode";
 import NavBar from "../NavBar/NavBar";
 import config from "../../../config";
 import JSFooter from "../NavBar/JSFooter";
+import { Buffer } from 'buffer';
+import SBookmarkIcon from "./Sbookmark";
 
 function SearchJobs() {
-    const [jobs, setJobs] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [filters, setFilters] = useState({ jobTitle: '', experience: '', location: '' });
-    const [currentPage, setCurrentPage] = useState(1);
-    const jobsPerPage = 10;
-    const filteredJobs = jobs.filter(job =>
-        (filters.jobTitle ? job.jobTitle.toLowerCase().includes(filters.jobTitle.toLowerCase()) : true) &&
-        (filters.experience ? job.experienceRequired.toLowerCase().includes(filters.experience.toLowerCase()) : true) &&
-        (filters.location ? job.jobLocation.toLowerCase().includes(filters.location.toLowerCase()) : true)
-    );
-
-    const indexOfLastJob = currentPage * jobsPerPage;
-    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-    const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
-    const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
-    const [saveJobMessage, setSaveJobMessage] = useState('');
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
-    };
     const dispatch = useDispatch();
     const log = useSelector(state => state.log);
     const token = log.data.token;
@@ -36,14 +19,79 @@ function SearchJobs() {
     const email = decoded ? decoded.sub : null;
     const navigate = useNavigate();
 
+    const [jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [filters, setFilters] = useState({ jobTitle: '', experience: '', location: '' });
+    const [currentPage, setCurrentPage] = useState(1);
+    const jobsPerPage = 10;
+    const [errorMessage,setErrorMessage] = useState('');
+    const filterExperience = (experienceRequired, selectedExperience) => {
+        // Convert the experience to lowercase for case-insensitive comparison
+        experienceRequired = experienceRequired.toLowerCase();
+        selectedExperience = selectedExperience.toLowerCase();
+    
+        // Handling for old experience ranges
+        const oldExperienceRanges = {
+            '0-1 years': ['0-1 years', '0+ years', '1+ years'],
+            '1-3 years': ['1-3 years', '1+ years', '2+ years', '3+ years'],
+            '3-5 years': ['3-5 years', '3+ years', '4+ years', '5+ years'],
+            '5-7 years': ['5-7 years', '5+ years', '6+ years', '7+ years'],
+            '7+ years': ['7+ years', '7+ years'],
+        };
+    
+        // If the selected experience is one of the old ranges
+        if (oldExperienceRanges[selectedExperience]) {
+            return oldExperienceRanges[selectedExperience].some(exp => experienceRequired === exp);
+        }
+    
+        // Handling for new experience format
+        if (selectedExperience.includes('+')) {
+            const selectedYears = parseInt(selectedExperience);
+            const jobYears = parseInt(experienceRequired);
+    
+            // Handle cases where the job's experience is in the "N+ years" format
+            if (experienceRequired.includes('+')) {
+                return jobYears >= selectedYears;
+            }
+    
+            // Handle cases where the job's experience is in the "N-M years" format
+            const rangeMatch = experienceRequired.match(/(\d+)-(\d+)/);
+            if (rangeMatch) {
+                const [_, min, max] = rangeMatch.map(Number);
+                return selectedYears >= min && selectedYears <= max;
+            }
+        }
+    
+        return false;
+    };
+    
+    const filteredJobs = jobs.filter(job =>
+        (filters.jobTitle ? job.jobTitle.toLowerCase().includes(filters.jobTitle.toLowerCase()) : true) &&
+        (filters.experience ? filterExperience(job.experienceRequired, filters.experience) : true) &&
+        (filters.location ? job.jobLocation.toLowerCase().includes(filters.location.toLowerCase()) : true)
+    );
+    
+    const indexOfLastJob = currentPage * jobsPerPage;
+    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+    const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
+    const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
+    const [saveJobMessage, setSaveJobMessage] = useState('');
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+        localStorage.setItem('currentPage', newPage);
+    };
+
     useEffect(() => {
         if (!token) {
             navigate('/login')
         }
     }, [token, navigate])
+
     useEffect(() => {
         fetchJobs();
     }, []);
+
     const fetchJobs = async () => {
         setLoading(true);
         try {
@@ -57,6 +105,7 @@ function SearchJobs() {
                 }
             );
             setJobs(response.data.reverse());
+          
 
         } catch (error) {
             if (error.response && error.response.status === 403) {
@@ -68,15 +117,20 @@ function SearchJobs() {
             } else {
                 setSaveJobMessage('Error while fetching jobs');
                 setTimeout(() => setSaveJobMessage(''), 2000);
+               
             }
         } finally {
             setLoading(false);
         }
+
+
     };
+
     const handleLogout = () => {
         navigate('/login');
         dispatch(logoutUser());
     };
+
     const handleSaveJob = async (jobId) => {
         setLoading(true);
 
@@ -91,6 +145,7 @@ function SearchJobs() {
 
         }).then(response => {
             fetchJobs();
+            setLoading(true);
         }).catch(error => {
 
             setSaveJobMessage('Error while saving job');
@@ -99,39 +154,85 @@ function SearchJobs() {
         }).finally(() => setLoading(false))
 
     };
-    const handleClick = (job) => {
-        navigate('/job-details', { state: { job } });
-    };
+
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        setFilters(prevFilters => ({
-            ...prevFilters,
+        const updatedFilters = {
+            ...filters,
             [name]: value
-        }));
+        };
+
+        setFilters(updatedFilters);
+        localStorage.setItem('filters', JSON.stringify(updatedFilters));
+        localStorage.setItem('currentPage', 1); // Reset page to 1 when filters change
         setCurrentPage(1);
     };
 
+
+
+    useEffect(() => {
+        const savedFilters = JSON.parse(localStorage.getItem('filters'));
+        const savedPage = parseInt(localStorage.getItem('currentPage'), 10);
+
+        if (savedFilters) {
+            setFilters(savedFilters);
+        }
+        if (savedPage) {
+            setCurrentPage(savedPage);
+        }
+
+    }, []);
+
+    const handleClearFilters = () => {
+        setFilters({ jobTitle: '', experience: '', location: '' });
+        localStorage.removeItem('filters');
+        localStorage.setItem('currentPage', 1);
+        setCurrentPage(1);
+    };
+
+    const handleRemoveSavedJob = (jobId) => {
+        setLoading(true);
+        axios.delete(`${config.api.baseURL}${config.api.jobSeeker.removeSavedJobs}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "ngrok-skip-browser-warning": "69420"
+            },
+            params: {
+                jobId: jobId,
+                email: email
+            }
+        })
+            .then(response => {
+                fetchJobs();
+            })
+            .catch(error => {
+                setErrorMessage('Error while removing the job');
+                setTimeout(() => {
+                    setErrorMessage('');
+                }, 2000);
+
+            }).finally(() => setLoading(false))
+    };
     
 
-        
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between pt-14 lg:pt-0">
             <NavBar />
             {jobs.length > 0 && (
-                <div className="flex flex-row pl-0 lg:pl-10 fixed  w-full ml-0 xl:ml-[20%] z-10  bg-[#f5faff]  mb-2 py-2 overflow-x-auto">
+                <div className="flex flex-row pl-0 lg:pl-10 fixed w-full ml-0 lg:ml-[20%] z-10 bg-[#f5faff] mb-2 py-2 overflow-x-auto">
                     <input
                         type="text"
                         name="jobTitle"
                         placeholder="Search by Job Title"
                         value={filters.jobTitle}
                         onChange={handleFilterChange}
-                        className="p-2 border rounded mr-2"
+                        className="p-2 border rounded mr-2 flex-shrink-0 min-w-[200px]"
                     />
                     <select
                         name="experience"
                         value={filters.experience}
                         onChange={handleFilterChange}
-                        className="p-2 border rounded mr-2"
+                        className="p-2 border rounded mr-2 flex-shrink-0 min-w-[150px]"
                     >
                         <option value="">Experience</option>
                         <option value="0-1 Years">0-1 Years</option>
@@ -144,9 +245,9 @@ function SearchJobs() {
                         name="location"
                         value={filters.location}
                         onChange={handleFilterChange}
-                        className="p-2 border rounded"
+                        className="p-2 border rounded mr-2 flex-shrink-0 min-w-[200px]"
                     >
-                        <option value="">Location</option>
+                       <option value="">Location</option>
                         <option value="Bangalore">Bangalore</option>
                         <option value="Hyderabad">Hyderabad</option>
                         <option value="Mumbai">Mumbai</option>
@@ -173,7 +274,15 @@ function SearchJobs() {
                         <option value="Vadodara">Vadodara</option>
                         <option value="Guwahati">Guwahati</option>
                     </select>
+                    <button
+                        onClick={handleClearFilters}
+                        className="p-2 bg-gray-700 text-white rounded flex-shrink-0 min-w-[150px]"
+                    >
+                        Clear Filters
+                    </button>
                 </div>
+
+
             )}
             {loading ? (
                 <div className="flex flex-col justify-center items-center h-screen">
@@ -181,7 +290,7 @@ function SearchJobs() {
                     <p className="mt-4 text-gray-900">Loading...</p>
                 </div>
             ) : (
-                <div className=" flex flex-grow flex-col  ml-0 xl:ml-[20%] pt-20 ">
+                <div className=" flex flex-grow flex-col  ml-0 lg:ml-[20%] pt-20 ">
                     {saveJobMessage && (<p className="text-red-500 fixed left-1/2 transform -translate-x-1/2 bg-white px-4 py-2">{saveJobMessage}</p>)}
 
                     {jobs.length > 0 && (
@@ -194,12 +303,12 @@ function SearchJobs() {
                             {currentJobs.map((job, index) => (
                                 <div key={index} className="bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
                                     <div className="mb-4 md:mb-0">
-                                        <p
-                                            onClick={() => handleClick(job)}
+                                        <Link
+                                            to={`/job-details/${Buffer.from(job.jobPostedBy).toString('base64')}/${job.jobId}?title=${job.jobTitle}`}
                                             className="text-lg font-semibold block  cursor-pointer md:text-left"
                                         >
                                             {job.jobTitle}
-                                        </p>
+                                        </Link>
                                         <p className="text-sm md:text-left">Company: {job.companyName}</p>
                                         <p className="text-sm md:text-left">Location: {
                                             job.jobLocation
@@ -214,14 +323,10 @@ function SearchJobs() {
                                         <p className="text-sm md:text-left">Posted on: {job.postedOn}</p>
                                     </div>
                                     <div className="flex flex-row">
-                                        <button
-                                            onClick={() => handleSaveJob(job.jobId)}
-                                            className={`text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 `}
-                                            disabled={job.saved}
-                                        >
-                                            {job.saved ? 'Saved' : 'Save'}
-                                        </button>
-                                        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => handleClick(job)}>{job.status === 'UN_REQUESTED' ? 'Request Referral' : 'Referral Requested'}</button>
+                                    <div className="h-10 w-10 p-2 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer me-2" onClick={job.saved ? () => handleRemoveSavedJob(job.jobId) : () =>  handleSaveJob(job.jobId)}>
+                                                <SBookmarkIcon saved={job.saved} />
+                                    </div>
+                                        <Link to={`/job-details/${Buffer.from(job.jobPostedBy).toString('base64')}/${job.jobId}?title=${job.jobTitle}`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >{job.status === 'UN_REQUESTED' ? 'Request Referral' : 'Referral Requested'}</Link>
                                     </div>
                                 </div>
                             ))}

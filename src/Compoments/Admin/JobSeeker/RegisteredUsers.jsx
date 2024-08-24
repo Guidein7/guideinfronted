@@ -132,6 +132,7 @@ function RegisteredUsers() {
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mobile No</th>
                     <th className="w-3/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mail ID</th>
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Subscribed User</th>
+                    <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">view  profile</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-700">
@@ -142,6 +143,8 @@ function RegisteredUsers() {
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.mobile}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.email}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.subscribed ? 'Yes' : 'No'}</td>
+                      <td className="w-2/12 py-3 px-6 border-b border-gray-200"><Link to={`/jsview-Profile/${item.name}/${item.email}`}>viewProfile</Link></td>
+
                     </tr>
                   ))}
                 </tbody>

@@ -1,7 +1,7 @@
-// src/config.js
+
 const config = {
   api: {
-    baseURL:  'https://guidein-backend-guidein-backend.lomaem.easypanel.host', //' https://burro-up-panda.ngrok-free.app', //'
+    baseURL: 'https://guidein-backend-guidein-backend.lomaem.easypanel.host', //'http://localhost:8080',//' https://burro-up-panda.ngrok-free.app', //'
     jobSeeker: {
       register:'/api/guidein/v1/auth/register',
       verification:'/api/guidein/v1/auth/register/otpvalidate',
@@ -71,8 +71,9 @@ const config = {
       disabledJobs:'/api/guidein/v1/admin/getDisabledJobs',
       enableJob:'/api/guidein/v1/admin/enablejob/',
       submitDeposit:'/api/guidein/v1/admin/submitDeposit',
-      adminReject:'/api/guidein/v1/admin/rejectReferralRequest'
-
+      adminReject:'/api/guidein/v1/admin/rejectReferralRequest',
+      getJobseekerProfile:'/api/guidein/v1/admin/getJobSeekerProfile/',
+      getJobPosterProfile:'/api/guidein/v1/admin/getJobPosterProfile/'
     }
 
   },

@@ -1,4 +1,4 @@
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { logoutEmployee } from '../slices/employeeLoginSlice';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,13 +6,12 @@ import { FaPlus } from "react-icons/fa6";
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
-import Select from 'react-select';
 import '../JobsPosted/JobsPosted.css'
 import config from '../../../config';
 import SideBar from '../SideBar/SideBar';
 import Pagination from './Pagenation';
 import Footer from '../SideBar/Footer';
-
+import JobPostForm from './JopPostForm';
 
 const cities = [
     { value: 'Others', label: 'Others' },
@@ -59,7 +58,6 @@ function JobsPosted() {
     const claim = decoded ? decoded.sub : null;
     const [editJobId, setEditJobId] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [formData, setFormData] = useState({
         jobTitle: '',
@@ -71,9 +69,9 @@ function JobsPosted() {
         experienceRequired: '',
         workMode: '',
         jobPostedBy: claim,
-        otherJobTitle: ''
+        otherJobTitle: '',
+        customCity: ''
     });
-    const [customCity, setCustomCity] = useState('');
     const [jobs, setJobs] = useState([]);
     const [profileComplete, setProfileComplete] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -83,70 +81,26 @@ function JobsPosted() {
     const [updateMessage, setUpdateMessage] = useState('');
     const [isTouched, setIsTouched] = useState({});
     const [errors, setErrors] = useState({});
-    const jobTitles = ["Others",
-        "Account Executive", "Account Manager", "Accountant", "Administrative Assistant",
-        "Advertising Manager", "Aerospace Engineer", "Agile Coach", "Analyst", "Android Developer",
-        "Animator", "Applications Developer", "Architect", "Art Director", "Assistant Manager",
-        "Assistant Product Manager", "Associate Professor", "Asset Manager", "Audit Manager",
-        "Back-End Developer", "Banking Analyst", "Benefits Coordinator", "Bioinformatics Specialist",
-        "Biomedical Engineer", "Blockchain Developer", "Brand Manager", "Business Analyst",
-        "Business Consultant", "Business Development Manager", "Business Intelligence Analyst",
-        "CAD Designer", "CEO (Chief Executive Officer)", "CFO (Chief Financial Officer)",
-        "Call Center Manager", "Campaign Manager", "Carpenter", "Case Manager", "Cashier",
-        "Chemical Engineer", "Chief Marketing Officer (CMO)", "Chief Operating Officer (COO)",
-        "Chief Technology Officer (CTO)", "Claims Adjuster", "Clinical Research Coordinator",
-        "Cloud Architect", "Compliance Officer", "Computer Programmer", "Construction Manager",
-        "Content Manager", "Content Writer", "Controller", "Copywriter", "Corporate Trainer",
-        "Creative Director", "Credit Analyst", "Customer Service Manager", "Cyber Security Analyst",
-        "Cytotechnologist", "Database Administrator", "Data Analyst", "Data Engineer", "Data Scientist",
-        "Design Engineer", "Designer", "Development Manager", "DevOps Engineer", "Dietitian",
-        "Director of Operations", "Director of Sales", "Distribution Manager", "Doctor",
-        "Electrical Engineer", "Elementary School Teacher", "Embedded Systems Engineer",
-        "Emergency Medical Technician (EMT)", "Employee Relations Specialist", "Email Marketing Manager",
-        "Engineer", "Environmental Engineer", "Environmental Scientist", "Epidemiologist",
-        "Event Coordinator", "Executive Assistant", "Facilities Manager", "Family Nurse Practitioner",
-        "Fashion Designer", "Finance Manager", "Financial Advisor", "Financial Analyst",
-        "Financial Planner", "Firefighter", "Fleet Manager", "Food Scientist", "Forensic Scientist",
-        "Front-End Developer", "Full Stack Developer", "Fundraiser", "Game Designer",
-        "Genetic Counselor", "Geneticist", "Geologist", "Graphic Designer", "Guidance Counselor",
-        "Hardware Engineer", "Health and Safety Manager", "Healthcare Administrator",
-        "Help Desk Technician", "High School Teacher", "Hospitality Manager", "Hotel Manager",
-        "HR Manager", "Human Resources Specialist", "Hydrologist", "Illustrator",
-        "Industrial Designer", "Industrial Engineer", "Information Security Analyst",
-        "Information Systems Manager", "Information Technology Manager", "Information Technology Specialist",
-        "Insurance Agent", "Instructional Designer", "Interior Designer", "Investment Banker",
-        "IT Consultant", "IT Manager", "Java Developer", "Journalist", "Junior Accountant",
-        "Laboratory Technician", "Landscape Architect", "Lawyer", "Librarian", "Machine Learning Engineer",
-        "Maintenance Manager", "Management Consultant", "Manufacturing Engineer", "Marketing Coordinator",
-        "Marketing Manager", "Marketing Specialist", "Mathematician", "Mechanical Engineer",
-        "Media Planner", "Medical Assistant", "Medical Laboratory Technician", "Medical Technologist",
-        "Mental Health Counselor", "Microbiologist", "Mobile Developer", "Mortgage Broker",
-        "Music Producer", "Network Administrator", "Network Engineer", "Neuroscientist",
-        "Nurse Practitioner", "Nursing Assistant", "Nutritionist", "Occupational Therapist",
-        "Office Manager", "Operations Analyst", "Operations Manager", "Pediatrician",
-        "Pharmacist", "Pharmacy Technician", "Physical Therapist", "Physician", "Physicist",
-        "Portfolio Manager", "Principal", "Product Manager", "Product Owner", "Professor",
-        "Project Coordinator", "Project Manager", "Property Manager", "Psychiatrist",
-        "Psychologist", "Public Relations Manager", "Public Relations Specialist",
-        "Purchasing Manager", "QA Engineer", "QA Manager", "Quality Assurance Analyst",
-        "Recruiter", "Registered Nurse", "Research Analyst", "Research Scientist", "Retail Manager",
-        "Risk Manager", "Sales Consultant", "Sales Director", "Sales Manager", "Sales Representative",
-        "Scrum Master", "Security Analyst", "SEO Specialist", "Social Media Manager",
-        "Software Developer", "Software Engineer", "Solutions Architect", "Speech Therapist",
-        "Statistician", "Store Manager", "Strategic Planner", "Structural Engineer",
-        "Supply Chain Manager", "Surgeon", "Surveyor", "System Administrator", "Systems Analyst",
-        "Tax Advisor", "Teacher", "Technical Writer", "Technology Consultant", "Therapist",
-        "Training Manager", "Translator", "Treasury Analyst", "UI Developer", "UI/UX Designer",
-        "Underwriter", "User Experience Researcher", "Veterinarian", "Video Game Designer",
-        "Warehouse Manager", "Web Designer", "Web Developer", "Writer"
-    ];
 
     const jobTitleRef = useRef(null);
+    const otherJobTitleRef = useRef(null);
+    const companyNameRef = useRef(null);
+    const jobLocationRef = useRef(null);
+    const customCityRef = useRef(null);
+    const jobTypeRef = useRef(null);
+    const workModeRef = useRef(null);
+    const jobDescriptionLinkRef = useRef(null);
+    const educationLevelRef = useRef(null);
+    const experienceRequiredRef = useRef(null);
 
+   
     useEffect(() => {
         fetchJobs();
         fetchProfile();
     }, []);
+
+
+
     const fetchProfile = () => {
         setLoading(true);
         axios.get(`${config.api.baseURL}${config.api.jobPoster.getProfile}${claim}`, {
@@ -192,6 +146,7 @@ function JobsPosted() {
             },
         }).then(response => {
             setJobs(response.data.reverse())
+           
         }).catch(error => {
             if (error.response.status === 403) {
                 setErrorMessage('session Expired')
@@ -237,72 +192,27 @@ function JobsPosted() {
         }
     };
     const handleEdit = (jobId) => {
-        setIsEditing(true)
-        setEditJobId(jobId)
+        setIsEditing(true);
+        setEditJobId(jobId);
         const jobToEdit = jobs.find(job => job.jobId === jobId);
+        const jobLocationArray = jobToEdit.jobLocation.split(', ').map(city => city.trim());
+        const citiesValues = cities.map(city => city.value);
+        const customCities = jobLocationArray.filter(city => !citiesValues.includes(city));
+        if (customCities.length > 0) {
+            jobToEdit.customCity = customCities.join(', ');
+            jobToEdit.jobLocation = jobLocationArray
+                .filter(city => !customCities.includes(city))
+                .concat('Others')
+                .join(', ');
+        } else {
+            jobToEdit.customCity = '';
+        }
         setFormData({ ...jobToEdit });
         setIsFormOpen(true);
     };
 
-    const cancel = () => {
-        toggleForm();
-        setIsEditing(false);
-    }
-
-    const handleChange = (e) => {
-        const { id, value } = e.target;
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [id]: value
-        }));
-    };
-    const handleCityChange = (selectedOptions) => {
-        const selectedCities = selectedOptions ? selectedOptions.map(option => option.value) : [];
-        if (selectedCities.includes('Others')) {
-            setCustomCity('');
-            setFormData({
-                ...formData,
-                jobLocation: selectedCities.filter(city => city !== 'Others').join(', ') + ', Others'
-            });
-        } else {
-            setFormData({
-                ...formData,
-                jobLocation: selectedCities.join(', ')
-            });
-            setCustomCity(''); 
-        }
-    };
-
-    const handleCustomCityChange = (e) => {
-        const value = e.target.value;
-        setCustomCity(value);
-    };
-
-    const handleCustomCityBlur = (e) => {
-        const value = e.target.value;
-        if (formData.jobLocation.includes('Others')) {
-            setFormData({
-                ...formData,
-                jobLocation: formData.jobLocation.replace(/Others,? ?/g, '') + ', Others, ' + value
-            });
-        } else {
-            setFormData({
-                ...formData,
-                jobLocation: value
-            });
-        }
-    };
-
-    const handleJobTitleChange = (selectedOption) => {
-        if (selectedOption.value === 'Others') {
-            setFormData(prevFormData => ({ ...prevFormData, jobTitle: 'Others', otherJobTitle: '' }));
-        } else {
-            setFormData(prevFormData => ({ ...prevFormData, jobTitle: selectedOption.value, otherJobTitle: '' }));
-        }
-        
-    };
-    
     const validate = () => {
+      
         let newErrors = {};
         if (!formData.jobTitle) {
             newErrors.jobTitle = 'Job title is required';
@@ -316,9 +226,9 @@ function JobsPosted() {
         if (!formData.jobLocation) {
             newErrors.jobLocation = 'Job location is required';
         }
-        // if (formData.jobLocation.includes('Others') && !formData.customCity) {
-        //     newErrors.customCity = 'Please specify the city';
-        // }
+        if (formData.jobLocation.includes('Others') && !formData.customCity) {
+            newErrors.customCity = 'Please specify the city';
+        }
         if (!formData.jobType) {
             newErrors.jobType = 'Job type is required';
         }
@@ -339,22 +249,42 @@ function JobsPosted() {
     };
 
     const scrollToFirstError = (errorFields) => {
-        if (errorFields.jobTitle && jobTitleRef.current) {
-          jobTitleRef.current.scrollIntoView({ behavior: 'smooth' });
+        const refs = {
+            jobTitle: jobTitleRef,
+            otherJobTitle: otherJobTitleRef,
+            companyName: companyNameRef,
+            jobLocation: jobLocationRef,
+            customCity: customCityRef,
+            jobType: jobTypeRef,
+            workMode: workModeRef,
+            jobDescriptionLink: jobDescriptionLinkRef,
+            educationLevel: educationLevelRef,
+            experienceRequired: experienceRequiredRef,
+        };
+        for (const field in errorFields) {
+            if (refs[field] && refs[field].current) {
+                refs[field].current.scrollIntoView({ behavior: 'smooth' });
+                break;
+            }
         }
-      };
+    };
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const validationErrors =  validate();
+       
+        const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             if (isEditing) {
-                const updateddata = { ...formData, jobId: editJobId };
+                const updateDdata = { ...formData, jobId: editJobId };
                 if (formData.jobTitle === 'Others') {
-                    updateddata.jobTitle = formData.otherJobTitle;
+                    updateDdata.jobTitle = formData.otherJobTitle;
+                }
+                if (formData.jobLocation.includes('Others')) {
+                    const customCities = formData.customCity.split(',').map(city => city.trim());
+                    updateDdata.jobLocation = formData.jobLocation.replace('Others', customCities.join(', '));
                 }
                 setLoading(true);
-                axios.put(`${config.api.baseURL}${config.api.jobPoster.updateJob}`, JSON.stringify(updateddata), {
+                axios.put(`${config.api.baseURL}${config.api.jobPoster.updateJob}`, JSON.stringify(updateDdata), {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`
@@ -382,13 +312,17 @@ function JobsPosted() {
                 }).finally(() => setLoading(false));
 
             } else {
-
-                const updatedformData = { ...formData };
+                const updatedFormData = { ...formData };
                 if (formData.jobTitle === 'Others') {
-                    updatedformData.jobTitle = formData.otherJobTitle;
+                    updatedFormData.jobTitle = formData.otherJobTitle;
                 }
+                if (formData.jobLocation.includes('Others')) {
+                    const customCities = formData.customCity.split(',').map(city => city.trim());
+                    updatedFormData.jobLocation = formData.jobLocation.replace('Others', customCities.join(', '));
+                }
+                
                 setLoading(true);
-                axios.post(`${config.api.baseURL}${config.api.jobPoster.saveJob}`, JSON.stringify(updatedformData), {
+                axios.post(`${config.api.baseURL}${config.api.jobPoster.saveJob}`, JSON.stringify(updatedFormData), {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`
@@ -434,7 +368,9 @@ function JobsPosted() {
                 experienceRequired: true,
             });
             scrollToFirstError(validationErrors);
+           
         }
+
     };
 
     const handleDisableEnable = async (jobId, enabled) => {
@@ -514,8 +450,7 @@ function JobsPosted() {
     const indexOfLastJob = currentPage * jobsPerPage;
     const indexOfFirstJob = indexOfLastJob - jobsPerPage;
     const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
-
-
+    const totalPages = Math.ceil(jobs.length / jobsPerPage);
     return (
         <div className='flex flex-col min-h-screen bg-[#f5faff]'>
             <SideBar />
@@ -532,8 +467,7 @@ function JobsPosted() {
                     </p>
 
                 )}
-
-                <div className='flex justify-between items-center mb-2 '>
+                <div className='flex justify-between items-center mb-2  '>
                     <h1 className='text-xl font-semibold'>Jobs Posted</h1>
                     <button
                         className='bg-blue-700 text-white px-4 py-2 rounded flex'
@@ -547,210 +481,14 @@ function JobsPosted() {
                     <div className='modal-overlay'>
                         <div className='modal-content'>
                             <h2 className='text-2xl font-semibold mb-4'>{isEditing ? 'Edit Job' : 'Post a New Job'}</h2>
-                            <form onSubmit={handleFormSubmit} >
-                                <div className='mb-4' ref={jobTitleRef}>
-                                    <label htmlFor="jobTitle">Job Title<span className='text-red-500'>*</span></label>
-                                    <Select
-                                        id="jobTitle"
-                                        options={jobTitles.map(title => ({ value: title, label: title }))}
-                                        onChange={handleJobTitleChange}
-                                        value={{ value: formData.jobTitle, label: formData.jobTitle }}
-                                        required
-                                    />
-                                    {isTouched.jobTitle && errors.jobTitle && <span style={{ color: 'red' }}>{errors.jobTitle}</span>}
-
-                                </div>
-
-                                {formData.jobTitle === 'Others' && (
-                                    <div className='mb-4'>
-                                        <label htmlFor="otherJobTitle">Please Specify<span className='text-red-500'>*</span></label>
-                                        <input
-                                            type="text"
-                                            id="otherJobTitle"
-                                            placeholder="Enter  job title"
-                                            value={formData.otherJobTitle}
-                                            onChange={handleChange}
-                                            className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                            required
-                                        />
-                                        {isTouched.otherJobTitle && errors.otherJobTitle && <span style={{ color: 'red' }}>{errors.otherJobTitle}</span>}
-
-                                    </div>
-                                )}
-
-                                <div className='mb-4'>
-                                    <label htmlFor='companyName' className='block text-sm font-medium text-gray-700'>
-                                        Company Name<span className='text-red-500'>*</span>
-                                    </label>
-                                    <input
-                                        type='text'
-                                        id='companyName'
-                                        value={formData.companyName}
-                                        onChange={handleChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        readOnly
-                                        required
-                                    />
-                                    {isTouched.companyName && errors.companyName && <span style={{ color: 'red' }}>{errors.companyName}</span>}
-
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor='jobLocation' className='block text-sm font-medium text-gray-700'>
-                                        Job Location<span className='text-red-500'>*</span>
-                                    </label>
-                                    <Select
-                                        isMulti
-                                        id='jobLocation'
-                                        options={cities}
-                                        value={cities.filter(city => formData.jobLocation.split(', ').includes(city.value))}
-                                        onChange={handleCityChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        required
-                                    />
-                                    {isTouched.jobLocation && errors.jobLocation && <span style={{ color: 'red' }}>{errors.jobLocation}</span>}
-
-                                    {formData.jobLocation.includes('Others') && (
-                                        <div className='mt-4'>
-                                            <label htmlFor='customCity' className='block text-sm font-medium text-gray-700'>
-                                                Please Specify the City<span className='text-red-500'>*</span>
-                                            </label>
-                                            <input
-                                                type='text'
-                                                id='customCity'
-                                                placeholder='Enter city name'
-                                                value={customCity}
-                                                onChange={handleCustomCityChange}
-                                                onBlur={handleCustomCityBlur}
-                                                className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                                required
-                                            />
-                                            {/* {isTouched.customCity && errors.customCity && <span style={{ color: 'red' }}>{errors.customCity}</span>} */}
-
-                                        </div>
-                                    )}
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor='jobType' className='block text-sm font-medium text-gray-700'>
-                                        Job Type<span className='text-red-500'>*</span>
-                                    </label>
-                                    <select
-                                        id='jobType'
-                                        value={formData.jobType}
-                                        onChange={handleChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        required
-                                    >
-                                        <option value=''>Select</option>
-                                        <option value='Full-time'>Full-time</option>
-                                        <option value='Part-time'>Part-time</option>
-                                        <option value='Contract'>Contract</option>
-                                        <option value='Internship'>Internship</option>
-                                        <option value='Freelance'>Freelance</option>
-                                        <option value='Remote'>Remote</option>
-                                        <option value='Consultant'>Consultant</option>
-                                        <option value='Apprenticeship'>Apprenticeship</option>
-                                    </select>
-                                    {isTouched.jobType && errors.jobType && <span style={{ color: 'red' }}>{errors.jobType}</span>}
-
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor='workMode' className='block text-sm font-medium text-gray-700'>
-                                        Work Mode<span className='text-red-500'>*</span>
-                                    </label>
-                                    <select
-                                        id='workMode'
-                                        value={formData.workMode}
-                                        onChange={handleChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        required
-                                    >
-                                        <option value=''>Select</option>
-                                        <option value='hybrid'>Hybrid</option>
-                                        <option value='onsite'>Onsite</option>
-                                        <option value='remote'>Remote</option>
-                                    </select>
-                                    {isTouched.workMode && errors.workMode && <span style={{ color: 'red' }}>{errors.workMode}</span>}
-
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor='jobDescriptionLink' className='block text-sm font-medium text-gray-700'>
-                                        Job Description Link<span className='text-red-500'>*</span>
-                                    </label>
-                                    <input
-                                        type='text'
-                                        id='jobDescriptionLink'
-                                        value={formData.jobDescriptionLink}
-                                        onChange={handleChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        required
-                                    />
-                                    {isTouched.jobDescriptionLink && errors.jobDescriptionLink && <span style={{ color: 'red' }}>{errors.jobDescriptionLink}</span>}
-
-                                </div>
-                                <h2 className='text-xl font-semibold mb-4'>Requirements</h2>
-                                <div className='mb-4'>
-                                    <label htmlFor='educationLevel' className='block text-sm font-medium text-gray-700'>
-                                        Education Level<span className='text-red-500'>*</span>
-                                    </label>
-                                    <select
-                                        id='educationLevel'
-                                        value={formData.educationLevel}
-                                        onChange={handleChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        required
-                                    >
-                                        <option value=''>Select</option>
-                                        <option value='High School'>High School</option>
-                                        <option value='Associate Degree'>Associate Degree</option>
-                                        <option value="bachelor's degree">Bachelor's Degree</option>
-                                        <option value="Master's Degree">Master's Degree</option>
-                                        <option value='Doctorate'>Doctorate</option>
-                                        <option value='Diploma/Certification'>Diploma/Certification</option>
-                                    </select>
-                                    {isTouched.educationLevel && errors.educationLevel && <span style={{ color: 'red' }}>{errors.educationLevel}</span>}
-
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor='experienceRequired' className='block text-sm font-medium text-gray-700'>
-                                        Experience Required<span className='text-red-500'>*</span>
-                                    </label>
-                                    <select
-                                        id='experienceRequired'
-                                        value={formData.experienceRequired}
-                                        onChange={handleChange}
-                                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                                        required
-                                    >
-                                        <option value=''>Select</option>
-                                        <option value='0-1 years'>0-1 years</option>
-                                        <option value='1-3 years'>1-3 years</option>
-                                        <option value='3-5 years'>3-5 years</option>
-                                        <option value='5-7 years'>5-7 years</option>
-                                        <option value='7+ years'>7+ years</option>
-                                    </select>
-                                    {isTouched.experienceRequired && errors.experienceRequired && <span style={{ color: 'red' }}>{errors.experienceRequired}</span>}
-
-                                </div>
-                                <div className='flex justify-end'>
-                                    <button
-                                        type='button'
-                                        onClick={cancel}
-                                        className='text-white bg-red-700 hover:bg-red-800 px-4 py-2 rounded-md shadow-md mr-2'
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type='submit'
-                                        className='text-white bg-green-700 hover:bg-green-800 px-4 py-2 rounded-md shadow-md'
-                                    >
-                                        {isEditing ? 'Update Job' : 'Post Job'}
-                                    </button>
-                                </div>
-                            </form>
+                           <JobPostForm formData={formData} setFormData={setFormData} handleFormSubmit={handleFormSubmit} errors={errors} setErrors={setErrors}
+                                isEditing={isEditing} setIsEditing={setIsEditing} toggleForm={toggleForm} handleEdit={handleEdit}  isTouched={isTouched} setIsTouched={setIsTouched}
+                                jobTitleRef={jobTitleRef} otherJobTitleRef={otherJobTitleRef} companyNameRef={companyNameRef} jobLocationRef={jobLocationRef} customCityRef={customCityRef}
+                                jobTypeRef={jobTypeRef} workModeRef={workModeRef} jobDescriptionLinkRef={jobDescriptionLinkRef} educationLevelRef={educationLevelRef} experienceRequiredRef={experienceRequiredRef}
+                           />
                         </div>
                     </div>
-                )
-                }
+                )}
                 <div className='flex flex-col flex-grow'>
                     {loading ? (
                         <div className="flex flex-col justify-center items-center h-full">
@@ -774,6 +512,7 @@ function JobsPosted() {
                                             } {`(${job.workMode})`}</p>
                                             <p className='text-sm'>Experience: {job.experienceRequired}</p>
                                             <p className='text-sm'>Posted on: {job.postedOn}</p>
+                                            <a className='text-sm underline' href={job.jobDescriptionLink || "#"} target="_blank"  rel="noopener noreferrer">JobLink</a>
                                             {job.disabledByAdmin && (<p className='text-xsm text-red-500'>This job was disabled by admin</p>)}
                                         </div>
                                         <div className='flex items-center space-x-2'>
@@ -792,17 +531,13 @@ function JobsPosted() {
                         </div>
                     )}
                 </div>
-
-
             </div >
-            {currentJobs.length > 10 && (
-                <Pagination
-                    totalJobs={jobs.length}
-                    jobsPerPage={jobsPerPage}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                />
-            )}
+            <Pagination
+                totalJobs={jobs.length}
+                jobsPerPage={jobsPerPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+            />
             <Footer />
         </div >
     );

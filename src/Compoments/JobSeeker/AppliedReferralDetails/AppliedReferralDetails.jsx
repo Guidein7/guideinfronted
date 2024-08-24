@@ -126,7 +126,7 @@ function AppliedRefeReferralDetails() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className='flex-grow ml-0 xl:ml-[20%] pt-16 lg:pt-5'>
+            <div className='flex-grow ml-0 lg:ml-[20%] pt-16 lg:pt-5'>
                 {errorMessage && <p className='text-red-500 fixed left-1/2 px-4 py-2 bg-white transform -translate-x-1/2'>{errorMessage}</p>}
                 {loading ? (<div className="flex flex-col justify-center items-center h-screen">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>

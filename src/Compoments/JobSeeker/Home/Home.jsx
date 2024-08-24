@@ -8,6 +8,7 @@ import { FaArrowRight } from "react-icons/fa";
 import config from '../../../config';
 import { logoutUser } from '../Slices/loginSlice';
 import JSFooter from '../NavBar/JSFooter';
+import { Buffer } from 'buffer';
 
 function Home() {
     const log = useSelector(state => state.log);
@@ -45,6 +46,8 @@ function Home() {
             }
 
         }).then(response => {
+
+           
             if (response.status === 200) {
                 setIsSubscribed(true)
             }
@@ -53,6 +56,7 @@ function Home() {
             }
         }).catch(error => {
             if (error.response.status === 403) {
+                
                 setErrorMessage('Session Expired');
                 setTimeout(() => {
                     setErrorMessage('')
@@ -79,7 +83,9 @@ function Home() {
         }).then(response => {
             const lastFourItems = response.data.slice(-3);
             setJobs(lastFourItems.reverse());
+          
         }).catch(error => {
+         
             if (error.response.status === 403) {
                 setErrorMessage('Session Expired');
                 setTimeout(() => {
@@ -97,14 +103,14 @@ function Home() {
     };
 
     const handleClick = (job) => {
-        navigate('/job-details', { state: { job } });
+        navigate(`/job-details/${Buffer.from(job.jobPostedBy).toString('base64')}/${job.jobId}?title=${job.jobTitle}`)  
     };
 
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className=' flex flex-col flex-grow  ml-0 xl:ml-[20%] pt-20 lg:pt-5'>
+            <div className=' flex flex-col flex-grow  ml-0 lg:ml-[20%] pt-20 lg:pt-5'>
                 {loading ? (
                     <div className="flex flex-col justify-center items-center  h-screen">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>

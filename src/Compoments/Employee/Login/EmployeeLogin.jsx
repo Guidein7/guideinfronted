@@ -3,24 +3,72 @@ import GuideinLogo from '../../../assets/GuideinLogo.png';
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useForm } from "react-hook-form";
 import { employeeLogin } from "../slices/employeeLoginSlice";
 import EFooter from "../LandingPage/Footer";
 
 const EmployeeLogin = () => {
-    const [type, setType] = useState('password');
-    const [buttonName, setButtonName] = useState('Show');
-    const [errors, setErrors] = useState({});
-    const [inputValue, setInputValue] = useState('');
-    const [password, setPassword] = useState('');
-    const dispatch = useDispatch();
     const log = useSelector(state => state.emplog);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [loger, setLoger] = useState('');
     const [isVerifedUser, setIsVerifiedUser] = useState(false);
     const [errorMessage, setErrorMessage] = useState('')
+    const [showValue, setShowValue] = useState(false)
     const modalRef = useRef(null);
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
+
+    const checkEmailMobile = (value) => { 
+        if (/^\+?\d+$/.test(value)){ 
+            return true; 
+        } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/.test(value)){ 
+            return true;
+        } 
+        return false; 
+    } 
+
+    const submitForm = async (data) => {
+        let { password, emailmobile } = data;
+        let subData = { password, role: "JOB_POSTER" };
+        if (/^\+?\d+$/.test(emailmobile)) {
+            if (!emailmobile.startsWith('+91')) {
+                emailmobile = emailmobile.startsWith('+') ? emailmobile : `+91${emailmobile}`;
+            }
+            subData = {...subData, mobile: emailmobile, email: ''};
+        } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailmobile)) {
+            subData = {...subData, email: emailmobile, mobile: ''};
+        }
+        else {
+            setErrorMessage('invalid input')
+            setTimeout(() => {
+                setErrorMessage('')
+            }, 2000);
+            return;
+        }
+
+       
+        try {
+            const action = employeeLogin(subData);
+            const resultAction = await dispatch(action);
+            const response = resultAction.payload;
+            if (response.status === 200) {
+                navigate('/employee-home');
+            }
+            else if (response.status === 403) {
+                setLoger("Invalid email or password");
+            }
+            else if (response.status === 401) {
+                setIsVerifiedUser(true);
+            }
+         
+        } catch (error) {
+            setErrorMessage('Error while submitting your request. Please try again.');
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+        }
+    }
     if (log.isLoading) {
         return (
             <div className="flex flex-col justify-center items-center h-screen">
@@ -29,74 +77,6 @@ const EmployeeLogin = () => {
             </div>
         );
     }
-
-    const isValidEmail = (value) => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(value);
-    };
-
-    const isValidMobile = (value) => {
-        const mobilePattern = /^\+?[1-9]\d{1,14}$/;
-        return mobilePattern.test(value);
-    };
-
-    const validateForm = () => {
-        const errors = {};
-        if (!inputValue.trim()) {
-            errors.inputValue = 'Email or Mobile number is required';
-        } else if (!isValidEmail(inputValue) && !isValidMobile(inputValue)) {
-            errors.inputValue = 'Invalid email or mobile number format';
-        }
-        if (!password.trim()) {
-            errors.password = 'Password is required';
-        }
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const passwordView = (e) => {
-        e.preventDefault();
-        setType(type === 'password' ? 'text' : 'password');
-        setButtonName(type === 'password' ? 'Hide' : 'Show');
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            const role = "JOB_POSTER";
-            let formData;
-
-            if (isValidEmail(inputValue)) {
-                formData = { email: inputValue, mobile: '', password, role };
-            } else {
-                const formattedMobile = inputValue.startsWith('+91') ? inputValue : `+91${inputValue}`;
-                formData = { email: '', mobile: formattedMobile, password, role };
-            }
-
-
-            try {
-                const action = employeeLogin(formData);
-                const resultAction = await dispatch(action);
-                const response = resultAction.payload;
-
-                if (response.status === 200) {
-                    navigate('/employee-home');
-                }
-                else if (response.status === 403) {
-                    setLoger("Invalid email or password");
-                }
-                else if (response.status === 401) {
-                    setIsVerifiedUser(true);
-                }
-            } catch (error) {
-                setErrorMessage('Error while submitting your request. Please try again.');
-                setTimeout(() => {
-                    setErrorMessage('');
-                }, 3000);
-               
-            }
-        }
-    };
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <nav className="bg-[#f8f9fa] py-4">
@@ -108,49 +88,45 @@ const EmployeeLogin = () => {
                     </div>
                 </div>
             </nav>
-            {errorMessage && (<p>{errorMessage}</p>)}
+            {errorMessage && (<p className="text-red-500 text-center">{errorMessage}</p>)}
             <div className="w-full max-w-xs lg:max-w-lg mx-auto">
-                <form className="border border-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+                <form className="border border-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit(submitForm)}>
                     <h1 className="font-bold text-center text-2xl mb-3"> Employee Sign in</h1>
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2" htmlFor="inputValue">
                             Email or Mobile
                         </label>
                         <input
-                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="inputValue"
-                            name="inputValue"
-                            onChange={(e) => setInputValue(e.target.value)}
                             type="text"
+                            {...register("emailmobile", { required: true,validate: ({checkEmailMobile: (value) => checkEmailMobile(value) || 'invalid input field '}) })}
+                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="Enter Email or Mobile"
                         />
-                        {errors.inputValue && (
-                            <p className="text-red-500 text-xs italic">{errors.inputValue}</p>
-                        )}
+                        {errors.emailmobile?.type === "required" && (<p className="text-sm text-red-500">Email or Mobile is required</p>)}
+                        {<p className="text-red-500">{errors.emailmobile?.message}</p>}
                     </div>
-                    <div className="relative mb-2">
+                    <div className="mb-2">
                         <label className="block text-gray-700  mb-2" htmlFor="password">
                             Password
                         </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                            id="password"
-                            name="password"
-                            onChange={(e) => setPassword(e.target.value)}
-                            type={type}
-                            placeholder="Password"
-                            autoComplete="false"
-                        />
-                        <p onClick={passwordView} className="absolute top-0 right-0 mt-8 mr-2 px-3 py-2 text-blue-700 cursor-pointer">
-                            {buttonName}
-                        </p>
-                        {errors.password && (
-                            <p className="text-red-500 text-xs italic">{errors.password}</p>
-                        )}
+                        <div className="relative">
+                            <input
+                                type={showValue ? 'text' : 'password'}
+                                {...register('password', { required: true })}
+                                className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder="Password"
+                                autoComplete="off"
+
+                            />
+                            <p onClick={() => setShowValue(!showValue)} className="absolute top-2     right-2  text-blue-700 cursor-pointer">
+                                {showValue ? 'hide' : 'show'}
+                            </p>
+                        </div>
+                        {errors.password?.type === 'required' && (<p className="text-sm text-red-500">Password is required</p>)}
                     </div>
-                    {/* <Link to='/employee-forgot-password' className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mb-6">
+                    <Link to='/employee-forgot-password' className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 mb-6">
                         Forgot Password?
-                    </Link> */}
+                    </Link>
                     <div>
                         <p className="text-red-500">{loger}</p>
                     </div>

@@ -12,12 +12,32 @@ function Verification() {
     const [otpMessage, setOtpMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('');
     const location = useLocation();
-    const { email, mobile,sessionUUID } = location.state;
+    const { email, mobile, sessionUUID } = location.state;
     const navigate = useNavigate();
+    const [Loading, setLoading] = useState(false);
+
+    if (Loading) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+                <p className="mt-4 text-gray-900">Loading...</p>
+            </div>
+        );
+    }
+
+
+    const getLastFourDigits = (mobileNumber) => {
+        return mobileNumber.slice(-4);
+    };
+
+    const lastFourDigits = getLastFourDigits(mobile);
+
+
+
     const resendVerification = () => {
         const role = "JOB_SEEKER";
         const formData = { email, mobile, role }
-
+        setLoading(true);
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.resendOtp}`, formData).then(response => {
             if (response.status === 200) {
                 setOtpMessage('Otp sent successfully');
@@ -31,7 +51,7 @@ function Verification() {
                 setOtpMessage('');
             }, 2000)
 
-        })
+        }).finally(() => setLoading(false));
     }
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,7 +63,9 @@ function Verification() {
         }
         setErrorMessage('');
         const role = "JOB_SEEKER"
-        const verifyData = { email, mobile, otp, role,sessionUUID };
+        const verifyData = { email, mobile, otp, role, sessionUUID };
+
+        setLoading(true)
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.verification}`, verifyData)
             .then(response => {
                 if (response.status === 200) {
@@ -52,19 +74,21 @@ function Verification() {
                         navigate('/login');
                     }, 2000); // Navigate to login page after 2 seconds
                 }
-                if(error.response.status === 401){
+                if (error.response.status === 401) {
                     setError('invalid otp')
-                } 
+                }
             })
             .catch(error => {
-
-                if(error.response.status === 401){
+                if (error.response.status === 401) {
                     setError('invalid otp')
+                    setTimeout(() => {
+                        setError('')
+                    }, 2000)
                 }
-                else{
-                setError("An error occurred while verifying the OTP. Please try again.");
+                else {
+                    setError("An error occurred while verifying the OTP. Please try again.");
                 }
-            });
+            }).finally(() => setLoading(false))
     };
     return (
         <div className="bg-[#f5faff] min-h-screen  flex flex-col justify-between">
@@ -81,11 +105,13 @@ function Verification() {
             {otpMessage && (
                 <p className='text-green-400 text-center'>{otpMessage}</p>
             )}
-            <div className="w-full max-w-sm mx-auto flex align-center">
+            <div className="w-full max-w-sm lg:max-w-md mx-auto flex align-center">
 
 
-                <form className="bg-white  shadow-md align-center rounded p-8 w-80 lg:w-full mx-auto mb-4" onSubmit={handleSubmit}>
+                <form className="bg-white  shadow-md align-center rounded p-6 w-80 lg:w-full mx-auto mb-4" onSubmit={handleSubmit}>
                     <h1 className='font-bold text-center mb-6'>Verification </h1>
+                    <p className='text-sm mb-5'>We have sent an OTP to your mobile number xxxxxx<span>{lastFourDigits}</span>.</p>
+
                     <div className="mb-4">
 
                         <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="otp" name="otp" value={otp} onChange={(e) => setOtp(e.target.value)} type="text" placeholder="Enter OTP" maxLength={6} />
@@ -100,11 +126,11 @@ function Verification() {
                             Resend OTP
                         </button>
                     </div>
-                    {error && <div className="text-red-500">{error}</div>}
-                    {success && <div className="text-green-500">{success}</div>}
+                    {error && <div className="text-red-500 text-center">{error}</div>}
+                    {success && <div className="text-green-500 text-center">{success}</div>}
                 </form>
             </div>
-           <JFooter/>
+            <JFooter />
         </div>
     );
 }

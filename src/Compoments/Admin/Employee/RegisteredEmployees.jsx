@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import config from '../../../config';
 import AdminNavBar from '../NavBar/AdminNavBar';
+import { Link } from 'react-router-dom';
 
 function RegisteredEmployees() {
   const log = useSelector(state => state.adminlog);
@@ -82,6 +83,7 @@ function RegisteredEmployees() {
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mobile No</th>
                     <th className="w-3/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mail ID</th>
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">No Of Jobs Posted</th>
+                    <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">profile</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-700">
@@ -92,6 +94,7 @@ function RegisteredEmployees() {
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.mobile}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.email}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.totalJobPosted}</td>
+                      <td className="w-2/12 py-3 px-6 border-b border-gray-200"><Link to={`/jpview-profile/${item.name}/${item.email}`}>view profile</Link></td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import GuideinLogo from '../../../assets/GuideinLogo.png';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import GuideinLogo from '../../../assets/GuideinLogo.png'
 import axios from 'axios';
 import config from '../../../config';
 import EFooter from '../LandingPage/Footer';
@@ -8,16 +8,33 @@ import EFooter from '../LandingPage/Footer';
 function EmployeeVerification() {
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const [otpMessage, setOtpMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('');
     const location = useLocation();
-    const { email, mobile,sessionUUID } = location.state;
+    const { email, mobile } = location.state;
     const navigate = useNavigate();
+    const [successMessage, setSuccessMessage] = useState('')
+    const [Loading, setLoading] = useState(false);
+
+    if (Loading) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+                <p className="mt-4 text-gray-900">Loading...</p>
+            </div>
+        );
+    }
+
+
+    const getLastFourDigits = (mobileNumber) => {
+        return mobileNumber.slice(-4);
+    };
+
+    const lastFourDigits = getLastFourDigits(mobile);
     const resendVerification = () => {
         const role = "JOB_POSTER";
         const formData = { email, mobile, role }
-
+        setLoading(true);
         axios.post(`${config.api.baseURL}${config.api.jobPoster.resendOtp}`, formData).then(response => {
             if (response.status === 200) {
                 setOtpMessage('Otp sent successfully');
@@ -31,8 +48,9 @@ function EmployeeVerification() {
                 setOtpMessage('');
             }, 2000)
 
-        })
+        }).finally(() => setLoading(false));
     }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setError("");
@@ -43,21 +61,32 @@ function EmployeeVerification() {
         }
         setErrorMessage('');
         const role = "JOB_POSTER"
-        const verifyData = { email, mobile, otp, role,sessionUUID };
+        const verifyData = { email, mobile, otp, role };
+
+        setLoading(true)
         axios.post(`${config.api.baseURL}${config.api.jobPoster.verification}`, verifyData)
             .then(response => {
                 if (response.status === 200) {
-                    setSuccess("Successfully registered!");
+                    setSuccessMessage("Successfully verified");
                     setTimeout(() => {
-                        navigate('/employee-login');
-                    }, 2000); // Navigate to login page after 2 seconds
-                } else {
-                    setError("Invalid OTP. Please try again.");
+                        setSuccessMessage('');
+                        navigate('/employee-login')
+                    }, 2000);
                 }
+
             })
             .catch(error => {
-                setError("An error occurred while verifying the OTP. Please try again.");
-            });
+
+                if (error.response?.status === 401) {
+                    setError('invalid otp')
+                    setTimeout(() => {
+                        setError('')
+                    }, 2000)
+                }
+                else {
+                    setError("An error occurred while verifying the OTP. Please try again.");
+                }
+            }).finally(() => setLoading(false))
     };
     return (
         <div className="bg-[#f5faff] min-h-screen  flex flex-col justify-between">
@@ -74,14 +103,16 @@ function EmployeeVerification() {
             {otpMessage && (
                 <p className='text-green-400 text-center'>{otpMessage}</p>
             )}
-            <div className="w-full max-w-sm mx-auto flex align-center">
+            <div className="w-full max-w-sm lg:max-w-md mx-auto flex align-center">
 
 
-                <form className="bg-white  shadow-md align-center rounded p-8 w-80 lg:w-full mx-auto mb-4" onSubmit={handleSubmit}>
+                <form className="bg-white  shadow-md align-center rounded p-6 w-80 lg:w-full mx-auto mb-4" onSubmit={handleSubmit}>
                     <h1 className='font-bold text-center mb-6'>Verification </h1>
+                    <p className='text-sm mb-5'>We have sent an OTP to your mobile number xxxxxx<span>{lastFourDigits}</span>.</p>
+
                     <div className="mb-4">
 
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="otp" name="otp" value={otp} onChange={(e) => setOtp(e.target.value)} type="text" placeholder="Enter OTP" maxLength={6} />
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="otp" name="otp" value={otp} onChange={(e) => { setOtp(e.target.value); setErrorMessage('') }} type="text" placeholder="Enter OTP" maxLength={6} />
                         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
                     </div>
 
@@ -93,12 +124,18 @@ function EmployeeVerification() {
                             Resend OTP
                         </button>
                     </div>
-                    {error && <div className="text-red-500">{error}</div>}
-                    {success && <div className="text-green-500">{success}</div>}
+                    {error && <div className="text-red-500 text-center">{error}</div>}
+                    {successMessage && <div className="text-green-500 text-center">{successMessage}</div>}
+                    <div className='text-center mt-4'>
+
+                    </div>
                 </form>
             </div>
-            <EFooter/>  
+            <EFooter />
         </div>
     );
 }
 export default EmployeeVerification;
+
+
+

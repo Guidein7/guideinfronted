@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
 import JSFooter from '../NavBar/JSFooter';
+import { Buffer } from 'buffer';
 
 function SavedJobs() {
     const [savedJobs, setSavedJobs] = useState([]);
@@ -43,7 +44,7 @@ function SavedJobs() {
             }
         })
             .then(response => {
-                setSavedJobs(response.data);
+                setSavedJobs(response.data.reverse());
             })
             .catch(error => {
                 if (error.response.status === 403) {
@@ -94,7 +95,7 @@ function SavedJobs() {
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
-            <div className="flex flex-grow flex-col ml-0 xl:ml-[20%] pt-20 lg:pt-5">
+            <div className="flex flex-grow flex-col ml-0 lg:ml-[20%] pt-20 lg:pt-4">
                 {errorMessage && (<p className='text-red-500 fixed left-1/2 transform -translate-x-1/2  bg-white px-4 py-2 text-center'>{errorMessage}</p>)}
                 <h1 className="text-xl mb-2 px-2 font-bold">Saved Jobs</h1>
                 {loading ? (
@@ -107,12 +108,12 @@ function SavedJobs() {
                         savedJobs.map((job, index) => (
                             <div key={index} className="bg-white p-4 rounded shadow-md mb-2 flex flex-col md:flex-row justify-between items-start md:items-center">
                                 <div className="mb-4 md:mb-0">
-                                    <p
-                                        onClick={() => handleClick(job)}
-                                        className="text-lg font-semibold block underline cursor-pointer md:text-left"
+                                    <Link to={`/job-details/${Buffer.from(job.jobPostedBy).toString('base64')}/${job.jobId}?title=${job.jobTitle}`}
+                                        
+                                        className="text-lg font-semibold block  cursor-pointer md:text-left"
                                     >
                                         {job.jobTitle}
-                                    </p>
+                                    </Link>
                                     <p className="text-sm md:text-left">Company: {job.companyName}</p>
                                     <p className="text-sm md:text-left">Location:  {
                                         job.jobLocation
@@ -134,7 +135,7 @@ function SavedJobs() {
                                     >
                                         Remove
                                     </button>
-                                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => handleClick(job)}>{job.status === 'UN_REQUESTED' ? 'Request Referral' : 'Referral Requested'}</button>
+                                    <Link to={`/job-details/${Buffer.from(job.jobPostedBy).toString('base64')}/${job.jobId}?title=${job.jobTitle}`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >{job.status === 'UN_REQUESTED' ? 'Request Referral' : 'Referral Requested'}</Link>
                                 </div>
                             </div>
                         ))
@@ -151,4 +152,5 @@ function SavedJobs() {
 }
 
 export default SavedJobs;
+
 

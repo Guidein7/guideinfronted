@@ -1,129 +1,4 @@
-// import { useState } from 'react';
-// import { useNavigate,Link,useLocation } from 'react-router-dom';
-// import axios from 'axios';
 
-// const EmployeePasswordReset = () => {
-//   const [password, setPassword] = useState('');
-//   const [confirmPassword, setConfirmPassword] = useState('');
-//   const [errors, setErrors] = useState({});
-//   const location = useLocation();
-//   const {email,mobile} = location.state;
-//   const navigate = useNavigate()
-
-
-//   const validateForm = () => {
-//     const errors = {};
-//     if (!password.trim()) {
-//       errors.password = 'Password is required';
-//     } else if (password.trim().length < 8) {
-//       errors.password = 'Password should be at least 8 characters long';
-//     }
-
-//     if (!confirmPassword.trim()) {
-//       errors.confirmPassword = 'Confirm Password is required';
-//     } else if (confirmPassword !== password) {
-//       errors.confirmPassword = 'Passwords do not match';
-//     }
-
-//     setErrors(errors);
-//     return Object.keys(errors).length === 0;
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if (validateForm()) {
-//       // Handle password reset logic here
-     
-//      const role = "JOB_POSTER";
-//      const newPassword = password;
-//       const formData = {email,mobile,role,newPassword}
-//       console.log('Password reset successful');
-//       axios.post('https://burro-up-panda.ngrok-free.app/api/guidein/v1/auth/register/forgetpassword',formData).then(response => {
-//         console.log(response)
-//         navigate('/employee-login')
-//       }).catch(error => {
-//       console.log(error);
-//       })
-
-      
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-//       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-//         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Reset Your Password</h2>
-//       </div>
-
-//       <div className="mt-8 w-full max-w-xs mx-auto ">
-//         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-//           <form className="space-y-6" onSubmit={handleSubmit}>
-//             <div>
-//               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-//                 New Password
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   id="password"
-//                   name="password"
-//                   type="password"
-//                   autoComplete="new-password"
-//                   required
-//                   value={password}
-//                   onChange={(e) => setPassword(e.target.value)}
-//                   className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.password ? 'border-red-500' : ''}`}
-//                 />
-//                 {errors.password && (
-//                   <p className="mt-2 text-sm text-red-600" id="password-error">
-//                     {errors.password}
-//                   </p>
-//                 )}
-//               </div>
-//             </div>
-
-//             <div>
-//               <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-//                 Confirm Password
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   id="confirm-password"
-//                   name="confirm-password"
-//                   type="password"
-//                   autoComplete="new-password"
-//                   required
-//                   value={confirmPassword}
-//                   onChange={(e) => setConfirmPassword(e.target.value)}
-//                   className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.confirmPassword ? 'border-red-500' : ''}`}
-//                 />
-//                 {errors.confirmPassword && (
-//                   <p className="mt-2 text-sm text-red-600" id="confirm-password-error">
-//                     {errors.confirmPassword}
-//                   </p>
-//                 )}
-//               </div>
-//             </div>
-
-//             <div>
-//               <button
-//                 type="submit"
-//                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-//               >
-//                 Reset Password
-//               </button>
-
-//                 <div className='text-center mt-6'>
-//               <Link to='/employee-forgot-password'  className='text-blue-500 '>back</Link>
-//               </div>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EmployeePasswordReset;
 import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -194,7 +69,7 @@ const EmployeePasswordReset = () => {
                     }, 2000);
                 })
                 .catch(error => {
-                    console.log(error);
+                   
                     setErrors({ form: 'An error occurred while resetting the password. Please try again.' });
                 });
         }
@@ -278,7 +153,7 @@ const EmployeePasswordReset = () => {
                                 Reset Password
                             </button>
                             <div className='text-center mt-6'>
-                                <Link to='/forgot-password' className='text-blue-500'>back</Link>
+                                <Link to='/employee-forgot-password' className='text-blue-500'>back</Link>
                             </div>
                         </div>
                     </form>
