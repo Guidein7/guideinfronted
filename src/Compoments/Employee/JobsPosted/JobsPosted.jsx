@@ -512,7 +512,7 @@ function JobsPosted() {
                                             } {`(${job.workMode})`}</p>
                                             <p className='text-sm'>Experience: {job.experienceRequired}</p>
                                             <p className='text-sm'>Posted on: {job.postedOn}</p>
-                                            <a className='text-sm underline' href={job.jobDescriptionLink || "#"} target="_blank"  rel="noopener noreferrer">JobLink</a>
+                                            <a className='text-sm underline' href={job.jobDescriptionLink || "#"} target="_blank"  rel="noopener noreferrer">JobDescription Link</a>
                                             {job.disabledByAdmin && (<p className='text-xsm text-red-500'>This job was disabled by admin</p>)}
                                         </div>
                                         <div className='flex items-center space-x-2'>
