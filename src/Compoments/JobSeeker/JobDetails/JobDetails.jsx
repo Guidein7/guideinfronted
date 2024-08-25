@@ -418,9 +418,9 @@ function JobDetails() {
                 ) : (
                     <div>
                         {job ? (
-                            <div className='flex justify-between'>
-                                <div className=' pt-16 lg:pt-5 '>
-                                    <div className='pl-5'>
+                       
+                                <div className='pl-5 pt-16 lg:pt-5 '>
+                                    
                                         {errorMessage && (<p className='fixed left-1/2 transform -translate-x-1/2 px-4 bg-white py-2 text-red-500'>{errorMessage}</p>)}
                                         <h1 className='text-xl lg:text-2xl font-bold  my-1'>{job?.jobTitle}</h1>
                                         <p className='font-bold  my-1 lg:my-2'> {job?.companyName}</p>
@@ -466,14 +466,14 @@ function JobDetails() {
                                             </div>
                                         </div>
 
-                                    </div>
+                                    
                                 </div>
 
 
 
 
 
-                            </div>) : (<div className='min-h-screen flex justify-center items-center'>
+                            ) : (<div className='min-h-screen flex justify-center items-center'>
                                 <p>no job found</p>
 
                             </div>)}
