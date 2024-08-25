@@ -132,27 +132,28 @@ function SearchJobs() {
     };
 
     const handleSaveJob = async (jobId) => {
-        setLoading(true);
-
-        axios.post(`${config.api.baseURL}${config.api.jobSeeker.saveJob}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: {
-                jobId: jobId,
-                email: email
-            }
-
-        }).then(response => {
-            fetchJobs();
-            setLoading(true);
-        }).catch(error => {
-
+        // Optimistically update the job's saved state
+        setJobs(prevJobs => 
+            prevJobs.map(job =>
+                job.jobId === jobId ? { ...job, saved: true } : job
+            )
+        );
+    
+        try {
+            await axios.post(`${config.api.baseURL}${config.api.jobSeeker.saveJob}`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { jobId: jobId, email: email }
+            });
+        } catch (error) {
+            // Handle error: revert the optimistic update if necessary
+            setJobs(prevJobs => 
+                prevJobs.map(job =>
+                    job.jobId === jobId ? { ...job, saved: false } : job
+                )
+            );
             setSaveJobMessage('Error while saving job');
-            setTimeout(() => setSaveJobMessage(''), 2000)
-
-        }).finally(() => setLoading(false))
-
+            setTimeout(() => setSaveJobMessage(''), 2000);
+        }
     };
 
     const handleFilterChange = (e) => {
@@ -191,29 +192,38 @@ function SearchJobs() {
     };
 
     const handleRemoveSavedJob = (jobId) => {
-        setLoading(true);
-        axios.delete(`${config.api.baseURL}${config.api.jobSeeker.removeSavedJobs}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "ngrok-skip-browser-warning": "69420"
-            },
-            params: {
-                jobId: jobId,
-                email: email
-            }
-        })
-            .then(response => {
-                fetchJobs();
-            })
-            .catch(error => {
-                setErrorMessage('Error while removing the job');
-                setTimeout(() => {
-                    setErrorMessage('');
-                }, 2000);
-
-            }).finally(() => setLoading(false))
-    };
+        // Optimistically update the job's saved state
+        setJobs(prevJobs => 
+            prevJobs.map(job =>
+                job.jobId === jobId ? { ...job, saved: false } : job
+            )
+        );
     
+        axios.delete(`${config.api.baseURL}${config.api.jobSeeker.removeSavedJobs}`, {
+            headers: { 
+                Authorization: `Bearer ${token}`, 
+                "ngrok-skip-browser-warning": "69420" 
+            },
+            params: { jobId: jobId, email: email }
+        })
+        .then(response => {
+            // Optionally, you can fetch jobs again if needed
+            // fetchJobs();
+        })
+        .catch(error => {
+            // Handle error: revert the optimistic update if there's an error
+            setJobs(prevJobs => 
+                prevJobs.map(job =>
+                    job.jobId === jobId ? { ...job, saved: true } : job
+                )
+            );
+            setErrorMessage('Error while removing the job');
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 2000);
+        })
+        .finally(() => setLoading(false));
+    };
 
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between pt-14 lg:pt-0">
@@ -323,7 +333,7 @@ function SearchJobs() {
                                         <p className="text-sm md:text-left">Posted on: {job.postedOn}</p>
                                     </div>
                                     <div className="flex flex-row">
-                                    <div className="h-10 w-10 p-2 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer me-2" onClick={job.saved ? () => handleRemoveSavedJob(job.jobId) : () =>  handleSaveJob(job.jobId)}>
+                                    <div className="flex justify-center items-center me-5 cursor-pointer"  onClick={job.saved ? () => handleRemoveSavedJob(job.jobId) : () =>  handleSaveJob(job.jobId)} >
                                                 <SBookmarkIcon saved={job.saved} />
                                     </div>
                                         <Link to={`/job-details/${Buffer.from(job.jobPostedBy).toString('base64')}/${job.jobId}?title=${job.jobTitle}`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >{job.status === 'UN_REQUESTED' ? 'Request Referral' : 'Referral Requested'}</Link>

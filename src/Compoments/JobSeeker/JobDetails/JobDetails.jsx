@@ -81,12 +81,6 @@ function JobDetails() {
         });
     };
 
-    // const title = searchParams.get('title');
-
-    // if (title) {
-    //     document.title = title;
-    // }
-
     const fetchJobs = () => {
         setLoading(true);
         axios.get(`${config.api.baseURL}${config.api.jobSeeker.fetchJobs}${email}`, {
@@ -98,6 +92,7 @@ function JobDetails() {
             .then(response => {
                 const foundJob = response.data.find(item => item.jobId === jobId && item.jobPostedBy === jobPostedBy);
                 setJob(foundJob);
+                
 
             })
             .catch(error => {
@@ -224,8 +219,10 @@ function JobDetails() {
         }
     }
 
-    const handleSaveJob = () => {
-        setLoading(true);
+    const handleSaveJob = (jobId) => {
+        setJob(prevJob => ({
+            ...prevJob,saved:true
+           }))
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.saveJob}`, {},
             {
                 headers: {
@@ -235,15 +232,16 @@ function JobDetails() {
                     jobId: jobId,
                     email: email
                 }
-
             }
-        ).then(response => {
-            fetchJobs();
+        ).then(response => { 
             setSavedJobMessage('job saved')
             setTimeout(() => {
                 setSavedJobMessage('');
             }, 2000);
         }).catch(error => {
+            setJob(prevJob => ({
+                ...prevJob,saved:false
+               }))
             if (error.response.status === 403) {
                 setErrorMessage('session Expired');
                 setTimeout(() => {
@@ -263,7 +261,9 @@ function JobDetails() {
     };
 
     const handleRemoveSavedJob = (jobId) => {
-        setLoading(true);
+        setJob(prevJob => ({
+            ...prevJob,saved:false
+           }))
         axios.delete(`${config.api.baseURL}${config.api.jobSeeker.removeSavedJobs}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -275,13 +275,15 @@ function JobDetails() {
             }
         })
             .then(response => {
-                fetchJobs();
                 setSavedJobMessage('job removed');
                 setTimeout(() => {
                     setSavedJobMessage('')
                 }, 2000);
             })
             .catch(error => {
+                setJob(prevJob => ({
+                    ...prevJob,saved:true
+                   }))
                 setErrorMessage('Error while removing the job');
                 setTimeout(() => {
                     setErrorMessage('');
@@ -449,7 +451,7 @@ function JobDetails() {
                                             </button>
 
                                             <div className="flex flex-col items-center justify-center ml-4">
-                                                <div className="h-12 w-12 p-2 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer" onClick={job.saved ? () => handleRemoveSavedJob(job.jobId) : handleSaveJob}>
+                                                <div className="flex items-center justify-center cursor-pointer" onClick={job.saved ? () => handleRemoveSavedJob(job.jobId) : () => handleSaveJob(job.jobId)}>
                                                 <BookmarkIcon saved={job.saved} />
 
                                                 </div>

@@ -2,10 +2,10 @@ const SBookmarkIcon = ({ saved }) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width="24"
-      height="24"
+      width="36"
+      height="28"
       fill={saved ? "#1D4ED8" : "none"}
-      stroke="currentColor"
+      stroke={saved ? "none" : "currentColor"}
       strokeWidth="2"
     >
       <path
