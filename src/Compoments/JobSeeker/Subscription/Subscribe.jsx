@@ -21,7 +21,7 @@ function Subscribe() {
     const name = decoded ? decoded.username : null;
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [errorMessage,setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     const [confirmPayment, setConfirmPayment] = useState(false);
     const [confirmPayment1, setConfirmPayment1] = useState(false);
     const [confirmPayment2, setConfirmPayment2] = useState(false);
@@ -61,12 +61,12 @@ function Subscribe() {
         }
 
         const options = {
-            key: key, 
+            key: key,
             currency: "INR",
             name: "Guidein",
             description: "Plan Subscription",
             image: GuideinLogo,
-            order_id: orderId, 
+            order_id: orderId,
             handler: function (response) {
 
                 const data = {
@@ -255,29 +255,38 @@ function Subscribe() {
                         <h1 className="text-center text-xl font-bold pt-10 lg:pt-0">Subscription Plans</h1>
                         <p className="text-center mb-3"> Choose the plan that best suits your needs</p>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 mx-5 lg:mx-10 mb-2">
-                          
+
                             <div className="bg-white p-6 rounded-lg shadow-lg">
                                 <h2 className="text-2xl font-semibold mb-4 text-center">Standard</h2>
-                                <p className="mb-2">2 referral credits</p>
-                                <p className="mb-2">Access to Job listings</p>
+                                <ul className="list-disc">
+                                    <li className="mb-2">1 Referral credit</li>
+                                    <li className="mb-2">Access to Job listings</li>
+                                    <li className="mb-2">Resume Refining</li>
+                                    <li className="mb-2">Track Your Job Application</li>
+                                </ul>
                                 <p className="mb-1">Starts at</p>
-                                <p className="font-bold "><span className="">&#8377;1199</span></p>
-                                <p className="text-xs font-bold"><s className=" me-1">&#8377;1499</s><span className="text-green-700">20% off</span></p>
-                                <div className="text-center">
+                                <p className="font-bold "><span className="">&#8377;399</span></p>
+                                <p className="text-xs font-bold"><s className=" me-1">&#8377;599</s><span className="text-green-700">33% off</span></p>
+                                <div className="text-center mt-6">
                                     <button onClick={paymentButton} className="bg-blue-700 text-white py-2 px-4 rounded ">
                                         Buy Now
                                     </button>
                                 </div>
                             </div>
 
-                          
+
                             <div className="bg-white p-6 rounded-lg shadow-lg">
                                 <h2 className="text-2xl font-semibold mb-4 text-center">Premium</h2>
-                                <p className="mb-2">5 referral credits</p>
-                                <p className="mb-2">Access to Job listings</p>
+                                <ul className="list-disc">
+                                <li className="mb-2">2 Referral credits</li>
+                                <li className="mb-2">Access to Job listings</li>
+                                <li className="mb-2">Resume Refining</li>
+                                <li className="mb-2">Track Your Job Application</li>
+                                <li  className="mb-2">Company-Specific Interview Questions </li>
+                                </ul>
                                 <p className="mb-1">Starts at</p>
-                                <p className="font-bold "><span className="">&#8377;2899</span></p>
-                                <p className="text-xs font-bold"><s className=" me-1">&#8377;3865</s><span className="text-green-700">25% off</span></p>
+                                <p className="font-bold "><span className="">&#8377;599</span></p>
+                                <p className="text-xs font-bold"><s className=" me-1">&#8377;1199</s><span className="text-green-700">50% off</span></p>
                                 <div className="text-center">
                                     <button onClick={paymentButton1} className="bg-blue-700 text-white py-2 px-4 rounded ">
                                         Buy Now
@@ -285,14 +294,20 @@ function Subscribe() {
                                 </div>
                             </div>
 
-                            
+
                             <div className="bg-white p-6 rounded-lg shadow-lg">
                                 <h2 className="text-2xl font-semibold mb-4 text-center">Ultimate</h2>
-                                <p className="mb-2">10 referral credits</p>
-                                <p className="mb-2">Access to Job listings</p>
+                                <ul className="list-disc">
+                                    <li className="mb-2">3 Referral credits</li>
+                                    <li className="mb-2">Access to Job listings</li>
+                                    <li className="mb-2">Resume Refining</li>
+                                    <li className="mb-2">Track Your Job Application</li>
+                                    <li className="mb-2">Company-Specific Interview Questions</li>
+                                </ul>
+
                                 <p className="mb-1">Starts at</p>
-                                <p className="font-bold "><span className="">&#8377;5399</span></p>
-                                <p className="text-xs font-bold"><s className=" me-1">&#8377;7712</s><span className="text-green-700">30% off</span></p>
+                                <p className="font-bold "><span className="">&#8377;899</span></p>
+                                <p className="text-xs font-bold"><s className=" me-1">&#8377;1799</s><span className="text-green-700">50% off</span></p>
 
                                 <div className="text-center">
                                     <button onClick={paymentButton2} className="bg-blue-700 text-white py-2 px-4 rounded ">
@@ -308,7 +323,7 @@ function Subscribe() {
                         <div ref={modalRef} className="bg-white p-6 rounded-lg shadow-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
                             <p>Subscription Type: <span className="font-bold">Standard</span></p>
-                            <p>Price: <span className="font-bold">&#8377;1199</span></p>
+                            <p>Price: <span className="font-bold">&#8377;399</span></p>
                             <p>Name <span className="font-bold">{name}</span></p>
                             <p>Email <span className="font-bold">{email}</span></p>
                             <div className=" mt-4 flex justify-center">
@@ -324,7 +339,7 @@ function Subscribe() {
                         <div className="bg-white p-6 rounded-lg shadow-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
                             <p>Subscription Type: <span className="font-bold">Premium</span></p>
-                            <p>Price: <span className="font-bold">&#8377;2899</span></p>
+                            <p>Price: <span className="font-bold">&#8377;599</span></p>
                             <p>Name <span className="font-bold">{name}</span></p>
                             <p>Email <span className="font-bold">{email}</span></p>
                             <div className=" mt-4 flex justify-center">
@@ -340,7 +355,7 @@ function Subscribe() {
                         <div className="bg-white p-6 rounded-lg shadow-lg">
                             <h3 className="text-lg font-semibold mb-4 text-center">Confirm Payment</h3>
                             <p>Subscription Type: <span className="font-bold">Ultimate</span></p>
-                            <p>Price: <span className="font-bold">&#8377;5399</span></p>
+                            <p>Price: <span className="font-bold">&#8377;899</span></p>
                             <p>Name <span className="font-bold">{name}</span></p>
                             <p>Email <span className="font-bold">{email}</span></p>
                             <div className=" mt-4 flex justify-center">

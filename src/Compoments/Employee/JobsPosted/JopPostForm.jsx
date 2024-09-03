@@ -150,6 +150,9 @@ function JobPostForm(props) {
           ...prevFormData,
           educationLevel: selectedValues.join(', '),
         }));
+        if (errors.educationLevel) {
+            setErrors((prevErrors) => ({ ...prevErrors, educationLevel: '' }));
+        }
       };
 
       const cancel = () => {
@@ -198,7 +201,6 @@ function JobPostForm(props) {
                 value={formData.companyName}
                 onChange={handleChange}
                 className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3'
-                readOnly
                 required
             />
             {isTouched.companyName && errors.companyName && <span style={{ color: 'red' }}>{errors.companyName}</span>}
@@ -335,6 +337,11 @@ function JobPostForm(props) {
                 <option value='5+ years'>5+ years</option>
                 <option value='6+ years'>6+ years</option>
                 <option value='7+ years'>7+ years</option>
+                <option value='8+ years'>8+ years</option>
+                <option value='9+ years'>9+ years</option>
+                <option value='10+ years'>10+ years</option>
+                <option value='11+ years'>11+ years</option>
+                <option value='12+ years'>12+ years</option>
                 
             </select>
             {isTouched.experienceRequired && errors.experienceRequired && <span style={{ color: 'red' }}>{errors.experienceRequired}</span>}

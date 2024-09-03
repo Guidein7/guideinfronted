@@ -73,6 +73,7 @@ function ReferredJobDetails() {
             },
         }).then(response => {
             setReferredJobdetails(response.data);
+           
             setProof(response.data.proof);
         }).catch(error => {
             if (error.response.status === 403) {

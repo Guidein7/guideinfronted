@@ -36,7 +36,9 @@ function SearchJobs() {
             '1-3 years': ['1-3 years', '1+ years', '2+ years', '3+ years'],
             '3-5 years': ['3-5 years', '3+ years', '4+ years', '5+ years'],
             '5-7 years': ['5-7 years', '5+ years', '6+ years', '7+ years'],
-            '7+ years': ['7+ years', '7+ years'],
+            '7-9 years': ['7+ years', '8+ years', '9+ years'],
+            '9-11 years': ['9+ years', '10+ years', '11+ years'],
+            '12+ years': ['12+ years'],
         };
     
         // If the selected experience is one of the old ranges
@@ -249,7 +251,9 @@ function SearchJobs() {
                         <option value="1-3 Years">1-3 Years</option>
                         <option value="3-5 Years">3-5 Years</option>
                         <option value="5-7 Years">5-7 Years</option>
-                        <option value="7+ Years">7+ Years</option>
+                        <option value="7-9 Years">7-9 Years</option>
+                        <option value="9-11 Years">9-11 Years</option>
+                        <option value="12+ Years">12+ Years</option>
                     </select>
                     <select
                         name="location"

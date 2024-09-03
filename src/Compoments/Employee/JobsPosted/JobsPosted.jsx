@@ -146,6 +146,7 @@ function JobsPosted() {
             },
         }).then(response => {
             setJobs(response.data.reverse())
+            
            
         }).catch(error => {
             if (error.response.status === 403) {
@@ -374,8 +375,12 @@ function JobsPosted() {
     };
 
     const handleDisableEnable = async (jobId, enabled) => {
-        setLoading(true)
+        
         if (enabled) {
+
+            setJobs(prev => 
+                prev.map(job => job.jobId === jobId?{...job,enabled:false}:job)
+            )
             axios.put(`${config.api.baseURL}${config.api.jobPoster.disableJob}${jobId}`, {},
                 {
                     headers: {
@@ -388,6 +393,9 @@ function JobsPosted() {
                     fetchJobs();
                 })
                 .catch(error => {
+                    setJobs(prev => 
+                        prev.map(job => job.jobId === jobId?{...job,enabled:true}:job)
+                    )
                     if (error.response.status === 403) {
                         setErrorMessage('session Expired')
                         setTimeout(() => {
@@ -405,6 +413,9 @@ function JobsPosted() {
                 .finally(() => setLoading(false));
         }
         else {
+            setJobs(prev => 
+                prev.map(job => job.jobId === jobId?{...job,enabled:true}:job)
+            )
             axios.put(`${config.api.baseURL}${config.api.jobPoster.enableJob}${jobId}`, {},
                 {
                     headers: {
@@ -413,9 +424,12 @@ function JobsPosted() {
                 }
             )
                 .then(response => {
-                    fetchJobs();
+                    
                 })
                 .catch(error => {
+                    setJobs(prev => 
+                        prev.map(job => job.jobId === jobId?{...job,enabled:false}:job)
+                    )
                     if (error.response.status === 403) {
                         setErrorMessage('session Expired')
                         setTimeout(() => {
