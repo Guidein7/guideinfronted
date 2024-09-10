@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Copy both package.json and package-lock.json files
 COPY package*.json ./
+COPY certs*.json ./
 
 # Install npm dependencies
 RUN npm install
@@ -23,4 +24,4 @@ RUN npm install -g serve
 EXPOSE 5173
 
 # Command to run your app
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["serve", "server.js", "-s", "dist", "-l", "5173"]
