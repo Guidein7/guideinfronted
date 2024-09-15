@@ -39,6 +39,7 @@ function ReferrelsRequested() {
             },
         }).then(response => {
             setReferrals(response.data)
+            
         }).catch(error => {
             if (error.response.status === 403) {
                 setErrorMessage('session expired')
@@ -94,6 +95,7 @@ function ReferrelsRequested() {
                                         <p>Referral for: <span className=''>{candidate.referralFor}</span></p>
                                         <p>Candidate experience: {candidate.candidateExperience}</p>
                                         <p>Requested On: {candidate.requestedOn}</p>
+                                        <a href={candidate.jobDescriptionLink} target='_blank' className='underline'>JobLInk</a>
                                     </div>
                                 ))}
                             </div>

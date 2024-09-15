@@ -24,6 +24,7 @@ const config = {
       subscribe:'/api/guidein/v1/job_seeker/subscribe',
       requestReferral:'/api/guidein/v1/job_seeker/requestReferral',
       getAppliedReferral:'/api/guidein/v1/job_seeker/getAppliedReferral/',
+      getJob:'/api/guidein/v1/job_seeker/getjob/'
     },
     jobPoster:{
       register:'/api/guidein/v1/auth/register',

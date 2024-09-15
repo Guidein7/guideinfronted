@@ -15,7 +15,6 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { MdOutlineShare } from "react-icons/md";
 import BookmarkIcon from './Bookmark';
 
-
 function JobDetails() {
     const log = useSelector(state => state.log);
     const token = log.data.token;
@@ -398,16 +397,6 @@ function JobDetails() {
         });
         setShowDetails(false);
     }
-
-
-
-    
-      // Usage
-      
-      
-
-
-
     return (
         <div className="bg-[#f5faff] min-h-screen flex flex-col justify-between">
             <NavBar />
@@ -455,9 +444,7 @@ function JobDetails() {
                                                 <BookmarkIcon saved={job.saved} />
 
                                                 </div>
-                                                {/* {savedJobMessage && (
-                                                    <p className="text-sm mt-1 text-center">{savedJobMessage}</p>
-                                                )} */}
+                                                
                                             </div>
 
                                             <div onClick={handleCopyLink} className='cursor-pointer flex flex-col justify-center ml-4'>
@@ -470,11 +457,6 @@ function JobDetails() {
 
                                     
                                 </div>
-
-
-
-
-
                             ) : (<div className='min-h-screen flex justify-center items-center'>
                                 <p>no job found</p>
 
@@ -647,5 +629,4 @@ function JobDetails() {
         </div >
     );
 }
-
 export default JobDetails;

@@ -254,6 +254,8 @@ function CandidateDetails() {
                             <p >Resume: <span className='text-blue-500 cursor-pointer' onClick={handleResumeView}>{candidateDetails.candidateName}.pdf</span></p>
                             <h1 className='font-bold mt-2'>Referral Requested for</h1>
                             <p className='mb-1'>Job Role: <span className=''>{candidateDetails.referralFor}</span></p>
+                            <a href={candidateDetails?.jobDescriptionLink} target='_blank' className='underline'>JobDescriptionLink</a>
+
                             <p className='mb-1'>Company: {candidateDetails.company}</p>
                             <p className='mb-1'>Location: {candidateDetails?.jobLocation
                                                     ?.split(',')

@@ -17,7 +17,7 @@ const FAQ = () => {
     },
     {
       question: "How much will I earn for a successful referral?",
-      answer: "You will earn ₹450 for every successful referral, irrespective of the candidate's selection status but only upon referral proof is validated."
+      answer: "You will earn ₹200 for every successful referral, irrespective of the candidate's selection status but only upon referral proof is validated."
     },
     {
       question: "Is there a deadline to refer a candidate after receiving a referral request?",

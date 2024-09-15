@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import NavBar from '../NavBar/NavBar';
 import config from '../../../config';
 import JSFooter from '../NavBar/JSFooter';
+import { current } from '@reduxjs/toolkit';
 
 function Profile() {
     const dispatch = useDispatch();
@@ -31,6 +32,9 @@ function Profile() {
         mobile: mobile,
         currentStatus: '',
         experience: '',
+        currentCompany: '',
+        currentRole: '',
+        preferredRole: '',
         linkedInUrl: '',
         resume: null,
     });
@@ -53,7 +57,7 @@ function Profile() {
             },
         })
             .then(response => {
-
+                  
                 if (response.status === 200) {
                     setProfile(response.data);
                     setFormData({
@@ -61,7 +65,10 @@ function Profile() {
                         name: response.data.name,
                         currentStatus: response.data.currentStatus,
                         experience: response.data.experience,
-                        linkedInUrl: response.data.linkedInUrl
+                        linkedInUrl: response.data.linkedInUrl,
+                        preferredRole:response.data?.preferredRole,
+                        currentRole:response.data?.currentRole,
+                        currentCompany:response.data?.currentCompany
                     });
                 }
                 else if (response.status === 204) {
@@ -164,6 +171,9 @@ function Profile() {
         form.append('currentStatus', formData.currentStatus);
         form.append('experience', formData.experience);
         form.append('linkedInUrl', formData.linkedInUrl);
+        form.append('preferredRole', formData.preferredRole)
+        form.append('currentCompany', formData.currentCompany)
+        form.append('currentRole', formData.currentRole)
         if (isNewResumeUploaded) {
             if (formData.resume) {
                 form.append('resume', formData.resume);
@@ -282,6 +292,39 @@ function Profile() {
 
 
                                 </div>
+                                {profile?.currentCompany && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Current Company </label>
+                                        <input
+                                            type='text'
+                                            value={profile.currentCompany}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
+                                {profile?.currentRole && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Current Role </label>
+                                        <input
+                                            type='text'
+                                            value={profile.currentRole}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
+                                {profile?.preferredRole && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Preferred Role </label>
+                                        <input
+                                            type='text'
+                                            value={profile.preferredRole}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
                                 {profile?.linkedInUrl && (
                                     <div className='mb-2 lg:mb-3'>
                                         <label className='block text-start lg:mb-1'>Linkedin URL </label>
@@ -362,6 +405,45 @@ function Profile() {
                                         </select>
 
                                     </div>
+                                    {(formData.currentStatus !== 'Student' && formData.currentStatus !== 'Fresher' && formData.currentStatus !== '') && (
+                                        <div>
+                                            <div className='mb-2 lg:mb-3'>
+                                                <label className='block text-start lg:mb-1'>Current Company<span className='text-red-700'></span></label>
+                                                <input
+                                                    type='text'
+                                                    name='currentCompany'
+                                                    value={formData.currentCompany}
+                                                    onChange={handleInputChange}
+                                                    className='w-full px-3 py-2 border rounded-md'
+                                                   
+
+                                                />
+                                            </div>
+                                            <div className='mb-2 lg:mb-3'>
+                                                <label className='block text-start lg:mb-1'>Current Role<span className='text-red-700'></span></label>
+                                                <input
+                                                    type='text'
+                                                    name='currentRole'
+                                                    value={formData.currentRole}
+                                                    onChange={handleInputChange}
+                                                    className='w-full px-3 py-2 border rounded-md'
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                     <div className='mb-2 lg:mb-3'>
+                                                <label className='block text-start lg:mb-1'>Preferred Role<span className='text-red-700'>*</span></label>
+                                                <input
+                                                    type='text'
+                                                    name='preferredRole'
+                                                    value={formData.preferredRole}
+                                                    onChange={handleInputChange}
+                                                    className='w-full px-3 py-2 border rounded-md'
+                                                    required
+                                                  
+
+                                                />
+                                            </div>
                                     <div className='mb-2 lg:mb-3'>
                                         <label className='block text-start lg:mb-1'>Experience<span className='text-red-700'>*</span></label>
                                         <select
@@ -381,19 +463,19 @@ function Profile() {
                                         </select>
                                     </div>
                                     <div className='mb-4'>
-                                            <label className='block text-gray-700 bold text-start'>LinkedIn URL(<a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer" className=" text-blue-500">
-                                                click here to get
-                                            </a>)</label>
-                                            <input
-                                                type='text'
-                                                name='linkedInUrl'
-                                                value={formData.linkedInUrl}
-                                                onChange={handleInputChange}
-                                                className='w-full px-3 py-2 border rounded-md'
+                                        <label className='block text-gray-700 bold text-start'>LinkedIn URL(<a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer" className=" text-blue-500">
+                                            click here to get
+                                        </a>)</label>
+                                        <input
+                                            type='text'
+                                            name='linkedInUrl'
+                                            value={formData.linkedInUrl}
+                                            onChange={handleInputChange}
+                                            className='w-full px-3 py-2 border rounded-md'
 
-                                            />
+                                        />
 
-                                        </div>
+                                    </div>
 
 
                                     <div className="mb-2 lg:mb-1">

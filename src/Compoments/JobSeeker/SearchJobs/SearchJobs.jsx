@@ -26,11 +26,8 @@ function SearchJobs() {
     const jobsPerPage = 10;
     const [errorMessage,setErrorMessage] = useState('');
     const filterExperience = (experienceRequired, selectedExperience) => {
-        // Convert the experience to lowercase for case-insensitive comparison
         experienceRequired = experienceRequired.toLowerCase();
         selectedExperience = selectedExperience.toLowerCase();
-    
-        // Handling for old experience ranges
         const oldExperienceRanges = {
             '0-1 years': ['0-1 years', '0+ years', '1+ years'],
             '1-3 years': ['1-3 years', '1+ years', '2+ years', '3+ years'],
@@ -40,30 +37,21 @@ function SearchJobs() {
             '9-11 years': ['9+ years', '10+ years', '11+ years'],
             '12+ years': ['12+ years'],
         };
-    
-        // If the selected experience is one of the old ranges
         if (oldExperienceRanges[selectedExperience]) {
             return oldExperienceRanges[selectedExperience].some(exp => experienceRequired === exp);
         }
-    
-        // Handling for new experience format
         if (selectedExperience.includes('+')) {
             const selectedYears = parseInt(selectedExperience);
             const jobYears = parseInt(experienceRequired);
-    
-            // Handle cases where the job's experience is in the "N+ years" format
             if (experienceRequired.includes('+')) {
                 return jobYears >= selectedYears;
             }
-    
-            // Handle cases where the job's experience is in the "N-M years" format
             const rangeMatch = experienceRequired.match(/(\d+)-(\d+)/);
             if (rangeMatch) {
                 const [_, min, max] = rangeMatch.map(Number);
                 return selectedYears >= min && selectedYears <= max;
             }
         }
-    
         return false;
     };
     
@@ -133,8 +121,8 @@ function SearchJobs() {
         dispatch(logoutUser());
     };
 
+
     const handleSaveJob = async (jobId) => {
-        // Optimistically update the job's saved state
         setJobs(prevJobs => 
             prevJobs.map(job =>
                 job.jobId === jobId ? { ...job, saved: true } : job
@@ -147,7 +135,6 @@ function SearchJobs() {
                 params: { jobId: jobId, email: email }
             });
         } catch (error) {
-            // Handle error: revert the optimistic update if necessary
             setJobs(prevJobs => 
                 prevJobs.map(job =>
                     job.jobId === jobId ? { ...job, saved: false } : job
@@ -194,7 +181,7 @@ function SearchJobs() {
     };
 
     const handleRemoveSavedJob = (jobId) => {
-        // Optimistically update the job's saved state
+       
         setJobs(prevJobs => 
             prevJobs.map(job =>
                 job.jobId === jobId ? { ...job, saved: false } : job

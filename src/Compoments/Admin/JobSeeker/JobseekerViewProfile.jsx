@@ -129,6 +129,39 @@ function JobseekerViewProfile() {
 
 
                                 </div>
+                                {profile?.currentCompany && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Current Company </label>
+                                        <input
+                                            type='text'
+                                            value={profile.currentCompany}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
+                                {profile?.currentRole && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Current Role </label>
+                                        <input
+                                            type='text'
+                                            value={profile.currentRole}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
+                                {profile?.preferredRole && (
+                                    <div className='mb-2 lg:mb-3'>
+                                        <label className='block text-start lg:mb-1'>Preferred Role </label>
+                                        <input
+                                            type='text'
+                                            value={profile.preferredRole}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                            readOnly
+                                        />
+                                    </div>
+                                )}
                                 <div className='mb-2 lg:mb-3'>
                                     <label className='block text-start lg:mb-1'>Linkedin URL </label>
                                     <input

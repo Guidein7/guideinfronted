@@ -37,11 +37,7 @@ color: #3E454B;
     top: -90px; /* Adjust as needed */
     left: 10%; /* Adjust as needed */
     color: #8CA3F7;
-    -webkit-text-stroke: 2px #FFFFFF;
-    
-   
-   
-    
+    -webkit-text-stroke: 2px #FFFFFF;  
 }
 
 .gradient-container{
@@ -50,3 +46,48 @@ color: #3E454B;
 
 }
 
+.scroll-container {
+  width: 100%;
+  overflow: hidden; /* Hide content that moves out of view */
+}
+
+.scroll-content {
+  display: flex;
+  gap: 16px;
+  animation: scroll 60s linear infinite;
+  white-space: nowrap;
+  width: max-content; /* Ensure enough space for smooth looping */
+}
+
+.box {
+  width: 300px; /* Fixed width for all boxes */
+  padding: 20px;
+  background-color: white;
+  min-height: 200px; /* Ensure a minimum height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start; /* Align items to the start for consistent text alignment */
+  color: black;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: normal; /* Allow text to wrap inside the box */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Adjust depending on the number of boxes */
+  }
+}
+
+@media (max-width: 768px) {
+  .box {
+    width: 250px; /* Reduce width on smaller screens */
+  }
+  .scroll-content {
+    gap: 8px; /* Smaller gap for small screens */
+  }
+}

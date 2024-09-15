@@ -15,6 +15,8 @@ const LandingPage = () => {
   const dispatch = useDispatch();
 
 
+
+
   const handleClickOutside = (event) => {
     if (
       sideNavRef.current &&
@@ -105,7 +107,7 @@ const LandingPage = () => {
               Register now
             </Link>
             <Link to='/login' className='text-[#244AD1] bg-[#FFFFFF] hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none w-36 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-2.5  dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800'>
-              Login 
+              Login
             </Link>
           </div>
 
@@ -157,6 +159,95 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
+        <div className='bg-white p-4'>
+        <h1 className='font-bold text-3xl text-center mb-4'>Why us</h1>
+        <div className='mb-4'>
+        <p className='text-center'>The perfect choice for job seekers who value personalized support and real results.</p>
+        <p className='text-center'>Trusted referrals and job specific resume refinement.  </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-8 p-8">
+          {/* Box 1 */}
+          <div className="bg-[#FFD966] text-black p-6 rounded-lg shadow-lg flex flex-col items-center justify-center w-full sm:w-64 h-40">
+            <h2 className="text-3xl font-bold">500+</h2>
+            <p className="mt-2 text-center text-sm">Join our growing community of job seekers</p>
+          </div>
+
+          {/* Box 2 */}
+          <div className="bg-black text-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center w-full sm:w-64 h-40">
+            <h2 className="text-3xl font-bold">200+</h2>
+            <p className="mt-2 text-center text-sm">Happy Subscribers landing their dream job through referrals</p>
+          </div>
+
+          {/* Box 3 */}
+          <div className="bg-white text-black p-6 rounded-lg shadow-lg flex flex-col items-center justify-center w-full sm:w-64 h-40">
+            <h2 className="text-3xl font-bold">85%</h2>
+            <p className="mt-2 text-center text-sm">Subscribers received interview calls</p>
+          </div>
+
+          {/* Box 4 */}
+          <div className="bg-[#7fb38d] text-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center w-full sm:w-64 h-40">
+            <h2 className="text-3xl font-bold">Our Network</h2>
+            <p className="mt-2 text-center text-sm">2000+ Employees, 600+ Companies</p>
+          </div>
+        </div>
+        </div>
+        <div className='bg-[#f4f4f4] p-6'>
+          <h1 className='text-center font-bold text-2xl mb-4'>People are talking</h1>
+          <div className='mb-4'>
+            <p className='text-center '>Helping job seekers succeed isn’t just about referrals and resumes. It’s about building trust, </p>
+            <p className='text-center'> offering genuine support, and guiding them on their career journey.</p>
+          </div>
+          <div className="scroll-container">
+            <div className="scroll-content">
+              {[
+               { letter: 'S', name: 'Satya', role: 'Product Manager (starhealth)', text: 'I was skeptical at first, but the referral really worked! I got calls for interviews at my dream companies within a few days.' },
+               { letter: 'R', name: 'Ravi Teja', role: 'Finance Professional (Global Data) ', text: 'The support I received from the platform was amazing. They helped me improve my resume and even prepared me with interview questions specific to each company.' },
+               { letter: 'P', name: 'Pavitra   K', role: 'Fresher', text: 'The resume refinement and interview tips made a huge difference. I felt more confident going into my interviews, and it paid off!' },
+               { letter: 'S', name: 'Santosh', role: 'Business Analyst (DDi)', text: 'Before finding this platform, I applied to so many jobs without hearing back. After joining, things changed quickly.' },
+               { letter: 'A', name: 'Amit', role: 'Designer (CreditVidya)', text: 'This platform was really helpful. Through referrals, I got access to roles I could never reach through the usual application process.' }
+              ].map((item, index) => (
+                <div key={index} className="box bg-white p-4">
+                  <p>{item.text}</p>
+                  <div className="flex items-center mt-4">
+                    <div className="w-10 h-10 flex items-center justify-center bg-gray-500 text-white rounded">
+                      {item.letter}
+                    </div>
+                    <div className="ml-4">
+                      <p className="font-bold">{item.name}</p>
+                      <p className="text-sm text-gray-600">{item.role}</p>
+                    </div>
+
+
+                  </div>
+                </div>
+              ))}
+              {[
+                { letter: 'S', name: 'Satya', role: 'Product Manager (starhealth)', text: 'I was skeptical at first, but the referral really worked! I got calls for interviews at my dream companies within a few days.' },
+                { letter: 'R', name: 'Ravi Teja', role: 'Finance Professional (Global Data) ', text: 'The support I received from the platform was amazing. They helped me improve my resume and even prepared me with interview questions specific to each company.' },
+                { letter: 'P', name: 'Pavitra   K', role: 'Fresher', text: 'The resume refinement and interview tips made a huge difference. I felt more confident going into my interviews, and it paid off!' },
+                { letter: 'S', name: 'Santosh', role: 'Business Analyst', text: 'Before finding this platform, I applied to so many jobs without hearing back. After joining, things changed quickly.' },
+                { letter: 'A', name: 'Amit', role: 'Designer (CreditVidya)', text: 'This platform was really helpful. Through referrals, I got access to roles I could never reach through the usual application process.' }
+              ].map((item, index) => (
+                <div key={index} className="box bg-white p-4">
+                  <p>{item.text}</p>
+                  <div className="flex items-center mt-4">
+                    <div className="w-10 h-10 flex items-center justify-center bg-gray-500 text-white rounded">
+                      {item.letter}
+                    </div>
+                    <div className="ml-4">
+                      <p className="font-bold">{item.name}</p>
+                      <p className="text-sm text-gray-600">{item.role}</p>
+                    </div>
+
+
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
       </div>
       <JFooter />
     </div>

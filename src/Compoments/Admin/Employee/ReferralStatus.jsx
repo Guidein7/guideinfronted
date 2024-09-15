@@ -303,8 +303,9 @@ const rejectReferral = (e) => {
                         <h1>Experience: {details?.experienceRequired}</h1>
                         <h1>Posted On: {details?.postedOn}</h1>
                         <h1>Job Posted By: {details?.jobPosterName}</h1>
+                        <a href={details.jobDescriptionLink} target="_blank" className="underline mb-2">job Link</a>
 
-                        {details.currentStatus === 'REQUESTED' && (<div>
+                        {details.currentStatus === 'REQUESTED' && (<div  className="mt-2">
                             <button className="bg-blue-700 text-white px-4 py-2 rounded me-2">Requested</button>
                             <button  onClick={() =>setReject(true)} className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded mr-2">Reject</button>
                         </div>)}
@@ -312,7 +313,7 @@ const rejectReferral = (e) => {
                        
 
                         {(details.currentStatus === 'IN_VERIFICATION' || details.currentStatus === 'REFERRED') && (
-                            <div>
+                            <div className="mt-2">
                                 <h1 className="font-bold my-2 text-lg">Referral details</h1>
                                 <h1>Referral Date: {details.dateOfReferral}</h1>
                                 <h1>Mode of Referral: {details.methodOfReferral}</h1>
@@ -326,7 +327,7 @@ const rejectReferral = (e) => {
                             </div>
                         )}
                          {(details.currentStatus === 'VERIFICATION_FAILED' || details.currentStatus === 'REJECTED') && (
-                            <div>
+                            <div className="mt-2">
                                 <h1 className="font-bold my-2 text-lg">Referral details</h1>
                              {details.currentStatus === 'VERIFICATION_FAILED' && <h1>Rejected Date: {details.dateOfReferral}</h1>}   
                                 <h1>Reason: {details.reason}</h1>

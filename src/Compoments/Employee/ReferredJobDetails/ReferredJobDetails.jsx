@@ -73,6 +73,7 @@ function ReferredJobDetails() {
             },
         }).then(response => {
             setReferredJobdetails(response.data);
+         
            
             setProof(response.data.proof);
         }).catch(error => {
@@ -137,13 +138,15 @@ function ReferredJobDetails() {
                                                     .join(', ')
                                             }</p>
                             <p className="mb-4">job PostedOn: {referredJobDetails.jobPostedOn}</p>
+                            <a href={referredJobDetails.jobDescriptionLink} target="_blank" className="underline cursor-pointer">JobLink</a>
+                         
                             <h1 className="font-bold mb-2">Referral Details </h1>
                             {referredJobDetails.dateOfReferral && (<p className=" mb-2">Date Of Referral: {referredJobDetails.dateOfReferral}</p>)}
                             {referredJobDetails.methodOfReferral && (<p className="mb-2"> Method Of Referral: {referredJobDetails.methodOfReferral}</p>)}
                             {referredJobDetails.proof && (<p className="mb-2">uploaded proof:  <a href={viewProof()} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                                 View proof
                             </a></p>)}
-                            <p>Job Status: <span className={` ${referredJobDetails.status === 'IN_VERIFICATION' ? 'text-yellow-500 font-bold' : referredJobDetails.status === 'REFERRED' ? 'text-green-500 font-bold' : 'text-green-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
+                            <p>Job Status: <span className={` ${referredJobDetails.status === 'IN_VERIFICATION' ? 'text-yellow-500 font-bold' : referredJobDetails.status === 'REFERRED' ? 'text-green-500 font-bold' : 'text-red-500 font-bold'}`}>{referredJobDetails.referralStatus}</span></p>
                             {referredJobDetails.reason && (<p>Reason: <span className="">{referredJobDetails.reason}</span></p>)}
                             <p className="mb-2">Comments: {referredJobDetails.comments}</p>
                         </div>

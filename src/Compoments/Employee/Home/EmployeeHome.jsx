@@ -102,6 +102,7 @@ function EmployeeHome() {
                                         <p>Referral for: <span className=''>{candidate.referralFor}</span></p>
                                         <p>Candidate experience: {candidate.candidateExperience}</p>
                                         <p>Requested On: {candidate.requestedOn}</p>
+                                        <a className='underline' href={candidate.jobDescriptionLink} target='_blank'>JobDescriptionLink</a>
                                     </div>
                                 ))}
                             </div>
