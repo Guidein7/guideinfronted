@@ -267,7 +267,7 @@ function Subscribe() {
                                 <p className="mb-1">Starts at</p>
                                 <p className="font-bold "><span className="">&#8377;399</span></p>
                                 <p className="text-xs font-bold"><s className=" me-1">&#8377;599</s><span className="text-green-700">33% off</span></p>
-                                <div className="text-center lg:mt-14 xl:mt-6 md:mt-7">
+                                <div className="text-center xl:mt-14 lg:mt-14 xl:mt-6 md:mt-7">
                                     <button onClick={paymentButton} className="bg-blue-700 text-white py-2 px-4 rounded ">
                                         Buy Now
                                     </button>
