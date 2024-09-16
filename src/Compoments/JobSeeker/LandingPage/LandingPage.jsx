@@ -115,7 +115,6 @@ const LandingPage = () => {
 
         <div className='grid grid cols-1 gap-5 mt-5 lg:mt-10'>
           <h1 className=' text-center font-bold text-xl lg:text-3xl '>Get Hired Faster with Trusted Referrals</h1>
-          <h1 className=' text-center font-bold text-xl lg:text-3xl '>Get Hired Faster with Trusted Referrals</h1>
           <div>
             <p className='text-center text-base m-0 p-0  lg:text-xl paragraph'>Don't wait for connections to get a referral. Get referred instantly <span className='md:hidden'>and
               increase your chances of landing your dream job right away!</span></p> <p className='hidden md:block text-center text-sm lg:text-xl paragraph m-0 p-0'>and
