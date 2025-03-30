@@ -64,7 +64,7 @@ function ContactUsJs() {
         <div className='bg-[#f5faff] min-h-screen flex flex-col justify-between'>
             <nav className="bg-[#f8f9fa] py-4 w-full fixed z-50">
                 <div className='max-w-7xl mx-auto px-4 flex justify-between items-center'>
-                    <div className='block lg:hidden'>
+                    {/* <div className='block lg:hidden'>
                         <button
                             ref={buttonRef}
                             className='text-dark focus:outline-none z-50'
@@ -74,25 +74,25 @@ function ContactUsJs() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </button>
-                    </div>
+                    </div> */}
                     <div className='lg:block'>
                         <Link to='/'>
                             <img src={GuideinLogo} alt='logo' className='h-8 lg:h-8' />
                         </Link>
                     </div>
-                    <div className='hidden lg:flex space-x-4'>
+                    {/* <div className='hidden lg:flex space-x-4'>
                         <NavLinks />
-                    </div>
+                    </div> */}
                 </div>
             </nav>
-            <div
+            {/* <div
                 ref={sideNavRef}
                 className={`side-nav fixed top-0 left-0 h-full w-38 bg-[#f8f9fa] shadow-lg z-40 flex flex-col transform transition-transform duration-300 ${showSideNav ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className='p-4 pt-16'>
                     <NavLinks className='flex flex-col my-4' />
                 </div>
-            </div>
+            </div> */}
             <div className='flex-grow justify-center items-center pt-24'>
                 <div className="flex  flex-col justify-center items-center">
                     <h1 className=" text-3xl">We are here to help.</h1>
@@ -122,7 +122,27 @@ function ContactUsJs() {
 
                 </div>
             </div>
-            <JFooter/>
+            {/* <JFooter/> */}
+            <div className="">
+            <div className="bg-[#00145e] w-full p-2">
+                    <footer className="max-w-screen mx-auto">
+                        <div className="grid grid-cols-3 md:grid-cols-3 gap-1 md:gap-4 justify-center items-center ">
+                            <div className="text-white text-start">
+                                {/* <Link to="/referral-faqs" className="text-sm">FAQ</Link> */}
+                                <h2>Help & Support</h2>
+                                <p className='text-sm md:text-base '>+91 9392579230</p>
+                            </div>
+                            <div className="text-white text-sm text-center ">
+                                <p>Copyright &copy; {new Date().getFullYear()}</p>
+                            </div>
+                            <div className="text-white text-sm text-end">
+                                
+                                <Link to="/contact-us" className="">Contact Us</Link>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
         </div>
     );
 };

@@ -69,7 +69,8 @@ import JobseekerViewProfile from './Compoments/Admin/JobSeeker/JobseekerViewProf
 import JobposterViewProfile from './Compoments/Admin/Employee/JobposterViewProfile'
 import NotFound from './Compoments/NotFound'
 import { ScrollRestoration } from "react-router-dom";
-
+import Homepage from './Compoments/ProductCoaching/Homepage'
+import { ToastContainer } from 'react-toastify'
 
 
 
@@ -94,12 +95,13 @@ function App() {
     
     <>
     
-   
+   <ToastContainer/>
     
       <Routes>
       
         
-        <Route path='/' element={<LandingPage/>}/>
+        <Route path='/guidein' element={<LandingPage/>}/>
+        <Route path='/' element={<Homepage/>}/>
         <Route path='/register' element={<Registration/>}/>
         <Route path='/login' element={<Login/>} />
         <Route path="/verification" element={<Verification/>} />
@@ -123,6 +125,8 @@ function App() {
         <Route path="/dashboard" element={<DashBoard/>} />
         <Route path="/referral-faqs" element={<ReferralFAQ/>} />
         <Route path="/faqs-referral" element={<JReferralFAQ/>} />
+
+        
 
      
         

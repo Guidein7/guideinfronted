@@ -1,7 +1,7 @@
 
 const config = {
   api: {
-    baseURL: 'https://guidein-backend-guidein-backend.lomaem.easypanel.host', //'http://localhost:8080',//' https://burro-up-panda.ngrok-free.app', //'
+    baseURL: 'http://localhost:8080',//'https://guidein-backend-guidein-backend.lomaem.easypanel.host', ,//' https://burro-up-panda.ngrok-free.app', //'
     jobSeeker: {
       register:'/api/guidein/v1/auth/register',
       verification:'/api/guidein/v1/auth/register/otpvalidate',
@@ -24,7 +24,8 @@ const config = {
       subscribe:'/api/guidein/v1/job_seeker/subscribe',
       requestReferral:'/api/guidein/v1/job_seeker/requestReferral',
       getAppliedReferral:'/api/guidein/v1/job_seeker/getAppliedReferral/',
-      getJob:'/api/guidein/v1/job_seeker/getjob/'
+      getJob:'/api/guidein/v1/job_seeker/getjob/',
+      learner: `/api/guidein/v1/auth/savelearnerdetails`
     },
     jobPoster:{
       register:'/api/guidein/v1/auth/register',
@@ -74,7 +75,8 @@ const config = {
       submitDeposit:'/api/guidein/v1/admin/submitDeposit',
       adminReject:'/api/guidein/v1/admin/rejectReferralRequest',
       getJobseekerProfile:'/api/guidein/v1/admin/getJobSeekerProfile/',
-      getJobPosterProfile:'/api/guidein/v1/admin/getJobPosterProfile/'
+      getJobPosterProfile:'/api/guidein/v1/admin/getJobPosterProfile/',
+      getAllLearners : '/api/guidein/v1/admin/getAllLearners'
     }
 
   },

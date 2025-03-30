@@ -19,7 +19,7 @@ function SubscribedUsers() {
 
   const getSubscribedUsers = () => {
     setLoading(true);
-    axios.get(`${config.api.baseURL}${config.api.admin.subscribedUsers}`, {
+    axios.get(`${config.api.baseURL}${config.api.admin.getAllLearners}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "ngrok-skip-browser-warning": "69420"
@@ -104,8 +104,8 @@ function SubscribedUsers() {
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Name</th>
                     <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mobile No</th>
                     <th className="w-3/12 py-3 px-6 uppercase font-semibold text-sm text-left">Mail ID</th>
-                    <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Subscribed Plan</th>
-                    <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Date of Subscription</th>
+                    <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">City</th>
+                {/*    <th className="w-2/12 py-3 px-6 uppercase font-semibold text-sm text-left">Date of Subscription</th> */}
                    
                   </tr>
                 </thead>
@@ -113,11 +113,11 @@ function SubscribedUsers() {
                   {currentUsers.map((item, index) => (
                     <tr key={index}>
                       <td className="w-1/12 py-3 px-6 border-b border-gray-200">{indexOfFirstUser + index + 1}</td>
-                      <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.name}</td>
+                      <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.fullName}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.mobile}</td>
                       <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.email}</td>
-                      <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.plan}</td>
-                      <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.subscribedOn}</td>
+                      <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.city}</td>
+                      {/* <td className="w-2/12 py-3 px-6 border-b border-gray-200">{item.subscribedOn}</td> */}
                     </tr>
                   ))}
                 </tbody>
