@@ -1,7 +1,7 @@
 
 const config = {
   api: {
-    baseURL: 'https://guidein-backend-guidein-backend.lomaem.easypanel.host', //' https://burro-up-panda.ngrok-free.app', //''http://localhost:8080',//
+    baseURL: 'https://guidein-backend-guidein-backend.lomaem.easypanel.host',// 'http://localhost:8080', //' https://burro-up-panda.ngrok-free.app', //'//
     jobSeeker: {
       register:'/api/guidein/v1/auth/register',
       verification:'/api/guidein/v1/auth/register/otpvalidate',

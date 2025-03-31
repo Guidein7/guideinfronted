@@ -63,6 +63,7 @@ export default function HomePage() {
     }
     const [isChecked, setIsChecked] = useState(false);
     const [checkboxError, setCheckboxError] = useState("");
+    const [loading,setLoading] = useState(false);
 
     const {
         register,
@@ -86,22 +87,26 @@ export default function HomePage() {
             return;
         }
         setCheckboxError("");
+        setLoading(true)
         axios.post(`${config.api.baseURL}${config.api.jobSeeker.learner}`, data).then(response => {
             if (response.data.success) {
+                setIsChecked(false);
                 setIsOpen(false);
                 reset();
-                successMessage("Your request was successfully submitted")
+                successMessage("Your request was successfully submitted");
 
             }
             else {
-                errorMessage(error.response.data.message)
+                errorMessage(response.data.message)
             }
 
         }).catch(error => {
-
+            if(error?.message){
+                errorMessage(error?.message);
+                return
+            }
             errorMessage(error.response.data.message)
-
-        })
+        }).finally(() => setLoading(false))
 
     };
 
@@ -577,8 +582,8 @@ export default function HomePage() {
                                     {checkboxError && <p className="text-red-500 text-sm">{checkboxError}</p>}
 
                                     <div className="text-center my-3">
-                                        <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 w-full" >
-                                            Submit
+                                        <button disabled={loading} type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 w-full" >
+                                           {loading ? 'submitting...' :'Submit'} 
                                         </button>
                                     </div>
                                 </form>
