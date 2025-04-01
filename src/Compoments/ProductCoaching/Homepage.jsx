@@ -502,7 +502,7 @@ export default function HomePage() {
 
 
                             <h1 className="font-dmSans font-medium text-black text-xl text-center">
-                                Get Free Consultation
+                                Enquire Now
                             </h1>
 
 
