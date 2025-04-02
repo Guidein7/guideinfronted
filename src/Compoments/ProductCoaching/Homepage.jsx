@@ -147,19 +147,19 @@ export default function HomePage() {
                         </span><span className="text-black font-dmsans text-base md:text-lg ">Click on each step to see how we take you from learning to landing the job</span>
                     </div>
                     <div className="flex justify-center items-center gap-2">
-                        <button onClick={() => setCurrentStep('learning')} className={`font-Inter text-[16px] md:text-xl bg-[#244ad1] p-3 text-white  rounded-lg step-button ${currentStep === 'learning' ? 'stepcolor border border-white border-2' : 'text-white'}`}>Learn_Skills</button>
+                        <button onClick={() => setCurrentStep('learning')} className={`font-Inter text-[16px] md:text-lg bg-[#244ad1] p-3 md:p-2 text-white  rounded-lg step-button ${currentStep === 'learning' ? 'stepcolor border border-white border-2' : 'text-white'}`}>Learn_Skills</button>
                         < TbArrowBigRight size={18} className="pro-arrowicon" />
-                        <button onClick={() => setCurrentStep('practice')} className={`font-Inter text-[16px] md:text-xl bg-[#244ad1] p-3 text-white  rounded-lg step-button ${currentStep === 'practice' ? 'stepcolor border border-white border-2' : 'text-white'}`}>Practice</button>
+                        <button onClick={() => setCurrentStep('practice')} className={`font-Inter text-[16px] md:text-lg bg-[#244ad1] p-3 md:p-2 text-white  rounded-lg step-button ${currentStep === 'practice' ? 'stepcolor border border-white border-2' : 'text-white'}`}>Practice</button>
                         < TbArrowBigRight size={18} className="pro-arrowicon" />
-                        <button onClick={() => setCurrentStep('getjob')} className={`font-Inter text-[16px] md:text-xl bg-[#244ad1] p-3 text-white  rounded-lg step-button ${currentStep === 'getjob' ? 'stepcolor border border-white border-2' : 'text-white'}`}>Get Job</button>
+                        <button onClick={() => setCurrentStep('getjob')} className={`font-Inter text-[16px] md:text-lg bg-[#244ad1] p-3 md:p-2 text-white  rounded-lg step-button ${currentStep === 'getjob' ? 'stepcolor border border-white border-2' : 'text-white'}`}>Get Job</button>
                     </div>
                 </div>
                 {currentStep === 'learning' && (
                     <>
                         <div className="text-center flex flex-col gap-8 pt-44 ">
                             <div className="md:hidden">
-                                <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Learning is Not About<br /> Reading the Book </span>
-                                <span className="text-[#013a7d] font-dmSans text-[24px] font-bold block">It’s about  gaining real skills</span>
+                                <span className=" text-[22px] font-dmSans font-semibold text-[#3741dc] block">Learning is Not About<br /> Reading the Book </span>
+                                <span className="text-[#013a7d] font-dmSans text-[20px] font-bold block">It’s about  gaining real skills</span>
                             </div>
                             <div className="hidden md:block">
                                 <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Learning is Not About Reading the Book </span>
@@ -173,13 +173,13 @@ export default function HomePage() {
 
                                 </div>
                                 <div>
-                                    <p className="block text-center font-dmSans pro-sub">You don’t just remember </p>
+                                    <p className="block text-center font-dmSans pro-sub pt-3">You don’t just remember </p>
                                     <p className="p-0 m-0">You understand</p>
                                     <p className="p-0 m-0">Once you understand, you never forget</p>
 
                                 </div>
                                 <div>
-                                    <p className="block text-center font-dmSans pro-sub">That’s why our students feel confident </p>
+                                    <p className="block text-center font-dmSans pro-sub pt-3">That’s why our students feel confident </p>
                                     <p className="p-0 m-0"> Even if they are from </p>
                                     <p className="p-0 m-0">Non-technical background</p>
 
@@ -330,25 +330,25 @@ export default function HomePage() {
                 {currentStep === 'practice' && (
                     <div className="text-center flex flex-col gap-8 pt-44 ">
                         <div className="md:hidden">
-                            <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Just Learning is Not Enough </span>
-                            <span className="text-[#013a7d] font-dmSans text-[20px] font-bold block">You should also know how to apply concepts in real work scenarios</span>
+                            <span className=" text-[24px] font-dmSans font-semibold text-[#3741dc] block">Just Learning is Not Enough </span>
+                            <span className="text-[#013a7d] font-dmSans text-[20px] font-semibold block">You should also know how to apply concepts in real work scenarios</span>
                         </div>
                         <div className="hidden md:block">
                             <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Just learning is not enough </span>
                             <span className="text-[#013a7d] font-dmSans text-[24px] font-bold block">you should also know how to apply concepts in real work scenarios</span>
                         </div>
-                        <div className="flex-flex-col gap-7  md:hidden" >
+                        <div className="flex flex-col gap-5  md:hidden" >
                             <div className="mb-2">
-                                <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-[20px] "> We show you: </p>
+                                <p className="pl-5 text-black font-semibold text-start font-dmSans text-[18px] "> We show you </p>
                                 <p className="p-0 m-0 font-Inter"> How BA and PMs work inside companies</p>
                             </div>
                             <div className="">
-                                <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-xl ">We conduct: </p>
+                                <p className="pl-5 text-black font-semibold text-start font-dmSans text-[18px] ">We conduct </p>
                                 <p className="p-0 m-0 font-Inter pl-5"> Real case studies, mock discussions, and role-plays to help you understand
                                 </p>
                             </div>
                             <div className="">
-                                <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-xl">You Practice: </p>
+                                <p className="pl-5 text-black font-semibold text-start font-dmSans text-[18px]">You Practice </p>
                                 <ul className="list-disc list-inside font-Inter text-sm  " style={{ listStyleType: 'disc' }} >
                                     <li className="font-dmSans mb-2 text-[15px]">How to talk to stakeholders and customers</li>
                                     <li className="font-dmSans mb-2 text-[15px]">How to work with developers and designers</li>
@@ -410,25 +410,25 @@ export default function HomePage() {
                 {currentStep === 'getjob' && (
                     <div className="text-center flex flex-col gap-8 pt-44 ">
                         <div className="md:hidden">
-                            <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Getting a Job Needs More Than  Knowledge</span>
+                            <span className=" text-[22px] font-dmSans font-semibold text-[#3741dc] block">Getting a Job Needs More Than  Knowledge</span>
                             <span className="text-[#013a7d] font-dmSans text-[20px] font-bold block">It needs the right support too</span>
                         </div>
                         <div className="hidden md:block">
                             <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Getting a job needs more than  knowledge </span>
                             <span className="text-[#013a7d] font-dmSans text-[24px] font-bold block">it needs the right support too</span>
                         </div>
-                        <div className="flex-flex-col gap-7  md:hidden" >
+                        <div className="flex flex-col gap-5 md:hidden" >
                             <div className="mb-2">
-                                <p className=" text-[#444] font-semibold text-center font-dmSans text-xl "> We don't promise </p>
+                                <p className=" text-black font-semibold text-center font-dmSans text-xl "> We don't promise </p>
                                 <p className="p-0 m-0 font-Inter text-center"> Fake "Job Guarantees"</p>
                             </div>
                             <div className="text-center mx-auto">
-                                <p className="pl-5 text-[#444] font-semibold text-center font-dmSans text-xl ">We promise one thing</p>
+                                <p className="pl-5 text-black font-semibold text-center font-dmSans text-xl ">We promise one thing</p>
                                 <p className="p-0 mx-auto font-Inter text-center">We’ll support you until you get your job <br /> no matter how long it takes
                                 </p>
                             </div>
                             <div className="">
-                                <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-xl mt-2">You’ll receive:</p>
+                                <p className="pl-5 text-black font-semibold text-start font-dmSans text-xl mt-2">You’ll receive</p>
                                 <ul className="list-disc list-inside font-Inter text-sm text-start  " style={{ listStyleType: 'disc' }} >
                                     <li className="ml-4 dmSans mb-2 text-[15px]">Job Referrals & Interview opportunities</li>
                                     <li className="font-dmSans mb-2 ml-4 text-[15px]">Mock interviews and case rounds</li>
