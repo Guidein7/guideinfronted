@@ -63,7 +63,7 @@ export default function HomePage() {
     }
     const [isChecked, setIsChecked] = useState(false);
     const [checkboxError, setCheckboxError] = useState("");
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const {
         register,
@@ -80,9 +80,9 @@ export default function HomePage() {
     });
 
     const onSubmit = (data) => {
-        
+
         if (!isChecked) {
-          
+
             setCheckboxError("You must agree to the Terms & Conditions");
             return;
         }
@@ -101,7 +101,7 @@ export default function HomePage() {
             }
 
         }).catch(error => {
-            if(error?.message){
+            if (error?.message) {
                 errorMessage(error?.message);
                 return
             }
@@ -162,8 +162,8 @@ export default function HomePage() {
                                 <span className="text-[#013a7d] font-dmSans text-[20px] font-bold block">It’s about  gaining real skills</span>
                             </div>
                             <div className="hidden md:block">
-                                <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Learning is Not About Reading the Book </span>
-                                <span className="text-[#013a7d] font-dmSans text-[24px] font-bold block">It’s about  gaining real skills</span>
+                                <span className=" text-[24px] font-dmSans font-semibold text-[#3741dc] block">Learning is Not About Reading the Book </span>
+                                <span className="text-[#013a7d] font-dmSans text-[22px] font-bold block">It’s about  gaining real skills</span>
                             </div>
                             <div className="flex-flex-col gap-5 text-center mx-auto md:hidden" >
                                 <div className="">
@@ -186,28 +186,27 @@ export default function HomePage() {
                                 </div>
                             </div>
                             <div className="hidden md:block ">
-                                <div className="grid grid-cols-3">
-                                    <div className="bg-[#F2F2F2] mx-16 rounded-lg flex flex-col gap-1 py-4" >
+                                <div className="grid grid-cols-3 gap-2 mx-2">
+                                    <div className="bg-[#fff6]  rounded-lg flex flex-col gap-1 py-4" >
                                         <p className="block text-center text-lg font-dmSans pro-sub"> We teach every topic with </p>
                                         <div>
                                             <p className="p-0 m-0 text-lg">Simple examples</p>
                                             <p className="p-0 m-0 text-lg">Not with boring definitions</p>
                                         </div>
                                     </div>
-                                    <div className="bg-[#F2F2F2] mx-16 text-lg rounded-lg flex flex-col gap-1 py-4" >
+                                    <div className="bg-[#fff6]  text-lg rounded-lg flex flex-col gap-1 py-4" >
                                         <p className="block text-center font-dmSans pro-sub">You don’t just remember </p>
                                         <p className="p-0 m-0">You understand</p>
                                         <p className="p-0 m-0">Once you understand, you never forget</p>
 
                                     </div>
-                                    <div className="bg-[#F2F2F2] mx-16  text-lg rounded-lg flex flex-col gap-1 py-4" >
+                                    <div className="bg-[#fff6]  text-lg rounded-lg flex flex-col gap-1 py-4" >
                                         <p className="block text-center font-dmSans pro-sub"> Our students feel confident </p>
                                         <p className="p-0 m-0"> Even if they are from </p>
                                         <p className="p-0 m-0">Non-technical background</p>
 
                                     </div>
                                 </div>
-
                             </div>
 
                             <div className="mb-3 md:hidden ">
@@ -228,74 +227,76 @@ export default function HomePage() {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                            <div className="md:flex justify-center hidden  ">
+                                <div className="">
+                                    <span className="text-xl font-dmsans font-bold mb-3">Skills You wil Learn</span>
+                                    <div className="flex justify-center mt-2 mx-auto">
+                                        <img src={Drawing} alt="picture" className="w-[60%]" />
+                                    </div>
+                                </div>
 
                             </div>
-                            <div className="md:flex hidden ">
-                                <div className=" flex-1">
-                                    <span className="text-xl font-dmsans font-bold mb-3">Skills You wil Learn</span>
-                                    <div className="flex justify-center mt-2">
-                                        <img src={Drawing} alt="picture" className="h-96  md:w-auto" />
-                                    </div>
-                                </div>
-                                <div className=" flex-1 ">
-                                    <h1 className="fot-bold font-Inter text-xl font-bold mb-2">Tools You will Master</h1>
-                                    <div className="grid grid-cols-3 mx-auto gap-10 place-items-center">
-                                        {images.map((item, idx) => (
-                                            <div key={idx} className="flex flex-col   gap-2 " >
-                                                <div className=" w-[57px] h-[57px] rounded-lg bg-[#1f4aad1a]  p-3">
-                                                    <img src={item.src} alt="companyimg" className="" />
-                                                </div>
-                                                <span className="text-sm font-dmsans font-normal">{item.name}</span>
+                            <div className=" hidden md:block mb-2">
+                                <h1 className="fot-bold font-Inter text-xl font-bold mb-4">Tools You will Master</h1>
+                                <div className="grid grid-cols-3 gap-10 mx-auto w-[50%] place-items-center ">
+                                    {images.map((item, idx) => (
+                                        <div key={idx} className="flex flex-col  " >
+                                            <div className=" w-[57px] h-[57px] rounded-lg bg-[#1f4aad1a]  p-3">
+                                                <img src={item.src} alt="companyimg" className="" />
                                             </div>
-                                        ))}
-                                    </div>
-
+                                            <span className="text-sm font-dmsans font-normal">{item.name}</span>
+                                        </div>
+                                    ))}
                                 </div>
+
                             </div>
                         </div>
-                        <h1 className="text-black text-center text-xl font-bold font-Inter">Who is this course for?</h1>
-                        <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-                            <div className="flex items-center  mx-2 gap-5 bg-[#fff6] p-2 rounded-lg">
-                                <div className="pro-background w-60 h-14 flex justify-center items-center rounded-lg" >
-                                    <FaUserGraduate size={24} />
+                        <div>
+                            <h1 className="text-black text-center text-xl font-bold mb-3 font-Inter">Who is this course for?</h1>
+                            <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+                                <div className="flex items-center  mx-2 gap-5 bg-[#fff6] p-2 rounded-lg">
+                                    <div className="pro-background w-60 h-14 flex justify-center items-center rounded-lg" >
+                                        <FaUserGraduate size={24} />
+                                    </div>
+                                    <div>
+                                        <h1 className="font-bold  font-Inter">Freshers & Graduates</h1>
+                                        <span className="text-base font-dmsans text-[#444]">
+                                            Start your career as a Business Analyst with in-demand skills like requirement gathering,
+                                            stakeholder communication, and tools like Excel, Confluence, Figma, SQL & Jira.
+                                        </span>
+                                    </div>
+
                                 </div>
-                                <div>
-                                    <h1 className="font-bold  font-Inter">Freshers & Graduates</h1>
-                                    <span className="text-base font-dmsans text-[#444]">
-                                        Start your career as a Business Analyst with in-demand skills like requirement gathering,
-                                        stakeholder communication, and tools like Excel, Confluence, Figma, SQL & Jira.
-                                    </span>
+                                <div className="flex items-center  mx-2 gap-5 bg-[#fff6] p-2 rounded-lg">
+                                    <div className="pro-background w-60 h-14 flex justify-center items-center rounded-lg" >
+                                        <MdOutlineAutoGraph size={24} />
+                                    </div>
+                                    <div>
+                                        <h1 className="font-bold  font-Inter">Non-Technical Working Professionals</h1>
+                                        <span className="text-base font-dmsans text-[#444]">
+                                            Transition into a Business Analyst role without coding knowledge. Learn how to analyze business needs,
+                                            document requirements, and communicate with tech teams.
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <div className="flex items-center  mx-2 gap-5 bg-[#fff6] p-2 rounded-lg">
+                                    <div className="pro-background w-60 h-14 flex justify-center items-center rounded-lg" >
+                                        <MdBusinessCenter size={24} />
+                                    </div>
+                                    <div>
+                                        <h1 className="font-bold  font-Inter">Technical Working Professionals</h1>
+                                        <span className="text-base font-dmsans text-[#444]">
+                                            Leverage your tech background to move into  Business Analyst role. Learn to bridge business
+                                            and technology through data, process flows, and user stories
+                                        </span>
+                                    </div>
+
                                 </div>
 
                             </div>
-                            <div className="flex items-center  mx-2 gap-5 bg-[#fff6] p-2 rounded-lg">
-                                <div className="pro-background w-60 h-14 flex justify-center items-center rounded-lg" >
-                                    <MdOutlineAutoGraph size={24} />
-                                </div>
-                                <div>
-                                    <h1 className="font-bold  font-Inter">Non-Technical Working Professionals</h1>
-                                    <span className="text-base font-dmsans text-[#444]">
-                                        Transition into a Business Analyst role without coding knowledge. Learn how to analyze business needs,
-                                        document requirements, and communicate with tech teams.
-                                    </span>
-                                </div>
-
-                            </div>
-
-                            <div className="flex items-center  mx-2 gap-5 bg-[#fff6] p-2 rounded-lg">
-                                <div className="pro-background w-60 h-14 flex justify-center items-center rounded-lg" >
-                                    <MdBusinessCenter size={24} />
-                                </div>
-                                <div>
-                                    <h1 className="font-bold  font-Inter">Technical Working Professionals</h1>
-                                    <span className="text-base font-dmsans text-[#444]">
-                                        Leverage your tech background to move into  Business Analyst role. Learn to bridge business
-                                        and technology through data, process flows, and user stories
-                                    </span>
-                                </div>
-
-                            </div>
-
                         </div>
                         <div className="bg-[#03183f] py-2">
                             <h1 className="text-white text-center text-xl font-bold mb-2">Why Business Analyst?</h1>
@@ -334,8 +335,8 @@ export default function HomePage() {
                             <span className="text-[#013a7d] font-dmSans text-[20px] font-semibold block">You should also know how to apply concepts in real work scenarios</span>
                         </div>
                         <div className="hidden md:block">
-                            <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Just learning is not enough </span>
-                            <span className="text-[#013a7d] font-dmSans text-[24px] font-bold block">you should also know how to apply concepts in real work scenarios</span>
+                            <span className=" text-[24px] font-dmSans font-semibold text-[#3741dc] block">Just learning is not enough </span>
+                            <span className="text-[#013a7d] font-dmSans text-[22px] font-bold block">you should also know how to apply concepts in real work scenarios</span>
                         </div>
                         <div className="flex flex-col gap-5  md:hidden" >
                             <div className="mb-2">
@@ -376,23 +377,23 @@ export default function HomePage() {
 
                         <div className="hidden  md:flex flex-col gap-7 " >
                             <div className="flex justify-center items-center gap-5">
-                                <div className=" bg-white w-[25%] h-[150px] rounded-lg">
-                                    <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-[23px] "> We show you: </p>
-                                    <p className="p-0 m-0 mt-2 font-Inter text-lg"> How BA and PMs work inside companies</p>
+                                <div className=" bg-[#fff6] w-[30%] h-[150px] flex justify-center flex-col rounded-lg">
+                                    <p className="pl-5 text-black font-semibold text-start font-dmSans text-[20px] "> We show you </p>
+                                    <p className="p-0 m-0 mt-2 font-Inter text-[18px]"> How BA and PMs work inside companies</p>
                                 </div>
-                                <div className="bg-white w-[25%] h-[150px] rounded-lg">
-                                    <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-xl md:text-[23px] ">We conduct: </p>
-                                    <p className="p-0 m-0 mt-2 font-Inter pl-5 text-lg"> Real case studies, mock discussions, and role-plays to help you understand
+                                <div className="bg-[#fff6] w-[30%] h-[150px] flex justify-center flex-col rounded-lg">
+                                    <p className="pl-5 text-black font-semibold text-start font-dmSans text-xl md:text-[20px] ">We conduct: </p>
+                                    <p className="p-0 m-0 mt-2 font-Inter pl-5 text-[18px]"> Real case studies, mock discussions, and role-plays to help you understand
                                     </p>
                                 </div>
-                                <div className="bg-white w-[25%] h-[150px] rounded-lg">
-                                    <p className="pl-5 text-[#444] font-semibold text-start font-dmSans text-xl md:text-[23px]">You Practice: </p>
-                                    <ul className="list-disc list-inside font-Inter text-sm  " style={{ listStyleType: 'disc' }} >
-                                        <li className="font-dmSans mb-2 text-[15px]">How to talk to stakeholders and customers</li>
-                                        <li className="font-dmSans mb-2 text-[15px]">How to work with developers and designers</li>
-                                        <li className="ml-4 dmSans mb-2 text-[15px]">What kind of problems you will face on the job</li>
-                                        <li className="ml-4 dmSans mb-2 text-[15px]">What exactly are your roles and responsibilities</li>
-                                    </ul>
+                                <div className="bg-[#fff6] w-[30%] h-[150px] text-start px-3 rounded-lg">
+                                    <p className=" text-black font-semibold text-start font-dmSans text-xl md:text-[20px]">You Practice: </p>
+
+                                    <p className="font-dmSans mb-2 text-[15px]">How to talk to stakeholders and customers</p>
+                                    <p className="font-dmSans mb-2 text-[15px]">How to work with developers and designers</p>
+                                    <p className=" dmSans mb-2 text-[15px]">What kind of problems you will face on the job</p>
+                                    <p className=" dmSans mb-2 text-[15px]">What exactly are your roles and responsibilities</p>
+
 
                                 </div>
                             </div>
@@ -417,8 +418,8 @@ export default function HomePage() {
                             <span className=" text-[26px] font-dmSans font-semibold text-[#3741dc] block">Getting a job needs more than  knowledge </span>
                             <span className="text-[#013a7d] font-dmSans text-[24px] font-bold block">it needs the right support too</span>
                         </div>
-                        <div className="flex flex-col gap-5 md:hidden" >
-                            <div className="mb-2">
+                        <div className=" flex flex-col gap-5 md:hidden" >
+                            <div className="mb-2 ">
                                 <p className=" text-black font-semibold text-center font-dmSans text-xl "> We don't promise </p>
                                 <p className="p-0 m-0 font-Inter text-center"> Fake "Job Guarantees"</p>
                             </div>
@@ -450,39 +451,35 @@ export default function HomePage() {
 
 
 
-                        <div className="hidden md:flex flex-col gap-7 " >
-                            <div className="flex justify-center items-center gap-14">
-                                <div className="bg-white w-1/5 h-[100px] rounded-lg justify-center  items-center">
-                                    <p className=" text-[#444] font-semibold text-center font-dmSans text-xl "> We don't promise </p>
-                                    <p className="p-0 m-0 font-Inter text-center md:text-base"> Fake "Job Guarantees"</p>
-                                </div>
-                                <div className="bg-white w-1/5 h-[100px] rounded-lg">
-                                    <p className="pl-5 text-[#444] font-semibold text-center font-dmSans text-xl ">We promise one thing</p>
-                                    <p className="p-0 mx-auto font-Inter text-center ">We’ll support you until you get your job <br /> no matter how long it takes
-                                    </p>
-                                </div>
+                        <div className="hidden md:flex  items-center gap-7  mb-20" >
 
+                            <div className="bg-[#fff6] w-[33%] h-[200px] flex  flex-col  rounded-lg justify-center  items-center">
+                                <p className=" text-black font-semibold text-center font-dmSans text-xl "> We don't promise </p>
+                                <p className="p-0 m-0 font-Inter text-center md:text-base"> Fake "Job Guarantees"</p>
                             </div>
-                            <div className="my-2">
-                                <p className="pl-5 text-black font-semibold text-center font-dmSans text-3xl mt-5">You’ll receive</p>
-                                <div className="flex justify-center gap-4 rounded-lg my-2">
-                                    <div className=" flex flex-col text-white text-start  pro-form-submit rounded-lg h-[180px]">
-                                        <span className="ml-4 dmSans mb-2 text-[18px] mt-3">Job Referrals & Interview opportunities</span>
-                                        <span className="font-dmSans mb-2 ml-4 text-[18px]">Mock interviews and case rounds</span>
-                                        <span className="font-dmSans mb-2 ml-4 text-[18px]">Personal resume feedback & optimization</span>
-                                        <span className="ml-4 dmSans mb-2 text-[18px]">Ongoing guidance until you land your dream role</span>
-
-
-
-                                    </div>
-
-
-
-                                </div>
-
+                            
+                            <div className="bg-[#fff6] w-[33%] h-[200px] flex flex-col justify-center  rounded-lg">
+                                <p className="pl-5 text-black font-semibold text-center font-dmSans text-xl ">We promise one thing</p>
+                                <p className="p-0 mx-auto font-Inter text-center ">We’ll support you until you get your job <br /> no matter how long it takes
+                                </p>
                             </div>
-                            <ul className="list-disc list-inside font-Inter text-sm text-start  " style={{ listStyleType: 'disc' }} >
-                            </ul>
+
+
+
+
+
+                            <div className=" flex  bg-[#fff6]  flex-col px-3 text-black text-start w-[33%]   rounded-lg h-[200px]">
+                                <p className=" text-black font-semibold text-center font-dmSans text-xl mt-5">You’ll receive</p>
+
+                                <span className=" dmSans mb-2 text-[15px] mt-3">Job Referrals & Interview opportunities</span>
+                                <span className="font-dmSans mb-2  text-[15px]">Mock interviews and case rounds</span>
+                                <span className="font-dmSans mb-2 text-[15px]">Personal resume feedback & optimization</span>
+                                <span className=" dmSans mb-2 text-[15px]">Ongoing guidance until you land your dream role</span>
+                            </div>
+
+
+
+
                         </div>
 
                     </div>
@@ -490,11 +487,11 @@ export default function HomePage() {
             </div>
 
             {isOpen && (
-                <div onClick={() => {setIsChecked(false);setIsOpen(false);reset()}} className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50 p-4">
+                <div onClick={() => { setIsChecked(false); setIsOpen(false); reset() }} className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50 p-4">
                     <div onClick={(e) => e.stopPropagation()} className="bg-white  rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-sm lg:max-w-sm z-50">
 
 
-                        <h2  onClick={() => {setIsChecked(false);setIsOpen(false);reset()}} className="text-3xl px-2 text-end cursor-pointer font-normal">
+                        <h2 onClick={() => { setIsChecked(false); setIsOpen(false); reset() }} className="text-3xl px-2 text-end cursor-pointer font-normal">
                             &times;
                         </h2>
 
@@ -583,7 +580,7 @@ export default function HomePage() {
 
                                     <div className="text-center my-3">
                                         <button disabled={loading} type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200 w-full" >
-                                           {loading ? 'submitting...' :'Submit'} 
+                                            {loading ? 'submitting...' : 'Submit'}
                                         </button>
                                     </div>
                                 </form>
