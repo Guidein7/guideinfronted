@@ -1,0 +1,12 @@
+.admin-tabbutton{
+    font-size: 24px;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    
+}
+
+.admin-tabactive {
+    color: black;
+    border-bottom: 5px solid #244ad1 ;
+}
