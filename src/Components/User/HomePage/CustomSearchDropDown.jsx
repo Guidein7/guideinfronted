@@ -68,14 +68,14 @@ const CustomSearchDropdown = () => {
     }, []);
 
     return (
-        <div className="relative min-w-[400px]" ref={dropdownRef}>
+        <div className="relative min-w-[350px]" ref={dropdownRef}>
             <div className='flex bg-white justify-between items-center py-2 gap-4 rounded-lg shadow-sm border border-gray-200 hover:border-[#244ad1] transition-colors duration-200'>
                 <div className='flex-1 px-3'>
                     <input
                         ref={inputRef}
                         type="text"
                         className='outline-none w-full placeholder-gray-400 text-gray-700'
-                        placeholder={selectedOption || "Search categories or type custom search..."}
+                        placeholder={selectedOption || "Search for Company Careers"}
                         value={searchValue}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyPress}

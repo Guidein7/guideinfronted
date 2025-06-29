@@ -39,11 +39,13 @@ export default function CareerOverview() {
         if (num >= 1000) return (num / 1000).toFixed(0) + 'K+';
         return num.toString();
     };
-
-    const formatReviewCount = (count) => {
-        const num = parseFloat(count);
+const formatReviewCount = (count) => {
+    const num = parseFloat(count);
+    if (num >= 1000) {
         return Math.floor(num / 1000) + 'K';
-    };
+    }
+    return Math.round(num).toString(); // return integer without decimals
+};
 
     
     const renderStars = (rating) => {
@@ -148,17 +150,17 @@ export default function CareerOverview() {
                     </div>
 
                     <div>
-                        <h3 className="text-base md:text-lg font-medium text-gray-900 mb-2 md:mb-3">Hiring Growth</h3>
+                        <h3 className="text-base md:text-lg font-medium text-gray-900 mb-2 md:mb-3">Hiring Growth (last 6 months)  </h3>
                         <div className="flex items-center">
                             <div className="flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full">
                                 <TrendingUp className="w-4 h-4 mr-1" />
-                                {data.hiringGrowth*100}% &emsp; 
-                                <span className="font-medium text-sm md:text-base">{data.hiringStatus}</span>
+                                {Math.round(data.hiringGrowth * 100)}% &emsp; 
+                                <span className="font-medium text-sm md:text-base">{data.hiringStatus} </span>
                             </div>
                         </div>
                     </div>
 
-                    <a href={data?.careerPageUrl} target="_blank" className="block w-full bg-blue-600 border border-gray-300 text-white py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center ">
+                    <a href={data?.careerPageUrl} target="_blank" className="block w-full bg-blue-600 border border-gray-300 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center ">
                         Visit Career Page
                     </a>
                 </div>
@@ -209,7 +211,7 @@ export default function CareerOverview() {
                             </div>
 
                            
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 {ratingDistribution.map((item) => (
                                     <div key={item.stars} className="flex items-center gap-2 md:gap-3">
                                         <span className="text-xs md:text-sm text-gray-600 w-6 md:w-8">{item.stars}★</span>
@@ -222,7 +224,7 @@ export default function CareerOverview() {
                                         <span className="text-xs md:text-sm text-gray-500 w-8 md:w-10 text-right">{item.percentage}%</span>
                                     </div>
                                 ))}
-                            </div>
+                            </div> */}
                         </div>
 
                     </div>

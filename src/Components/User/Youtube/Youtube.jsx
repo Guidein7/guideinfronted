@@ -62,9 +62,9 @@ const VideoCard = ({ video }) => {
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-lg transition-shadow">
       <div className="flex  items-start gap-4">
-        {/* Video thumbnail placeholder */}
        
-          <img className='h-16 w-16' src={youtube} />
+       
+          <img className=' h-12 w-12 md:w-16 md:h-16'  src={youtube} />
         
 
         {/* Video info */}
@@ -72,8 +72,8 @@ const VideoCard = ({ video }) => {
           <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2 gap-2">
             <div className="min-w-0 flex-1">
               <h3 
-                onClick={() => navigate(`/youtube-overview`, { state: video })} 
-                className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2 cursor-pointer hover:text-red-600"
+              
+                className="text font-semibold text-gray-900 mb-1 line-clamp-2 cursor-pointer hover:text-red-600"
               >
                 {video.videoTitle}
               </h3>
@@ -92,7 +92,7 @@ const VideoCard = ({ video }) => {
 
           {/* Stats */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 mb-3 text-sm text-gray-600">
-            <a href={video?.channelName} target='_blank' className="flex items-center gap-1 hover:text-red-600">
+            <a href={video?.channelName} target='_blank' className="flex items-center gap-1 text-blue-500 underline">
               <Youtube className="w-4 h-4" />
               <span className="truncate">{video.channelName?.split('@')?.at(-1)}</span>
             </a>
@@ -116,7 +116,7 @@ const VideoCard = ({ video }) => {
 
           {video.shortDescription.length > 150 && (
             <Link
-              to={`/youtube/${video.id}/${video?.videoTitle}`}
+              to={`/youtube/${video.id}/${encodeURIComponent(video?.videoTitle)}`}
               className="text-blue-500 hover:underline text-sm mb-3 inline-block"
             >
               See More
@@ -133,7 +133,7 @@ const VideoCard = ({ video }) => {
                 {video.tags.split(',').map((tag, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-green-200 text-gray-700 rounded-full text-xs font-medium"
+                    className="px-1 py-1 bg-green-200 text-gray-700 rounded-full text-xs"
                   >
                     {tag.trim()}
                   </span>

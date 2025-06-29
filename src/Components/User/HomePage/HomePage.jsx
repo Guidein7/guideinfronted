@@ -99,11 +99,11 @@ export default function HomePage() {
 
             <div className=' hidden lg:block bg-[#244ad1] p-10'>
 
-                <div className='text-center text-white text-[44px] font-[500]'>
+                <div className='text-center text-white text-[36px] font-[500]'>
                     <h1>One-Stop Guide for</h1>
                     <h1>Your Career Journey</h1>
                 </div>
-                <div className='w-[400px] mx-auto'>
+                <div className='w-[350px] mx-auto'>
                 <CustomSearchDropdown/>
                 </div>
 
@@ -112,39 +112,39 @@ export default function HomePage() {
                     <div onClick={() => navigate('/career')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
 
                         <div className='h-1/2 white flex items-center justify-center'>
-                            <div className='text-4xl text-white'><img src={Company} className='w-24 h-24' /></div>
+                            <div className='text-4xl text-white'><img src={Company} className='w-18 h-18' /></div>
                         </div>
 
                         <div className='h-1/2 bg-white p-4 text-center'>
-                            <h3 className='font-bold text-2xl text-gray-800'>Company Careers</h3>
+                            <h3 className='font-bold text-xl text-gray-800'>Company Careers</h3>
                             <p className='text-sm text-gray-600'>Explore company career pages and know their current hiring status, median employee tenure, and more — all in one place</p>
                         </div>
                     </div>
 
                     <div onClick={() => navigate('/youtube')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
                         <div className='h-1/2 white flex items-center justify-center'>
-                            <div className='text-4xl text-white'><img src={youtubeimg} className='w-24 h-24' /></div>
+                            <div className='text-4xl text-white'><img src={youtubeimg} className='w-18 h-18' /></div>
                         </div>
                         <div className='h-1/2 bg-white p-4 text-center'>
-                            <h3 className='font-bold text-2xl text-gray-800'>YouTube Learning</h3>
+                            <h3 className='font-bold text-xl text-gray-800'>YouTube Learning</h3>
                             <p className='text-sm text-gray-600'>Don’t waste time searching for good videos — we’ve already done the research. Learn from the best YouTube videos.</p>
                         </div>
                     </div>
                     <div onClick={() => navigate('/institute')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
                         <div className='h-1/2 bg-white flex items-center justify-center'>
-                            <div className='text-4xl text-white'><img src={instituteimg} className='w-24 h-24' /></div>
+                            <div className='text-4xl text-white'><img src={instituteimg} className='w-18 h-18' /></div>
                         </div>
                         <div className='h-1/2 bg-white p-4 text-center'>
-                            <h3 className='font-bold text-2xl text-gray-800'>Coaching Centers</h3>
+                            <h3 className='font-bold text-xl text-gray-800'>Coaching Centers</h3>
                             <p className='text-sm text-gray-600'>Find the right coaching center without leaving your home. We’ve researched it all — explore course details, reviews, and request a call back</p>
                         </div>
                     </div>
                     <div onClick={() => navigate('/certificate')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60'>
                         <div className='h-1/2 bg-white flex items-center justify-center'>
-                            <div className='text-4xl text-white'><img src={certificateimg} className='w-24 h-24' /></div>
+                            <div className='text-4xl text-white'><img src={certificateimg} className='w-18 h-18' /></div>
                         </div>
                         <div className='h-1/2 bg-white p-4 text-center'>
-                            <h3 className='font-bold text-2xl text-gray-800'>Free Certifications</h3>
+                            <h3 className='font-bold text-xl text-gray-800'>Free Certifications</h3>
                             <p className='text-sm text-gray-600'>Boost your career with 100% free certification courses. We’ve curated the best from top platforms — start learning and get certified</p>
                         </div>
                     </div>
@@ -170,14 +170,14 @@ export default function HomePage() {
 
                 <div className=' p-2 bg-gradient-to-r from-blue-600 to-indigo-700' >
 
-                    <div className='text-center  flex flex-col gap-3 text-white text-3xl font-[500]'>
+                    <div className='text-center  flex flex-col gap-3 text-white text-2xl font-[500]'>
                         <h1>One-Stop Guide for</h1>
                         <h1>Your Career Journey</h1>
                     </div>
 
-                    <div className='flex bg-white items-center rounded-lg justify-between px-3 mt-8 w-[80%] mx-auto'>
+                    <div className='flex bg-white items-center rounded-lg justify-between px-3 mt-8 w-[60%] mx-auto'>
 
-                        <select onChange={(e) => setSearchValue(e.target.value)} className=' border bg-white border-gray-100 rounded-lg p-4 outline-none' >
+                        <select onChange={(e) => setSearchValue(e.target.value)} className=' border bg-white border-gray-100 rounded-lg px-4 py-2 outline-none' >
                             <option value="">Select Category</option>
                             <option value="career">Career Pages</option>
                             <option value="youtube">Youtube</option>
@@ -194,32 +194,32 @@ export default function HomePage() {
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
-                                <img src={Company} className='h-16 w-16' />
+                                <img src={Company} className='w-12 h-12' />
                             </div>
-                            <span className='font-bold text-lg'>Company Careers</span>
+                            <span className='font-bold'>Company Careers</span>
                         </div>
                         <div onClick={() => navigate('/youtube')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
-                                <img src={youtubeimg} className='h-16 w-16' />
+                                <img src={youtubeimg} className='w-12 h-12' />
                             </div>
 
-                            <span className='font-bold text-lg'>YouTube Learning</span>
+                            <span className='font-bold '>YouTube Learning</span>
                         </div>
                     </div>
 
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/institute')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
-                                <img src={instituteimg} className='h-16 w-16' />
+                                <img src={instituteimg} className='w-12 h-12' />
                             </div>
-                            <span className='font-bold text-lg'>Coaching Centers</span>
+                            <span className='font-bold '>Coaching Centers</span>
                         </div>
                         <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
-                                <img src={certificateimg} className='h-16 w-16' />
+                                <img src={certificateimg} className='w-12 h-12' />
                             </div>
 
-                            <span className='font-bold text-lg'>Free Certifications</span>
+                            <span className='font-bold '>Free Certifications</span>
                         </div>
                     </div>
 
@@ -245,9 +245,9 @@ export default function HomePage() {
                                 className='bg-white flex flex-col items-center gap-5 py-2 px-4 rounded-lg  flex-shrink-0'
                             >
                                 <div className='bg-blue-100 p-3 rounded-xl'>
-                                    <img src={Company} className='w-16 h-16' />
+                                    <img src={Company} className='w-12 h-12' />
                                 </div>
-                                <span className='text-lg font-sans font-semibold text-center'>
+                                <span className=' font-sans font-semibold text-center'>
                                     {extractBracketOrOriginal(item?.companyName)}
                                 </span>
                                 <span className="p-1 bg-green-100 rounded-lg text-[10px] font-medium">
@@ -255,7 +255,7 @@ export default function HomePage() {
                                 </span>
                             </div>
                         ))}
-                        {data.careerData.length > 5 && (
+                        {/* {data.careerData.length > 5 && (
                             <Link
                                 to='/career'
                                 className='bg-white  flex flex-col items-center justify-center gap-3 py-2 px-4 rounded-lg flex-shrink-0 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-colors'
@@ -270,7 +270,7 @@ export default function HomePage() {
                                     +{data.careerData.length - 5} more companies
                                 </span>
                             </Link>
-                        )}
+                        )} */}
                     </div>
                 </div>
 
@@ -284,10 +284,9 @@ export default function HomePage() {
 
                         </div>
                         {data.instituteData?.length > 5 && (
-                            <button onClick={() => navigate(`institute`)} className='group flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl'>
-                                View All
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </button>
+                           
+                                <Link className='text-blue-400 font-semibold cursor-pointer' to='/institute'>View all</Link>
+                              
                         )}
                     </div>
 
@@ -297,15 +296,15 @@ export default function HomePage() {
                             <div
                                 onClick={() => navigate(`institute/${item.id}/${item.instituteName}`)}
                                 key={idx}
-                                className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100'
+                                className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[200px]'
                             >
 
                                 <div className='flex items-start gap-4 mb-4'>
                                     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:shadow-xl transition-shadow">
-                                        <GraduationCap className="w-7 h-7 text-white" />
+                                        <GraduationCap className="w-12 h-12 text-white" />
                                     </div>
                                     <div className='flex-1'>
-                                        <h3 className='text-lg font-bold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors'>
+                                        <h3 className=' font-semibold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors'>
                                             {extractBracketOrOriginal(item?.instituteName)}
                                         </h3>
 
@@ -313,13 +312,13 @@ export default function HomePage() {
                                 </div>
 
 
-                                <div className='flex flex-col gap-3 mb-6'>
+                                <div className='flex flex-col gap-3 '>
                                     <div className="flex items-center gap-2">
                                         <div className="flex items-center gap-1 bg-yellow-50 px-3 py-1 rounded-lg">
                                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                             <span className="font-bold text-gray-900">{item.rating}</span>
                                         </div>
-                                        <span className="text-gray-600 text-sm">({item.numberOfReviews} reviews)</span>
+                                        <span className="text-gray-600 text-sm">({item.numberOfReviews?.split('.')[0]} reviews)</span>
                                     </div>
 
                                     <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">
@@ -333,7 +332,7 @@ export default function HomePage() {
                             </button> */}
                             </div>
                         ))}
-                        {data.instituteData?.length > 5 && (
+                        {/* {data.instituteData?.length > 5 && (
                             <div className='group bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 flex flex-col items-center justify-center gap-4 min-w-[280px] p-6 rounded-2xl border-2 border-dashed border-blue-200 hover:border-blue-300 cursor-pointer transition-all duration-300 transform hover:-translate-y-2'>
                                 <div className='bg-gradient-to-br from-blue-500 to-indigo-600 p-4 rounded-2xl shadow-lg group-hover:shadow-xl transition-shadow'>
                                     <Building size={32} className='text-white' />
@@ -352,14 +351,14 @@ export default function HomePage() {
                                 </div>
                                 <ArrowRight className="w-5 h-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
 
 
                 <div className='flex flex-col p-2'>
                     <div className='flex justify-between items-center p-2 font-sans'>
-                        <span className='text-xl font-semibold'>Learn From Youtube</span>
+                        <span className='text-lg font-semibold'>Learn From Youtube</span>
                         {data.youtubeData.length > 5 && (
                             <Link to='/youtube' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
@@ -371,23 +370,23 @@ export default function HomePage() {
                             <div
                                 onClick={() => navigate(`youtube/${item.id}/${item.videoTitle}`)}
                                 key={idx}
-                                className='bg-white flex flex-col  gap-2 py-2 px-4 rounded-lg  flex-shrink-0'
+                                className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className=' p-3 rounded-xl flex items-center gap-5'>
-                                    <img src={youtubeimg} className='w-16 h-16' />
+                                    <img src={youtubeimg} className='w-12 h-12' />
                                     <span className='text-lg font-sans font-semibold text-center'>
                                         {item.topic}
                                     </span>
                                 </div>
 
 
-                                <span className='text-lg font-sans font-semibold text-center'>
-                                    {extractBracketOrOriginal(item?.videoTitle)}
+                                <span className=' font-sans font-semibold text-center'>
+                                    {extractBracketOrOriginal(item?.videoTitle.substring(0,28))}
                                 </span>
 
 
                                 {item.tags && (
-                                    <div className="flex items-start gap-2 flex-wrap">
+                                    <div className="flex items-start gap-2 ">
                                         <Tag className="w-3 h-3 text-gray-400 mt-1 flex-shrink-0" />
                                         <div className="flex flex-wrap gap-1">
                                             {item.tags.split(',').map((tag, index) => (
@@ -405,7 +404,7 @@ export default function HomePage() {
 
                             </div>
                         ))}
-                        {data.youtubeData.length > 5 && (
+                        {/* {data.youtubeData.length > 5 && (
                             <Link
                                 to='/youtube'
                                 className='bg-white  flex flex-col items-center justify-center gap-3 py-2 px-4 rounded-lg flex-shrink-0 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-colors'
@@ -420,7 +419,7 @@ export default function HomePage() {
                                     +{data.careerData.length - 5} more companies
                                 </span>
                             </Link>
-                        )}
+                        )} */}
                     </div>
                 </div>
 
@@ -430,23 +429,23 @@ export default function HomePage() {
 
                 <div className='flex flex-col'>
                     <div className='flex justify-between items-center p-2 font-sans'>
-                        <span className='text-xl font-semibold'>Free Certifications</span>
+                        <span className='text-lg font-semibold'>Free Certifications</span>
                         {data.certificateData.length > 5 && (
                             <Link to='/certificate' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
                             </Link>
                         )}
                     </div>
-                    <div className='flex  overflow-x-auto scrollbar-hide gap-4 px-2 pb-2'>
+                    <div className='flex  overflow-x-auto scrollbar-hide gap-4 px-2 pb-2 mb-3'>
                         {data.certificateData.slice(0, 5).map((item, idx) => (
                             <div
                                 onClick={() => navigate(`certificate/${item.id}/${item.courseTitle}`)}
                                 key={idx}
-                                className='bg-white flex flex-col  gap-5 py-2 px-4 rounded-lg  flex-shrink-0'
+                                className='group bg-white gap-3 hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className='flex items-center gap-3 rounded-xl'>
-                                    <img src={certificateimg} className='w-16 h-16' />
-                                    <span className='text-lg font-sans font-semibold text-center'>
+                                    <img src={certificateimg} className='w-12 h-12' />
+                                    <span className=' font-sans font-semibold text-center'>
                                         {item?.courseCategory}
                                     </span>
 
@@ -469,7 +468,7 @@ export default function HomePage() {
                                 </button> */}
                             </div>
                         ))}
-                        {data.certificateData.length > 5 && (
+                        {/* {data.certificateData.length > 5 && (
                             <Link
                                 to='/certificate'
                                 className='bg-white  flex flex-col items-center justify-center gap-3 py-2 px-4 rounded-lg flex-shrink-0 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-colors'
@@ -484,7 +483,7 @@ export default function HomePage() {
                                     +{data.careerData.length - 5} more companies
                                 </span>
                             </Link>
-                        )}
+                        )} */}
                     </div>
                 </div>
 

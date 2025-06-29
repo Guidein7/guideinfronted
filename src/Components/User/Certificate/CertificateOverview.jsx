@@ -65,7 +65,7 @@ export default function CertificateOverview() {
                                 {data.courseCategory}
                             </span>
                         </div>
-                        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                        <h1 className="text-xl md:text-2xl  font-bold text-white mb-2">
                             {data.courseTitle}
                         </h1>
                         <div className="flex flex-wrap items-center gap-4 text-white/90">

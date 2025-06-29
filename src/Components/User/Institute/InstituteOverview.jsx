@@ -67,16 +67,16 @@ export default function InstituteOverview() {
         const hasHalfStar = rating % 1 !== 0;
 
         for (let i = 0; i < fullStars; i++) {
-            stars.push(<Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />);
+            stars.push(<Star size={6} key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />);
         }
 
         if (hasHalfStar) {
-            stars.push(<Star key="half" className="w-5 h-5 fill-yellow-400/50 text-yellow-400" />);
+            stars.push(<Star size={6} key="half" className="w-5 h-5 fill-yellow-400/50 text-yellow-400" />);
         }
 
         const remainingStars = 5 - Math.ceil(rating);
         for (let i = 0; i < remainingStars; i++) {
-            stars.push(<Star key={`empty-${i}`} className="w-5 h-5 text-gray-300" />);
+            stars.push(<Star size={6} key={`empty-${i}`} className="w-5 h-5 text-gray-300" />);
         }
 
         return stars;
@@ -126,11 +126,11 @@ export default function InstituteOverview() {
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 sm:px-8 py-8 text-white">
                         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                             <div className="flex-1">
-                                <h1 className="text-3xl sm:text-4xl font-bold mb-2">{data.instituteName}</h1>
+                                <h1 className="text-2xl font-bold mb-2">{data.instituteName}</h1>
                                 <div className="flex items-center space-x-4 mb-4">
                                     <div className="flex items-center space-x-1">
                                         {renderStars(data.rating)}
-                                        <span className="ml-2 text-lg font-semibold">{data.rating}</span>
+                                        <span className="ml-2 text-sm font-semibold">{data.rating}</span>
                                         <span className="text-blue-100">({data.numberOfReviews} reviews)</span>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@ export default function InstituteOverview() {
                     {/* Course Information */}
                     <div className="p-6 sm:p-8">
                         <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Information</h2>
+                            <h2 className="text-xl font-bold text-gray-900 mb-6">Course Information</h2>
                             <div className="bg-blue-50 rounded-lg p-6 mb-6">
                                 <div className="flex items-center mb-2">
                                     <GraduationCap className="w-6 h-6 text-blue-600 mr-3" />
@@ -213,9 +213,9 @@ export default function InstituteOverview() {
 
                         {/* About Section */}
                         <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">About</h2>
                             <div className="prose max-w-none">
-                                <p className="text-gray-700 leading-relaxed text-lg">{data.instituteDescription}</p>
+                                <p className="text-gray-700 leading-relaxed ">{data.instituteDescription}</p>
                             </div>
                         </div>
 
@@ -236,7 +236,7 @@ export default function InstituteOverview() {
                         {/* Action Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                             <button className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                                Contact Institute
+                                Request Callback
                             </button>
                             {data.websiteUrl && (
                                 <a 
@@ -257,7 +257,7 @@ export default function InstituteOverview() {
                                     className="flex-1 bg-green-100 text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-green-200 transition-colors text-center flex items-center justify-center"
                                 >
                                     <MapPin className="w-5 h-5 mr-2" />
-                                    View Location
+                                    Get Directions
                                 </a>
                             )}
                         </div>

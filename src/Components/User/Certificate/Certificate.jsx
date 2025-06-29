@@ -121,7 +121,7 @@ export default function Certificate() {
             <div className=" border-b border-slate-200 ">
                 <div className="max-w-7xl mx-auto px-6 py-8">
                     <div className=" mb-8">
-                        <h1 className="md:text-4xl font-bold text-slate-800 mb-2 text-lg">Professional Certificates</h1>
+                        <h1 className="md:text-2xl font-bold text-slate-800 mb-2 text-lg">Professional Certificates</h1>
                         <p className="text-slate-600  max-w-2xl ">
                             Advance your career with industry-recognized certificates from top providers
                         </p>
@@ -201,7 +201,7 @@ export default function Certificate() {
                                     <div className="p-8 flex flex-col lg:flex-row gap-8">
                                         {/* Certificate Icon */}
                                         <div className="flex-shrink-0">
-                                            <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
+                                            <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
                                                 <GrCertificate className="w-12 h-12 text-blue-600" />
                                             </div>
                                         </div>
@@ -209,7 +209,7 @@ export default function Certificate() {
                                         {/* Course Details */}
                                         <div className="flex-1 space-y-4">
                                             <div>
-                                                <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
+                                                <h2 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
                                                     {item.courseTitle}
                                                 </h2>
                                                 <div className="flex flex-wrap items-center gap-4 text-slate-600">
@@ -260,11 +260,11 @@ export default function Certificate() {
                                     <div className="p-6 flex  gap-4">
                                        
                                         <div className="flex-shrink-0">
-                                            <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
-                                                <GrCertificate className="w-12 h-12 text-blue-600" />
+                                            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
+                                                <GrCertificate className="w-10 h-10 text-blue-600" />
                                             </div>
                                         </div>
-                                        <h2 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
+                                        <h2 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
                                                 {item.courseTitle}
                                             </h2>
                                     </div>

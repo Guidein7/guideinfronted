@@ -93,18 +93,18 @@ export default function YoutubeOverView() {
                 {/* Header */}
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6 lg:p-8 text-white">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-                            <div className="bg-white/20 p-3 rounded-full w-fit">
-                                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8" />
+                        <div className="flex  sm:items-center gap-3 mb-4">
+                            <div className="bg-white/20 flex justify-center items-center w-10 h-10 p-3 rounded-full w-fit">
+                                <BookOpen className="w-6 h-6" />
                             </div>
                             <div className="min-w-0 flex-1">
                                 {courseData.videoTitle && (
-                                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold break-words">
+                                    <h1 className="text-lg  lg:text-2xl font-bold break-words">
                                         {courseData.videoTitle}
                                     </h1>
                                 )}
                                 <p className="text-blue-100 text-sm sm:text-base lg:text-lg mt-1">
-                                    by Bro Code
+                                    by {courseData.channelName?.split('@')?.at(-1)}
                                 </p>
                             </div>
                         </div>
@@ -157,9 +157,9 @@ export default function YoutubeOverView() {
 
                         {/* Course Description */}
                         <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
-                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Course Overview</h2>
+                            <h2 className="text-lg font-bold text-gray-900 mb-4 sm:mb-6">Course Overview</h2>
                             {courseData.shortDescription && (
-                                <p className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed mb-6 lg:mb-8">
+                                <p className="text-gray-700  leading-relaxed mb-6 lg:mb-8">
                                     {courseData.shortDescription}
                                 </p>
                             )}
@@ -211,7 +211,7 @@ export default function YoutubeOverView() {
                     <div className="space-y-4 sm:space-y-6">
                         {/* Course Stats */}
                         <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
-                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Video Details</h3>
+                            <h3 className="  font-bold text-gray-900 mb-4 sm:mb-6">Video Details</h3>
                             <div className="space-y-3 sm:space-y-4">
                                 {courseData.topic && (
                                     <div className="flex items-center justify-between text-sm sm:text-base">
@@ -240,16 +240,18 @@ export default function YoutubeOverView() {
                         {/* Quick Start */}
                         {courseData.youtubeUrl && (
                             <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl shadow-lg p-4 sm:p-6 text-white">
-                                <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Ready to Start?</h3>
+                                <h3 className=" font-bold mb-3 sm:mb-4">Ready to Start?</h3>
                                 <p className="mb-3 sm:mb-4 text-green-100 text-sm sm:text-base">
                                     Begin your {courseData.topic || 'learning'} journey with this comprehensive free course!
                                 </p>
+                                <div className=" w-full mx-auto flex justify-center">
                                 <button
                                     onClick={() => window.open(courseData.youtubeUrl, '_blank')}
-                                    className="w-full bg-white text-green-600 py-2.5 sm:py-3 px-4 rounded-xl font-semibold hover:bg-green-50 transition-colors text-sm sm:text-base"
+                                    className=" mx-auto bg-white text-green-600 py-2.5 sm:py-3 px-4 rounded-xl font-semibold hover:bg-green-50 transition-colors text-sm sm:text-base"
                                 >
                                     Start Learning Now
                                 </button>
+                                </div>
                             </div>
                         )}
                     </div>

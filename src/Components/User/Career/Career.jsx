@@ -96,7 +96,7 @@ const CompanyCard = ({ company }) => {
             </div>
             <div className="flex items-center gap-1 " title="Hiring Growth" >
               <TrendingUp className="w-4 h-4 flex-shrink-0" />
-              <span className="truncate">{company.hiringGrowth ? '+' + (parseFloat(company.hiringGrowth) * 100).toFixed(1) + '%' : 'N/A'}</span>
+              <span className="truncate">{company.hiringGrowth ?  + (parseFloat(company.hiringGrowth) * 100).toFixed(1) + '%' : 'N/A'}</span>
             </div>
             <div className="flex items-center gap-1" title="Median Tenure">
               <Clock className="w-4 h-4 flex-shrink-0" />
@@ -115,7 +115,7 @@ const CompanyCard = ({ company }) => {
               : company.companyOverview}
           </p>
 
-          {company.companyOverview.length > 150 && (
+          {company.companyOverview.length > 30 && (
             <Link
               to={`/career/${company.id}/${company?.companyName}`}
               className="text-blue-500 hover:underline text-sm"

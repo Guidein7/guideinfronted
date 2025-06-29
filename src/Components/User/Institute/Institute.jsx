@@ -95,9 +95,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
     address: course.address,
     mobile: course.mobileNumber ? `+91 ${course.mobileNumber}` : 'N/A',
     duration: course.courseDuration,
-    mode: course.modeOfClass === '1.0' ? 'Online' :
-      course.modeOfClass === '2.0' ? 'Offline' :
-        course.modeOfClass === '3.0' ? 'Hybrid' : 'Unknown',
+    mode: course.modeOfClass ,
     batch: course.courseBatch,
     computerLab: course.computerLab === '1.0' ? 'Available' : 'Not Available',
     price: `₹${parseFloat(course.estimatedCoursePrice).toLocaleString('en-IN')}`,
@@ -115,7 +113,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
       <div className=" hidden md:block bg-white border border-gray-200 rounded-2xl p-2 hover:shadow-xl transition-all duration-300 hover:border-blue-200 transform hover:-translate-y-1">
         <div className="flex flex lg:flex-row gap-6">
           {/* Institute logo */}
-          <div className="w-16 h-16 lg:w-24 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+          <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
             <GraduationCap className="w-10 h-10 text-white" />
           </div>
 
@@ -128,7 +126,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
                   <Building2 className="w-5 h-5" />
                   {mappedCourse.instituteName}
                 </p>
-                <p className='flex gap-2 items-center'> <span>{mappedCourse.price} (estimated) </span></p>
+                {/* <p className='flex gap-2 items-center'> <span>{mappedCourse.price} (estimated) </span></p> */}
               </div>
               <a
                 href={mappedCourse.mapLocation}
@@ -173,7 +171,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <a
                 href={`tel:${mappedCourse.mobile}`}
-                className="flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+                className="flex items-center justify-center gap-3 bg-[#058a07] hover:bg-green-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <IoCallOutline className="w-5 h-5" />
                 <span>{mappedCourse.mobile}</span>
@@ -184,7 +182,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
                 className="flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <LuMessageCircleMore className="w-5 h-5" />
-                <span>Send Enquiry</span>
+                <span>Request Callback</span>
               </button>
 
               <button
@@ -202,20 +200,23 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
       <div className='md:hidden bg-white border border-gray-200 rounded-2xl p-2 flex flex-col gap-1'>
         <div className='flex gap-5'>
           <div>
-            <div className="w-20 h-20 lg:w-24 h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
               <GraduationCap className="w-10 h-10 text-white" />
             </div>
           </div>
           <div className='flex flex-col gap-1'>
             <div className='flex flex-col'>
-              <span className='text-[22px] font-bold'>{mappedCourse.courseName}</span>
+              <div className='flex justify-between items-center gap-5 '>
+              <span className='text-[20px] font-bold'>{mappedCourse.courseName}</span>
+              {/* <Link className='text-blue-500 text-xs underline' to={`/institute/${course.id}/${mappedCourse.instituteName}`}>View Details</Link> */}
+              </div>
               <Link to={`/institute/${course.id}/${mappedCourse.instituteName}`} className='text-[16px] text-blue-500'>{mappedCourse.instituteName}</Link>
-              <p>{mappedCourse.price} - estimated price</p>
+              {/* <p>{mappedCourse.price} - estimated price</p> */}
             </div>
             <div className='flex gap-2 items-center'>
-              <span className='bg-blue-700 text-white flex itmes-center p-1 gap-3 w-[70px] rounded-lg'>
+              <span className='bg-blue-700 text-white flex items-center p-1 gap-2 w-[60px] rounded-lg'>
                 <span> {mappedCourse.rating}</span>
-                <Star size={20} />
+                <Star size={16} />
               </span>
               <div className='flex'>
                 <img className='w-6 h-6' src={maps} />
@@ -241,7 +242,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
         <div className="flex flex gap-3 justify-center my-2">
           <a
             href={`tel:${mappedCourse.mobile}`}
-            className="flex items-center justify-center px-2 gap-2 bg-green-500 hover:bg-green-600 text-white py-1 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+            className="flex items-center justify-center px-2 gap-2 bg-[#058a07] hover:bg-green-600 text-white py-1 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <IoCallOutline className="w-5 h-5" />
             <span>Call Now</span>
@@ -249,10 +250,10 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
 
           <button
             onClick={() => { setId(course.id); setShowModel(true) }}
-            className="flex items-center justify-cente px-2 gap-2 bg-blue-600 hover:bg-blue-700 text-white py-1  rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+            className="flex items-center justify-cente px-2 gap-2 bg-blue-700 hover:bg-blue-700 text-white py-1  rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <LuMessageCircleMore className="w-5 h-5" />
-            <span>Send Enquiry</span>
+            <span>Request Callback</span>
           </button>
         </div>
 
@@ -303,8 +304,8 @@ const EnquiryModal = ({ showModel, setShowModel, setId, id }) => {
   if (!showModel) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8 relative animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-100 bg-opacity-50 p-4">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8 relative animate-in fade-in duration-300 z-10">
         <button
           onClick={() => setShowModel(false)}
           className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200"
@@ -504,8 +505,8 @@ const Institute = () => {
             <ChevronRight size={18} />
             <span className="text-gray-600">Institutes</span>
           </div>
-          <h1 className="text-xl md:text-4xl font-bold text-gray-900 mb-3">Find Your Perfect Course</h1>
-          <p className="md:text-xl text-gray-600">Discover top programming institutes and courses tailored for you</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">Find Your Perfect Course</h1>
+          <p className="md:text-lg text-gray-600">Discover top programming institutes and courses tailored for you</p>
         </div>
 
         {/* Enhanced Filters */}
@@ -548,14 +549,14 @@ const Institute = () => {
             />
 
             {/* Price Filter */}
-            <SingleSelectDropdown
+            {/* <SingleSelectDropdown
               label="Price"
               options={priceOptions}
               selected={selectedPrice}
               onChange={setSelectedPrice}
               icon={IndianRupee}
               placeholder="Any Price"
-            />
+            /> */}
 
             {/* Duration Filter */}
             <SingleSelectDropdown
