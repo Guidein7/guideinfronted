@@ -10,6 +10,7 @@ import Company from '../../../assets/company.png'
 import youtubeimg from '../../../assets/youtube.png'
 import instituteimg from '../../../assets/institute.png'
 import certificateimg from '../../../assets/certificate.png'
+import CustomSearchDropdown from './CustomSearchDropDown.jsx'
 
 
 export default function HomePage() {
@@ -23,18 +24,13 @@ export default function HomePage() {
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    const navigateForSearch = () => {
-        if (!searchTerm)
-            return
-
-        alert(searchTerm)
-        if (searchTerm.toLowerCase().startsWith('com')) {
-            navigate('/career')
-        } else if (searchTerm.toLocaleLowerCase().startsWith('y')) {
-            navigate('youtube')
+    const navigateForSearch = (value) => {
+        if (!searchValue) {
+            return;
         }
-        navigate(searchTerm)
-    }
+        // Your navigation logic here
+        navigate(searchValue);
+    };
 
 
     const [searchValue, setSearchValue] = useState('');
@@ -76,6 +72,12 @@ export default function HomePage() {
         })
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            navigateForSearch();
+        }
+    }
+
     useEffect(() => {
         getCareerData(types.CAREER);
         getCareerData(types.YOUTUBE)
@@ -101,33 +103,9 @@ export default function HomePage() {
                     <h1>One-Stop Guide for</h1>
                     <h1>Your Career Journey</h1>
                 </div>
-                <div className='flex justify-center '>
-                    <div className='flex bg-white justify-between py-2  gap-4  min-w-[400px] rounded-lg'>
-                        <div className='p-2 '>
-                            <select className='outline-none' value={searchTerm} onChange={(e) => navigateForSearch(e.target.value)}>
-                                <option className='font-bold' value="">Select Category</option>
-                                <option vlaue="/career">Company Careers</option>
-                                <option value="/youtube">Youtube Learning</option>
-                                <option value="/insitute">Coaching Centers</option>
-                                <option value="/certificate">Free  Certifications</option>
-                            </select>
-                        </div>
-                        {/* <div className='p-2 border-r' >
-                            <select >
-                                <option>All Cities</option>
-                            </select>
-                        </div>
-                        <div className='p-2'>
-                            <input type='text' placeholder="whats' on your mind" />
-                        </div> */}
-                        <div className='p-2  mr-2 rounded-lg'>
-                            {/* <button className='text-white'>Search</button> */}
-                            <SearchIcon onClick={navigateForSearch} strokeWidth={2.5} className='text-[#244ad1] font-bold' />
-                        </div>
-
-                    </div>
+                <div className='w-[400px] mx-auto'>
+                <CustomSearchDropdown/>
                 </div>
-
 
                 <div className='grid grid-cols-4 gap-4 mt-8 -mb-36'>
 

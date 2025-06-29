@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { types } from '../../Admin/ExcelUploads/types';
 import { resources } from '../../resources';
+import youtube from '../../../assets/youtube.png'
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,9 +63,9 @@ const VideoCard = ({ video }) => {
     <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-lg transition-shadow">
       <div className="flex  items-start gap-4">
         {/* Video thumbnail placeholder */}
-        <div className="h-12 w-12 md:w-20 md:h-32  bg-[#FF0000] rounded-lg flex items-center justify-center flex-shrink-0">
-          <Play className="w-8 h-8 text-white" />
-        </div>
+       
+          <img className='h-16 w-16' src={youtube} />
+        
 
         {/* Video info */}
         <div className="flex-1 min-w-0 w-full">
@@ -82,7 +83,7 @@ const VideoCard = ({ video }) => {
               href={video.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className=" hidden md:block px-3 py-2 sm:px-4 bg-[#FF0000] text-white rounded-lg text-sm font-medium hover:bg-red-700 flex-shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
+              className=" hidden md:flex px-3 py-2 sm:px-4 bg-[#FF0000] text-white rounded-lg text-sm font-medium hover:bg-red-700 flex-shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
             >
               <Youtube className="w-4 h-4" />
               Watch Video
@@ -124,15 +125,15 @@ const VideoCard = ({ video }) => {
 
           {/* Tags */}
           {video.tags && (
-            <div className="flex items-center">
+            <div className="flex gap-2 items-center">
               <div>
               <Tag className="w-3 h-3 text-gray-400 mt-1 flex-shrink-0" />
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center gap-2">
                 {video.tags.split(',').map((tag, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"
+                    className="px-2 py-1 bg-green-200 text-gray-700 rounded-full text-xs font-medium"
                   >
                     {tag.trim()}
                   </span>

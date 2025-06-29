@@ -5,7 +5,7 @@ import { resources } from "../../resources";
 import { types } from "../../Admin/ExcelUploads/types";
 
 
-import { ArrowLeft, MapPin, Clock, Users, Phone, Globe, Star, Calendar, Monitor, Briefcase, DollarSign, GraduationCap } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Users, Phone, Globe, Star, Calendar, Monitor, Briefcase, DollarSign, GraduationCap, IndianRupee } from "lucide-react";
 
 export default function InstituteOverview() {
     // Sample data based on your API response
@@ -180,10 +180,10 @@ export default function InstituteOverview() {
 
                             <div className="bg-gray-50 rounded-lg p-6">
                                 <div className="flex items-center mb-3">
-                                    <DollarSign className="w-6 h-6 text-orange-600 mr-3" />
-                                    <h4 className="font-semibold text-gray-900">Course Fee</h4>
+                                    <IndianRupee className="w-6 h-6 text-orange-600 " />
+                                    <h4 className="font-semibold text-gray-900"> Estimated Course Fee</h4>
                                 </div>
-                                <p className="text-lg text-gray-700 font-semibold">{formatPrice(data.estimatedCoursePrice)}</p>
+                                <p className="text-lg text-gray-700 font-semibold ml-3">{formatPrice(data.estimatedCoursePrice)}</p>
                             </div>
 
                             <div className="bg-gray-50 rounded-lg p-6">
