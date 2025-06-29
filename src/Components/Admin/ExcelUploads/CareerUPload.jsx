@@ -260,7 +260,7 @@ export default function CareerUpload() {
                             }}
                         >
                             <option value="">All Industries</option>
-                            {industries.map((indus,ind) => (
+                            {industries?.map((indus,ind) => (
                                 <option key={ind} value={indus}>{indus}</option>
                             ))}
                            
@@ -292,7 +292,7 @@ export default function CareerUpload() {
                             }}
                         >
                             <option value="">All Hiring Status</option>
-                            {hirings.map((hiring,ind ) => (
+                            {hirings?.map((hiring,ind ) => (
                                 <option key={ind} value={hiring}>{hiring}</option>
                             ))}
                         </select>
