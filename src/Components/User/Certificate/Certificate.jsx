@@ -58,7 +58,12 @@ export default function Certificate() {
 
     useEffect(() => {
         getData();
+         
     }, [courseCategory, courseDuration, page]);
+
+    useEffect(() => {
+         window.scrollTo(0, 0);
+    },[page])
 
     const updateFilters = (newFilters) => {
         const updatedParams = {

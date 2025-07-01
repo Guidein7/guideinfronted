@@ -64,7 +64,7 @@ const VideoCard = ({ video }) => {
       <div className="flex  items-start gap-4">
        
        
-          <img className=' h-12 w-12 md:w-16 md:h-16'  src={youtube} />
+          <img className=' h-10 w-10 md:w-16 md:h-16'  src={youtube} />
         
 
         {/* Video info */}
@@ -252,6 +252,10 @@ const Youtub = () => {
   useEffect(() => {
     getData();
   }, [topic, page, duration]);
+
+  useEffect(() => {
+         window.scrollTo(0, 0);
+    },[page])
 
   const currentPageDisplay = page + 1;
 

@@ -4,6 +4,7 @@ import {  useNavigate, useParams } from "react-router-dom";
 import { resources } from "../../resources";
 import { types } from "../../Admin/ExcelUploads/types";
 import { useEffect, useState } from "react";
+import Company from '../../../assets/company.png'
 
 
 export default function CareerOverview() {
@@ -105,9 +106,9 @@ const formatReviewCount = (count) => {
             <h1 onClick={() => navigate(-1)} className="cursor-pointer text-blue-600 hover:text-blue-800 mb-4 md:mb-6">← Back</h1>
           
             <div className="flex flex md:flex-row items-start gap-4 md:gap-6 mb-6 md:mb-8">
-                <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-200 rounded-lg flex items-center justify-center border flex-shrink-0">
+                <div className="w-20 h-20  bg-gray-200 rounded-lg flex items-center justify-center  flex-shrink-0">
                     {/* <span className="text-gray-500 text-sm sm:text-lg font-medium">LOGO</span> */}
-                    <Building/>
+                    <img className="w-16 h-16" src={Company}/>
                 </div>
 
                 <div className="flex-1 min-w-0">

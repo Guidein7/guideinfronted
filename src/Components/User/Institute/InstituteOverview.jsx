@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { resources } from "../../resources";
 import { types } from "../../Admin/ExcelUploads/types";
+import Company from '../../../assets/company.png'
 
 
 import { ArrowLeft, MapPin, Clock, Users, Phone, Globe, Star, Calendar, Monitor, Briefcase, DollarSign, GraduationCap, IndianRupee } from "lucide-react";
@@ -13,7 +14,9 @@ export default function InstituteOverview() {
     const [data, setData] = useState({});
 
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const [showModal,setShowModal] = useState(false)
 
 
     

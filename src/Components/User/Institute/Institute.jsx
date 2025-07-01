@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, MapPin, Clock, GraduationCap, Search, Tag, ChevronRight, Star, ExternalLink, Phone, Globe, DollarSign, Building2, IndianRupee } from 'lucide-react';
+import { ChevronDown, MapPin, Clock, GraduationCap, Search, Tag, ChevronRight, Star, ExternalLink, Phone, Globe, DollarSign, Building2, IndianRupee, ChevronLeft } from 'lucide-react';
 import { IoCallOutline } from "react-icons/io5";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { CgDetailsMore } from "react-icons/cg";
@@ -12,12 +12,15 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import maps from '../../../assets/maps.webp';
+import EnquiryModal from './EnquiryModel';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const successMessage = (message) => {
   toast.success(message, {
     position: 'top-center',
-    autoClose: 1000
+    autoClose: 3000
   })
 }
 
@@ -93,7 +96,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
     instituteName: course.instituteName,
     location: course.location,
     address: course.address,
-    mobile: course.mobileNumber ? `+91 ${course.mobileNumber}` : 'N/A',
+    mobile: course.mobileNumber ? `${course.mobileNumber}` : 'N/A',
     duration: course.courseDuration,
     mode: course.modeOfClass ,
     batch: course.courseBatch,
@@ -170,11 +173,11 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <a
-                href={`tel:${mappedCourse.mobile}`}
+                href={`tel:${Number(mappedCourse.mobile).toString()}`}
                 className="flex items-center justify-center gap-3 bg-[#058a07] hover:bg-green-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <IoCallOutline className="w-5 h-5" />
-                <span>{mappedCourse.mobile}</span>
+                <span>{Number(mappedCourse.mobile).toString()}</span>
               </a>
 
               <button
@@ -197,7 +200,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
         </div>
       </div>
 
-      <div className='md:hidden bg-white border border-gray-200 rounded-2xl p-2 flex flex-col gap-1'>
+      <div onClick={() => navigate(`/institute/${course.id}/${encodeURIComponent(mappedCourse.instituteName)}`)} className='md:hidden bg-white border border-gray-200 rounded-2xl p-2 flex flex-col gap-1'>
         <div className='flex gap-5'>
           <div>
             <div className="w-14 h-14 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
@@ -241,7 +244,11 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
 
         <div className="flex flex gap-3 justify-center my-2">
           <a
-            href={`tel:${mappedCourse.mobile}`}
+            href={`tel:${Number(mappedCourse.mobile).toString()}`}
+            onClick={(e) => {
+    e.stopPropagation();
+    // Optional: If you want to prevent default <a> behavior (e.g., for modal), use e.preventDefault();
+  }}
             className="flex items-center justify-center px-2 gap-2 bg-[#058a07] hover:bg-green-600 text-white py-1 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <IoCallOutline className="w-5 h-5" />
@@ -249,7 +256,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
           </a>
 
           <button
-            onClick={() => { setId(course.id); setShowModel(true) }}
+            onClick={(e) => {e.stopPropagation(); setId(course.id); setShowModel(true) }}
             className="flex items-center justify-cente px-2 gap-2 bg-blue-700 hover:bg-blue-700 text-white py-1  rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <LuMessageCircleMore className="w-5 h-5" />
@@ -266,111 +273,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
 };
 
 // Enhanced Modal Component
-const EnquiryModal = ({ showModel, setShowModel, setId, id }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobileNumber: ''
-  });
 
-
-  const handleSubmit = () => {
-    for (let key in formData) {
-      if (!formData[key] || formData[key].trim() === '') {
-        errorMessage("Please fill all the fields");
-        return;
-      }
-    }
-    console.log("------------------->", id)
-    const sendingData = { ...formData, instituteId: id }
-    axios.post(`${resources.APPLICATION_URL}student-data`, sendingData).then(response => {
-      successMessage("Request Submitted Successfully");
-      setId(null)
-      setShowModel(false);
-    }).catch(error => {
-      errorMessage("Error Submitting Requset")
-    })
-    console.log('Form submitted:', formData);
-
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  if (!showModel) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-100 bg-opacity-50 p-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8 relative animate-in fade-in duration-300 z-10">
-        <button
-          onClick={() => setShowModel(false)}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200"
-        >
-          ✕
-        </button>
-
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Enquiry</h2>
-          <p className="text-gray-600">Get in touch with the institute</p>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              placeholder="Enter your name"
-            />
-          </div>
-
-          <div>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              placeholder="Enter your email"
-            />
-          </div>
-
-          <div>
-            <input
-              type="tel"
-              name="mobileNumber"
-              value={formData.mobileNumber}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              placeholder="Enter your mobile number"
-            />
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button
-              onClick={handleSubmit}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              Submit Enquiry
-            </button>
-            <button
-              onClick={() => { setId(null); setShowModel(false) }}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-6 rounded-xl font-semibold transition-all duration-200 border border-gray-200 hover:border-gray-300"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Institute = () => {
 
@@ -453,7 +356,11 @@ const Institute = () => {
 
   useEffect(() => {
     getData();
-  }, [currentPage, selectedPrice, selectedLocation, selectedDuration, selectedMode])
+  }, [currentPage, selectedPrice, selectedLocation, selectedDuration, selectedMode]);
+
+  useEffect(() => {
+         window.scrollTo(0, 0);
+    },[currentPage])
 
   const getModeDisplayName = (modeValue) => {
     switch (modeValue) {
@@ -617,40 +524,58 @@ const Institute = () => {
 
         {/* Pagination */}
         {totalPages > 1 && !loading && (
-          <div className="flex justify-center items-center gap-2 mt-8">
-            <button
-              onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
-              disabled={currentPage === 0}
-              className="px-6 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              Previous
-            </button>
+  <div className="flex flex-col sm:flex-row justify-center items-center gap-2 mt-8">
+    <div className="flex items-center gap-1 md:gap-2 ">
+      <button
+        onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
+        disabled={currentPage === 0}
+        className=" border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+      >
+        <ChevronLeft/>
+      </button>
 
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => handlePageChange(i)}
-                className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${currentPage === i
+      <div className="flex gap-1 sm:gap-2 flex-wrap justify-center">
+        {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+          let pageNum;
+          if (totalPages <= 5) {
+            pageNum = i;
+          } else if (currentPage < 3) {
+            pageNum = i;
+          } else if (currentPage > totalPages - 3) {
+            pageNum = totalPages - 5 + i;
+          } else {
+            pageNum = currentPage - 2 + i;
+          }
+
+          return (
+            <button
+              key={pageNum}
+              onClick={() => handlePageChange(pageNum)}
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                currentPage === pageNum
                   ? 'bg-blue-600 text-white shadow-md'
                   : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-
-            <button
-              onClick={() => handlePageChange(Math.min(totalPages - 1, currentPage + 1))}
-              disabled={currentPage === totalPages - 1}
-              className="px-6 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              }`}
             >
-              Next
+              {pageNum + 1}
             </button>
-          </div>
-        )}
+          );
+        })}
+      </div>
+
+      <button
+        onClick={() => handlePageChange(Math.min(totalPages - 1, currentPage + 1))}
+        disabled={currentPage === totalPages - 1}
+        className=" border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+      >
+     <ChevronRight/>
+      </button>
+    </div>
+  </div>
+)}
 
         {/* Enhanced Modal */}
-        <EnquiryModal showModel={showModel} setId={setId} id={id} setShowModel={setShowModel} />
+        <EnquiryModal showModel={showModel} setId={setId} id={id} setShowModel={setShowModel} successMessage={successMessage} errorMessage={errorMessage}/>
       </div>
     </div>
   );

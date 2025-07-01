@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { resources } from '../../resources';
 import { types } from '../../Admin/ExcelUploads/types';
+import Company from '../../../assets/company.png'
 
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
@@ -68,7 +69,8 @@ const CompanyCard = ({ company }) => {
     <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-lg transition-shadow">
       <div className="flex  md:flex-row items-start gap-4">
         <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Building className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
+          {/* <Building className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" /> */}
+          <img className='w-10 h-10' src={Company} />
         </div>
         <div className="flex-1 min-w-0 w-full">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-3">
@@ -276,7 +278,12 @@ const Career = () => {
 
   useEffect(() => {
     getData();
+   
   }, [industry, hiringStatus, companyName, page]);
+
+  useEffect(()=> {
+     window.scrollTo(0, 0);
+  },[page])
 
   return (
     <div className="min-h-screen bg-gray-50">

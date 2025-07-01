@@ -230,7 +230,7 @@ export default function HomePage() {
 
                 <div className='flex flex-col'>
                     <div className='flex justify-between items-center p-2 font-sans'>
-                        <span className='text-xl font-semibold'>Explore Career Pages</span>
+                        <span className='text-lg font-semibold'>Explore Career Pages</span>
                         {data.careerData.length > 5 && (
                             <Link to='/career' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
@@ -451,8 +451,8 @@ export default function HomePage() {
 
                                 </div>
                                 <div className='flex flex-col'>
-                                    <span className='text-lg font-sans font-semibold text-center'>
-                                        {item?.courseTitle}
+                                    <span className=' font-sans font-semibold text-center'>
+                                        {item?.courseTitle.substring(0,28)}
                                     </span>
                                     {/* <span className='text-lg font-sans font-semibold '>
                                     {item?.platform}
