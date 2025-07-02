@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Users, TrendingUp, Clock, Star, MapPin, Building, ChevronRight } from 'lucide-react';
+import { ChevronDown, Users, TrendingUp, Clock, Star, MapPin, Building, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -296,7 +296,7 @@ const Career = () => {
             <Link to='/career' className='hover:underline'>Career</Link>
           </div> */}
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Company Careers</h1>
-          <p className="text-gray-600 text-sm sm:text-base">Discover your next career opportunity</p>
+          <p className="text-gray-600 text-sm sm:text-base">Explore Company Career Pages & Current Hiring Trends</p>
         </div>
 
         {/* Filters */}
@@ -359,53 +359,58 @@ const Career = () => {
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && !loading && (
-          <div className="flex flex-wrap justify-center items-center gap-2">
-            <button
-              onClick={() => updatePage(Math.max(0, page - 1))}
-              disabled={page === 0}
-              className="px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Previous
-            </button>
+        {totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+            <div className="flex items-center gap-2 mb-2 sm:mb-0">
+              <button
+                onClick={() => updatePage(Math.max(0, page - 1))}
+                disabled={page === 0}
+                className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft/>
+              </button>
 
-            <div className="flex gap-1 max-w-full overflow-x-auto">
-              {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 7) {
-                  pageNum = i;
-                } else if (page < 3) {
-                  pageNum = i;
-                } else if (page > totalPages - 4) {
-                  pageNum = totalPages - 7 + i;
-                } else {
-                  pageNum = page - 3 + i;
-                }
+              {/* Show limited page numbers on mobile */}
+              <div className="flex gap-1 sm:gap-2">
+                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i;
+                  } else if (page < 3) {
+                    pageNum = i;
+                  } else if (page > totalPages - 4) {
+                    pageNum = totalPages - 5 + i;
+                  } else {
+                    pageNum = page - 2 + i;
+                  }
 
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => updatePage(pageNum)}
-                    className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm font-medium transition-colors ${page === pageNum
-                        ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => updatePage(pageNum)}
+                      className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${
+                        page === pageNum
+                          ? 'bg-blue-600 text-white'
+                          : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
-                  >
-                    {pageNum + 1}
-                  </button>
-                );
-              })}
-            </div>
+                    >
+                      {pageNum + 1}
+                    </button>
+                  );
+                })}
+              </div>
 
-            <button
-              onClick={() => updatePage(Math.min(totalPages - 1, page + 1))}
-              disabled={page === totalPages - 1}
-              className="px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Next
-            </button>
+              <button
+                onClick={() => updatePage(Math.min(totalPages - 1, page + 1))}
+                disabled={page === totalPages - 1}
+                className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronRight/>
+              </button>
+            </div>
           </div>
         )}
+       
       </div>
     </div>
   );

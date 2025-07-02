@@ -15,7 +15,7 @@ import maps from '../../../assets/maps.webp';
 
 
 
-const EnquiryModal = ({ showModel, setShowModel, setId, id,successMessage,errorMessage }) => {
+const EnquiryModal = ({ showModel, setShowModel, setId = () => {}, id ,successMessage,errorMessage }) => {
 
 
    

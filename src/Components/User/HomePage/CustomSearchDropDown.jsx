@@ -67,16 +67,34 @@ const CustomSearchDropdown = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const placeholders = [
+    "Search for Careers",
+    "Search for YouTube",
+    "Search for Institute",
+    "Search for Certifications"
+  ];
+
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
+    }, 1000); // change every 1 second
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, []);
+
     return (
-        <div className="relative min-w-[350px]" ref={dropdownRef}>
-            <div className='flex bg-white justify-between items-center py-2 gap-4 rounded-lg shadow-sm border border-gray-200 hover:border-[#244ad1] transition-colors duration-200'>
-                <div className='flex-1 px-3'>
+        <div className="relative w-[82%] md:min-w-[350]" ref={dropdownRef}>
+            <div className='flex bg-white justify-between items-center md:py-2 gap-4 rounded-lg shadow-sm border border-gray-200 hover:border-[#244ad1] transition-colors duration-200'>
+                <div className='flex-1 px-1 md:px-3'>
                     <input
                         ref={inputRef}
                         type="text"
                         className='outline-none w-full placeholder-gray-400 text-gray-700'
-                        placeholder={selectedOption || "Search for Company Careers"}
+                        placeholder={selectedOption || placeholders[placeholderIndex]}
                         value={searchValue}
+            
                         onChange={handleInputChange}
                         onKeyDown={handleKeyPress}
                         onFocus={() => setIsOpen(true)}

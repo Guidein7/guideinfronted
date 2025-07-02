@@ -4,9 +4,33 @@ import { useNavigate, useParams } from "react-router-dom";
 import { resources } from "../../resources";
 import { types } from "../../Admin/ExcelUploads/types";
 import Company from '../../../assets/company.png'
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
+
+
+
 
 
 import { ArrowLeft, MapPin, Clock, Users, Phone, Globe, Star, Calendar, Monitor, Briefcase, DollarSign, GraduationCap, IndianRupee } from "lucide-react";
+import EnquiryModal from "./EnquiryModel";
+
+
+
+const successMessage = (message) => {
+  toast.success(message, {
+    position: 'top-center',
+    autoClose: 3000
+  })
+}
+
+
+const errorMessage = (message) => {
+  toast.error(message, {
+    position: 'top-center',
+    autoClose: 1000
+  })
+}
 
 export default function InstituteOverview() {
     // Sample data based on your API response
@@ -94,6 +118,8 @@ export default function InstituteOverview() {
     }
 
     return (
+        <>
+        <ToastContainer/>
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
             <div className="bg-white shadow-sm border-b">
@@ -238,7 +264,7 @@ export default function InstituteOverview() {
 
                         {/* Action Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
-                            <button className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                            <button onClick={() => setShowModal(true)} className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                                 Request Callback
                             </button>
                             {data.websiteUrl && (
@@ -267,6 +293,11 @@ export default function InstituteOverview() {
                     </div>
                 </div>
             </div>
+            {showModal && (
+                <EnquiryModal showModel={showModal}  id={id} setShowModel={setShowModal} successMessage={successMessage} errorMessage={errorMessage}/>
+            )}
         </div>
+
+        </>
     );
 }

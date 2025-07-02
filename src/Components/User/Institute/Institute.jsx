@@ -231,7 +231,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
 
           </div>
         </div>
-        <div className='flex flex-wrap gap-2 justify-center items-center my-2'>
+        {/* <div className='flex flex-wrap gap-2 justify-center items-center my-2'>
           <Tag size={16} className='text-green-400' />
           {mappedCourse?.tags?.slice(0, 2)?.map((tag, idx) => (
 
@@ -239,7 +239,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
               <span className='bg-green-100 p-1 rounded-lg text-sm '>{tag}</span>
             </div>
           ))}
-        </div>
+        </div> */}
 
 
         <div className="flex flex gap-3 justify-center my-2">
@@ -413,7 +413,7 @@ const Institute = () => {
             <span className="text-gray-600">Institutes</span>
           </div>
           <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">Find Your Perfect Course</h1>
-          <p className="md:text-lg text-gray-600">Discover top programming institutes and courses tailored for you</p>
+          <p className="md:text-lg text-gray-600">Find the Best Coaching Institutes – Online & Offline</p>
         </div>
 
         {/* Enhanced Filters */}

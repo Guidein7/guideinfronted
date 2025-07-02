@@ -17,6 +17,7 @@ import GuideinLogo from './assets/Guidein_logo.png'
 import PrivacyPolicy from './Components/User/PrivacyPolicy/PrivacyPolicy'
 import ScrollToTop from './Components/ScrollToTop'
 import StudentInfo from './Components/Admin/StudentInfo/StudentInfo'
+import AboutUs from './Components/User/Aboutus/Aboutus'
 
 
 
@@ -49,10 +50,15 @@ function App() {
         <Route path='/certificate/:id/:name' element={<CertificateOverview />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
          <Route path='/admin-data' element={<StudentInfo/>} />
+         <Route path='/about' element={<AboutUs/>} />
       </Routes>
     
       <div className='bg-black text-white flex justify-between items-center h-[60px] px-2  md:px-10 py-4'>
-        <p>Contact us</p>
+        <div className='flex flex-col gap-2'>
+          <p>Contact us</p>
+          <p className='cursor-pointer' onClick={() => navigate('/about')}>About us</p>
+
+        </div>
          <p>CopyRight&#169;{new Date().getFullYear()}</p>
           <p className='cursor-pointer ' onClick={() => navigate('/privacy-policy')}>Privacy Policy</p>
 

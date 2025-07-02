@@ -103,7 +103,7 @@ export default function HomePage() {
                     <h1>One-Stop Guide for</h1>
                     <h1>Your Career Journey</h1>
                 </div>
-                <div className='w-[350px] mx-auto'>
+                <div className='w-[450px] mx-auto flex justify-center mt-2'>
                 <CustomSearchDropdown/>
                 </div>
 
@@ -153,30 +153,25 @@ export default function HomePage() {
             <div className=' hidden lg:block mt-36 p-5'>
                 <h1 className=' font-bold text-xl '>Top Searches</h1>
                 <div className='grid grid-cols-3 p-5 gap-3 text-[#244ad1]'>
-                    <p >TCS Careers</p>
-                    <p >Swiggy</p>
-                    <p >PhonePe</p>
+                    < p className='cursor-pointer' onClick={() => navigate(`career/1314/TCS`)}>TCS Careers</p>
+                    <p className='cursor-pointer' onClick={() => navigate(`career/1374/Swiggy`)}>Swiggy</p>
+                    <p className='cursor-pointer' onClick={() => navigate(`career/1376/PhonePe`)}>PhonePe</p>
                     <p>Data Science</p>
                     <p>IAS Coaching Centers</p>
                     <p>Excel Courses</p>
                 </div>
             </div>
 
-
-
-
             <div className='flex flex-col gap-5 lg:hidden'>
-
-
                 <div className=' p-2 bg-gradient-to-r from-blue-600 to-indigo-700' >
-
                     <div className='text-center  flex flex-col gap-3 text-white text-2xl font-[500]'>
                         <h1>One-Stop Guide for</h1>
                         <h1>Your Career Journey</h1>
                     </div>
-
-                    <div className='flex bg-white items-center rounded-lg justify-between px-3 mt-8 w-[60%] mx-auto'>
-
+                <div className='mx-auto flex justify-center mt-3'>
+                        <CustomSearchDropdown/>
+                </div>
+                    {/* <div className='flex bg-white items-center rounded-lg justify-between px-3 mt-8 w-[60%] mx-auto'>
                         <select onChange={(e) => setSearchValue(e.target.value)} className=' border bg-white border-gray-100 rounded-lg px-4 py-2 outline-none' >
                             <option value="">Select Category</option>
                             <option value="career">Career Pages</option>
@@ -185,8 +180,7 @@ export default function HomePage() {
                             <option value="certificate">Certificates</option>
                         </select>
                         <SearchIcon className='bg-white text-[#244ad1]' strokeWidth={2.5} size={24} onClick={navigatFunciton} />
-                    </div>
-
+                    </div> */}
                 </div>
 
 

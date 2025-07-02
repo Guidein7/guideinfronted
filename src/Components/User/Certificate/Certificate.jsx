@@ -10,6 +10,7 @@ import { RxClock } from "react-icons/rx";
 import { HiOutlineAcademicCap, HiOutlineGlobeAlt, HiOutlineExternalLink } from "react-icons/hi";
 import { BiFilterAlt } from "react-icons/bi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { ChevronLeft,ChevronRight } from "lucide-react";
 
 export default function Certificate() {
     const [searchParms, setSearchParams] = useSearchParams();
@@ -128,7 +129,7 @@ export default function Certificate() {
                     <div className=" mb-8">
                         <h1 className="md:text-2xl font-bold text-slate-800 mb-2 text-lg">Professional Certificates</h1>
                         <p className="text-slate-600  max-w-2xl ">
-                            Advance your career with industry-recognized certificates from top providers
+                           Get Free Certifications from Top Platforms – Skill Up Today
                         </p>
                     </div>
 
@@ -269,7 +270,7 @@ export default function Certificate() {
                                                 <GrCertificate className="w-10 h-10 text-blue-600" />
                                             </div>
                                         </div>
-                                        <h2 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
+                                        <h2 className=" md:text-xl font-semibold md:font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
                                                 {item.courseTitle}
                                             </h2>
                                     </div>
@@ -322,41 +323,59 @@ export default function Certificate() {
                     </div>
                 )}
 
-                {/* Pagination */}
-                {totalPages > 1 && !loading && (
-                    <div className="flex justify-center items-center gap-2 mt-12 pt-8 border-t border-slate-200">
-                        <button
-                            onClick={() => updatePage(Math.max(0, page - 1))}
-                            disabled={page === 0}
-                            className="px-5 py-3 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                        >
-                            Previous
-                        </button>
+               
+                 {totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 mt-5">
+            <div className="flex items-center gap-2 mb-2 sm:mb-0">
+              <button
+                onClick={() => updatePage(Math.max(0, page - 1))}
+                disabled={page === 0}
+                className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft/>
+              </button>
 
-                        <div className="flex gap-1">
-                            {Array.from({ length: totalPages }, (_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => updatePage(i)}
-                                    className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${page === i
-                                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                                            : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400'
-                                        }`}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-                        </div>
+              {/* Show limited page numbers on mobile */}
+              <div className="flex gap-1 sm:gap-2">
+                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i;
+                  } else if (page < 3) {
+                    pageNum = i;
+                  } else if (page > totalPages - 4) {
+                    pageNum = totalPages - 5 + i;
+                  } else {
+                    pageNum = page - 2 + i;
+                  }
 
-                        <button
-                            onClick={() => updatePage(Math.min(totalPages - 1, page + 1))}
-                            disabled={page === totalPages - 1}
-                            className="px-5 py-3 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                        >
-                            Next
-                        </button>
-                    </div>
-                )}
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => updatePage(pageNum)}
+                      className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${
+                        page === pageNum
+                          ? 'bg-blue-600 text-white'
+                          : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {pageNum + 1}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => updatePage(Math.min(totalPages - 1, page + 1))}
+                disabled={page === totalPages - 1}
+                className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronRight/>
+              </button>
+            </div>
+          </div>
+        )}
+       
             </div>
         </div>
     );

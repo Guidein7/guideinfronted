@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Play, Eye, Clock, Youtube, Search, Filter, Tag, ChevronRight } from 'lucide-react';
+import { ChevronDown, Play, Eye, Clock, Youtube, Search, Filter, Tag, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { types } from '../../Admin/ExcelUploads/types';
@@ -270,7 +270,7 @@ const Youtub = () => {
             <Link to='/career' className='hover:underline'>Youtube</Link>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">YouTube Videos</h1>
-          <p className="text-gray-600">Discover programming tutorials and courses</p>
+          <p className="text-gray-600">Learn Faster with  Curated YouTube Videos Across Tech & Business</p>
         </div>
 
         {/* Filters */}
@@ -329,7 +329,7 @@ const Youtub = () => {
                 disabled={page === 0}
                 className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Previous
+                <ChevronLeft/>
               </button>
 
               {/* Show limited page numbers on mobile */}
@@ -367,7 +367,7 @@ const Youtub = () => {
                 disabled={page === totalPages - 1}
                 className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next
+                <ChevronRight/>
               </button>
             </div>
           </div>
