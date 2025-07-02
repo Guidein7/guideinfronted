@@ -18,6 +18,8 @@ import PrivacyPolicy from './Components/User/PrivacyPolicy/PrivacyPolicy'
 import ScrollToTop from './Components/ScrollToTop'
 import StudentInfo from './Components/Admin/StudentInfo/StudentInfo'
 import AboutUs from './Components/User/Aboutus/Aboutus'
+import Contactus from './Components/User/Contactus/Contactus'
+import NotFound from './Components/User/NotFound'
 
 
 
@@ -27,43 +29,47 @@ function App() {
 
 
   return (
-    <>
+    < div className='flex flex-col min-h-screen'>
       <ToastContainer />
-      <ScrollToTop/>
+      <ScrollToTop />
       <nav className="h-[60px] p-2 bg-white flex justify-between">
         <div className='cursor-pointer' onClick={() => navigate('/')}>
           <img src={GuideinLogo} className='h-8' />
 
         </div>
-       
+
       </nav>
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/admin-upload' element={<ExcelUpload />} />
-        <Route path='/career' element={<Career />} />
-        <Route path='/youtube' element={<Youtub />} />
-        <Route path='/institute' element={<Institute />} />
-        <Route path='career/:id/:name' element={<CareerOverview />} />
-        <Route path='/youtube/:id/:name' element={<YoutubeOverView />} />
-        <Route path='/certificate' element={<Certificate />} />
-        <Route path='/institute/:id/:name' element={<InstituteOverview />} />
-        <Route path='/certificate/:id/:name' element={<CertificateOverview />} />
-        <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
-         <Route path='/admin-data' element={<StudentInfo/>} />
-         <Route path='/about' element={<AboutUs/>} />
-      </Routes>
-    
+      <div className='flex-grow'>
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/admin-upload' element={<ExcelUpload />} />
+          <Route path='/career' element={<Career />} />
+          <Route path='/youtube' element={<Youtub />} />
+          <Route path='/institute' element={<Institute />} />
+          <Route path='career/:id/:name' element={<CareerOverview />} />
+          <Route path='/youtube/:id/:name' element={<YoutubeOverView />} />
+          <Route path='/certificate' element={<Certificate />} />
+          <Route path='/institute/:id/:name' element={<InstituteOverview />} />
+          <Route path='/certificate/:id/:name' element={<CertificateOverview />} />
+          <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+          <Route path='/admin-data' element={<StudentInfo />} />
+          <Route path='/about' element={<AboutUs />} />
+          <Route path='/contact-us' element={<Contactus />} />
+           <Route path='*' element={<NotFound/>} />
+        </Routes>
+      </div>
+
       <div className='bg-black text-white flex justify-between items-center h-[60px] px-2  md:px-10 py-4'>
         <div className='flex flex-col gap-2'>
-          <p>Contact us</p>
+          <p  className="cursor-pointer" onClick={() => navigate('/contact-us')}>Contact us</p>
           <p className='cursor-pointer' onClick={() => navigate('/about')}>About us</p>
 
         </div>
-         <p>CopyRight&#169;{new Date().getFullYear()}</p>
-          <p className='cursor-pointer ' onClick={() => navigate('/privacy-policy')}>Privacy Policy</p>
+        <p>CopyRight&#169;{new Date().getFullYear()}</p>
+        <p className='cursor-pointer ' onClick={() => navigate('/privacy-policy')}>Privacy Policy</p>
 
       </div>
-    </>
+    </div>
   )
 }
 

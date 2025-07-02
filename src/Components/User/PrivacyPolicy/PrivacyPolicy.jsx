@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
       <p className="mb-6">
         Guidein ("we", "our", or "us") values the trust placed in us and is committed to protecting the privacy of our users. 
         This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website 
-        <a href="https://www.guidein.org" className="text-blue-600 hover:underline"> www.guidein.org</a> (referred to as the "Website"). 
+        <a href="https://guidein.org" className="text-blue-600 hover:underline"> www.guidein.org</a> (referred to as the "Website"). 
         By using our Website, you agree to the terms of this Privacy Policy.
       </p>
 

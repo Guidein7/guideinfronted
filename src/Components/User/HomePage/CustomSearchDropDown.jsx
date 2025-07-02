@@ -14,7 +14,7 @@ const CustomSearchDropdown = () => {
     const options = [
         { value: '/career', label: 'Company Careers', icon: '🏢' },
         { value: '/youtube', label: 'Youtube Learning', icon: '📺' },
-        { value: '/insitute', label: 'Coaching Centers', icon: '🎓' },
+        { value: '/institute', label: 'Coaching Centers', icon: '🎓' },
         { value: '/certificate', label: 'Free Certifications', icon: '📜' }
     ];
 
