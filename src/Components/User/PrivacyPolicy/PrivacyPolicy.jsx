@@ -107,7 +107,7 @@ const PrivacyPolicy = () => {
         <p>If you have any questions or concerns about this Privacy Policy or your data, you may contact us at:</p>
         <ul className="ml-6 mt-2">
           <li>📧 Email: <a href="mailto:support@guidein.org" className="text-blue-600 hover:underline">support@guidein.org</a></li>
-          <li>🌐 Website: <a href="https://www.guidein.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.guidein.org</a></li>
+          <li>🌐 Website: <a href="https://guidein.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.guidein.org</a></li>
         </ul>
       </section>
     </div>
