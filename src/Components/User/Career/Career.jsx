@@ -1,15 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Users, TrendingUp, Clock, Star, MapPin, Building, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronDown, Users, TrendingUp, Clock, Star, MapPin, Building, ChevronRight, ChevronLeft, Filter, X } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import { resources } from '../../resources';
 import { types } from '../../Admin/ExcelUploads/types';
 import Company from '../../../assets/company.png'
+import React, { useState, useEffect, useRef } from 'react';
 
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleOptionSelect = (value) => {
     onChange(value);
     setIsOpen(false);
@@ -21,26 +35,30 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 sm:px-4 sm:py-3 text-left bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className={`w-full px-2 py-2 sm:px-4 sm:py-3 text-left bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between hover:bg-gray-50 transition-colors ${selected
+            ? 'border-blue-300 bg-blue-50'
+            : 'border-gray-300'
+          }`}
       >
-        <div className="flex items-center gap-2 min-w-0">
-          {Icon && <Icon className="w-4 h-4 text-gray-500 flex-shrink-0" />}
-          <span className="text-gray-700 text-sm sm:text-base font-bold truncate">
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
+          {Icon && <Icon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${selected ? 'text-blue-600' : 'text-gray-500'}`} />}
+          <span className={`text-xs sm:text-sm font-medium truncate ${selected ? 'text-blue-700' : 'text-gray-700'}`}>
             {selected || label}
           </span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform font-bold flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''
+          } ${selected ? 'text-blue-600' : 'text-gray-500'}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 sm:max-h-60 overflow-y-auto">
           {selected && (
             <button
               onClick={handleClearSelection}
-              className="w-full px-4 py-2 text-left hover:bg-gray-50 border-b border-gray-100 text-sm text-gray-500 italic"
+              className="w-full px-3 py-2 text-left hover:bg-gray-50 border-b border-gray-100 text-xs sm:text-sm text-gray-500 italic"
             >
               Clear selection
             </button>
@@ -49,7 +67,7 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
             <button
               key={option}
               onClick={() => handleOptionSelect(option)}
-              className={`w-full px-4 py-2 text-left hover:bg-gray-50 text-sm transition-colors ${selected === option ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+              className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors ${selected === option ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
                 }`}
             >
               {option}
@@ -60,7 +78,6 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
     </div>
   );
 };
-
 
 const CompanyCard = ({ company }) => {
   const navigate = useNavigate();
@@ -76,7 +93,7 @@ const CompanyCard = ({ company }) => {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-3">
             <div className="min-w-0">
               <h3
-                
+
                 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1   transition-colors"
               >
                 {company.companyName}
@@ -98,7 +115,7 @@ const CompanyCard = ({ company }) => {
             </div>
             <div className="flex items-center gap-1 " title="Hiring Growth" >
               <TrendingUp className="w-4 h-4 flex-shrink-0" />
-              <span className="truncate">{company.hiringGrowth ?  + (parseFloat(company.hiringGrowth) * 100).toFixed(1) + '%' : 'N/A'}</span>
+              <span className="truncate">{company.hiringGrowth ? + (parseFloat(company.hiringGrowth) * 100).toFixed(1) + '%' : 'N/A'}</span>
             </div>
             <div className="flex items-center gap-1" title="Median Tenure">
               <Clock className="w-4 h-4 flex-shrink-0" />
@@ -110,7 +127,6 @@ const CompanyCard = ({ company }) => {
             </div>
           </div>
 
-          {/* Description */}
           <p className="text-sm text-gray-600 mb-1">
             {company.companyOverview.length > 150
               ? `${company.companyOverview.substring(0, 150)}...`
@@ -126,37 +142,18 @@ const CompanyCard = ({ company }) => {
             </Link>
           )}
           <div className='flex justify-end'>
-          <button className=" md:hidden px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 flex-shrink-0 transition-colors">
+            <button className=" md:hidden px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 flex-shrink-0 transition-colors">
               <a href={company.careerPageUrl} target='_blank' rel="noopener noreferrer">
                 Visit Career Page
               </a>
             </button>
-            </div>
+          </div>
 
-          {/* Location and hiring status */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            {/* <div className="flex items-center gap-1 text-sm text-gray-600">
-              <MapPin className="w-4 h-4 flex-shrink-0" />
-              <span className="truncate">{company.location || 'Multiple Locations'}</span>
-            </div> */}
-            {/* <div className="flex items-center gap-2 flex-wrap">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                company.hiringStatus === 'Hiring Now' || company.hiringStatus === 'Moderately Hiring'
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-gray-100 text-gray-800'
-              }`}>
-                {company.hiringStatus}
-              </span>
-            
-              {company.tags && (
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs whitespace-nowrap">
-                  {company.tags}
-                </span>
-              )}
-            </div> */}
+           
           </div>
         </div>
-         
+
       </div>
     </div>
   );
@@ -165,13 +162,13 @@ const CompanyCard = ({ company }) => {
 const Career = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [showFilters, setShowFilters] = useState(false);
 
   const industry = searchParams.get("industry") || "";
   const hiringStatus = searchParams.get("hiringStatus") || "";
   const companyName = searchParams.get("companyName") || "";
   const page = parseInt(searchParams.get("page")) || 0;
 
-  // State for data and dropdown options
   const [data, setData] = useState([]);
   const [dropdownData, setDropdownData] = useState({
     industry: [],
@@ -181,7 +178,6 @@ const Career = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Fetch dropdown data
   const getDropdown = () => {
     axios.get(`${resources.APPLICATION_URL}drop-down?type=${types.CAREER}`)
       .then(response => {
@@ -196,7 +192,6 @@ const Career = () => {
       });
   };
 
-  // Fetch main data
   const getData = () => {
     setLoading(true);
     const params = new URLSearchParams({
@@ -231,7 +226,6 @@ const Career = () => {
       });
   };
 
-  // Update filters and URL params
   const updateFilters = (newFilters) => {
     const updatedParams = {
       industry,
@@ -241,7 +235,6 @@ const Career = () => {
       ...newFilters
     };
 
-    // Remove empty values
     Object.keys(updatedParams).forEach(key => {
       if (!updatedParams[key] || updatedParams[key] === "") {
         delete updatedParams[key];
@@ -271,38 +264,53 @@ const Career = () => {
     updateFilters({ hiringStatus: selected });
   };
 
-  // Effects
+  const clearAllFilters = () => {
+    setSearchParams({});
+  };
+
+  const hasActiveFilters = industry || hiringStatus || companyName;
+
   useEffect(() => {
     getDropdown();
   }, []);
 
   useEffect(() => {
     getData();
-   
   }, [industry, hiringStatus, companyName, page]);
 
-  useEffect(()=> {
-     window.scrollTo(0, 0);
-  },[page])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          {/* <div className='flex gap-1 items-center text-blue-500 text-sm sm:text-base mb-2'>
-            <Link to='/' className='hover:underline'>Home</Link>
-            <ChevronRight size={16} className="sm:w-5 sm:h-5" />
-            <Link to='/career' className='hover:underline'>Career</Link>
-          </div> */}
+      <div className='fixed z-10 bg-white p-2  w-full'>
+        <div className="">
+          <div className="flex gap-1 items-center text-blue-500 mb-2">
+                      <Link to="/" className="hover:underline">Home</Link>
+                      <ChevronRight size={18} />
+                      <Link to="/career" className="hover:underline">Careers</Link>
+                    </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Company Careers</h1>
           <p className="text-gray-600 text-sm sm:text-base">Explore Company Career Pages & Current Hiring Trends</p>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Companies</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="md:hidden my-2">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${hasActiveFilters
+                ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                : 'bg-white text-black border border-gray-300'
+              }`}
+          >
+            <Filter className="w-4 h-4" />
+            <span>Filters</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+
+        <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[50%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <FilterDropdown
               label="Select Industry"
               options={dropdownData.industry}
@@ -310,7 +318,6 @@ const Career = () => {
               onChange={handleIndustryChange}
               icon={Building}
             />
-
             <FilterDropdown
               label="Select Hiring Status"
               options={dropdownData.hiringStatus}
@@ -318,8 +325,7 @@ const Career = () => {
               onChange={handleHiringStatusChange}
               icon={TrendingUp}
             />
-
-            <div className="relative lg:col-span-1 xl:col-span-2">
+            <div className="lg:col-span-2">
               <input
                 type="text"
                 placeholder="Search by company name"
@@ -328,18 +334,23 @@ const Career = () => {
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
               />
             </div>
+            <div className='hidden md:block'>
+              {hasActiveFilters && (
+                <button
+                  onClick={clearAllFilters}
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
           </div>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto pt-36 lg:pt-40 ">
 
-        {/* Results count */}
-        {/* <div className="mb-4 sm:mb-6">
-          <p className="text-gray-600 text-sm sm:text-base">
-            {loading ? 'Loading...' : `Showing ${data.length} companies on page ${page + 1} of ${totalPages}`}
-          </p>
-        </div> */}
 
-        {/* Company Cards */}
-        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
+        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8  p-4 sm:p-6 lg:p-8">
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -361,16 +372,15 @@ const Career = () => {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-            <div className="flex items-center gap-2 mb-2 sm:mb-0">
+            <div className="flex items-center gap-2 mb-2 ">
               <button
                 onClick={() => updatePage(Math.max(0, page - 1))}
                 disabled={page === 0}
                 className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <ChevronLeft/>
+                <ChevronLeft />
               </button>
 
-              {/* Show limited page numbers on mobile */}
               <div className="flex gap-1 sm:gap-2">
                 {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                   let pageNum;
@@ -388,11 +398,10 @@ const Career = () => {
                     <button
                       key={pageNum}
                       onClick={() => updatePage(pageNum)}
-                      className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${
-                        page === pageNum
-                          ? 'bg-blue-600 text-white'
-                          : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                      }`}
+                      className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${page === pageNum
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
                     >
                       {pageNum + 1}
                     </button>
@@ -405,12 +414,11 @@ const Career = () => {
                 disabled={page === totalPages - 1}
                 className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <ChevronRight/>
+                <ChevronRight />
               </button>
             </div>
           </div>
         )}
-       
       </div>
     </div>
   );

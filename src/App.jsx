@@ -32,14 +32,14 @@ function App() {
     < div className='flex flex-col min-h-screen'>
       <ToastContainer />
       <ScrollToTop />
-      <nav className="h-[60px] p-2 bg-white flex justify-between">
+      <nav className="h-[60px] w-full fixed p-2 z-10 bg-white flex justify-between">
         <div className='cursor-pointer' onClick={() => navigate('/')}>
           <img src={GuideinLogo} className='h-8' />
 
         </div>
 
       </nav>
-      <div className='flex-grow'>
+      <div className='flex-grow pt-[60px]'>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/admin-upload' element={<ExcelUpload />} />

@@ -156,9 +156,9 @@ export default function HomePage() {
                     < p className='cursor-pointer' onClick={() => navigate(`career/1314/TCS`)}>TCS Careers</p>
                     <p className='cursor-pointer' onClick={() => navigate(`career/1374/Swiggy`)}>Swiggy</p>
                     <p className='cursor-pointer' onClick={() => navigate(`career/1376/PhonePe`)}>PhonePe</p>
-                    <p>Data Science</p>
+                    {/* <p>Data Science</p>
                     <p>IAS Coaching Centers</p>
-                    <p>Excel Courses</p>
+                    <p>Excel Courses</p> */}
                 </div>
             </div>
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Play, Eye, Clock, Youtube, Search, Filter, Tag, ChevronRight, ChevronLeft } from 'lucide-react';
+import React, { useState, useEffect ,useRef} from 'react';
+import { ChevronDown, Play, Eye, Clock, Youtube, Search, Filter, Tag, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { types } from '../../Admin/ExcelUploads/types';
@@ -8,43 +8,66 @@ import youtube from '../../../assets/youtube.png'
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleOptionSelect = (value) => {
     onChange(value);
     setIsOpen(false);
   };
 
+  const handleClearSelection = () => {
+    onChange('');
+    setIsOpen(false);
+  };
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 sm:px-4 sm:py-3 text-left bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 flex items-center justify-between hover:bg-gray-50 text-sm sm:text-base"
+        className={`w-full px-2 py-2 sm:px-4 sm:py-3 text-left bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 flex items-center justify-between hover:bg-gray-50 transition-colors ${
+          selected ? 'border-red-300 bg-red-50' : 'border-gray-300'
+        }`}
       >
-        <div className="flex items-center gap-2 min-w-0">
-          {Icon && <Icon className="w-4 h-4 text-gray-500 flex-shrink-0" />}
-          <span className="text-gray-700 truncate">
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
+          {Icon && <Icon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${selected ? 'text-red-600' : 'text-gray-500'}`} />}
+          <span className={`text-xs sm:text-sm font-medium truncate ${selected ? 'text-red-700' : 'text-gray-700'}`}>
             {selected || `Select ${label}`}
           </span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''} ${
+          selected ? 'text-red-600' : 'text-gray-500'
+        }`} />
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          <button
-            onClick={() => handleOptionSelect('')}
-            className={`w-full px-4 py-2 text-left hover:bg-gray-50 cursor-pointer text-sm ${
-              !selected ? 'bg-red-50 text-red-600' : 'text-gray-700'
-            }`}
-          >
-            All {label}s
-          </button>
+        <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 sm:max-h-60 overflow-y-auto">
+          {selected && (
+            <button
+              onClick={handleClearSelection}
+              className="w-full px-3 py-2 text-left hover:bg-gray-50 border-b border-gray-100 text-xs sm:text-sm text-gray-500 italic"
+            >
+              Clear selection
+            </button>
+          )}
           {options.map(option => (
             <button
               key={option}
               onClick={() => handleOptionSelect(option)}
-              className={`w-full px-4 py-2 text-left hover:bg-gray-50 cursor-pointer text-sm ${
-                selected === option ? 'bg-red-50 text-red-600' : 'text-gray-700'
+              className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors ${
+                selected === option ? 'bg-red-50 text-red-700' : 'text-gray-700'
               }`}
             >
               {option}
@@ -58,21 +81,15 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
 
 const VideoCard = ({ video }) => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-lg transition-shadow">
-      <div className="flex  items-start gap-4">
-       
-       
-          <img className=' h-10 w-10 md:w-16 md:h-16'  src={youtube} />
-        
-
-        {/* Video info */}
+      <div className="flex items-start gap-4">
+        <img className="h-10 w-10 md:w-16 md:h-16" src={youtube} />
         <div className="flex-1 min-w-0 w-full">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2 gap-2">
             <div className="min-w-0 flex-1">
-              <h3 
-              
+              <h3
                 className="text font-semibold text-gray-900 mb-1 line-clamp-2 cursor-pointer hover:text-red-600"
               >
                 {video.videoTitle}
@@ -83,16 +100,14 @@ const VideoCard = ({ video }) => {
               href={video.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className=" hidden md:flex px-3 py-2 sm:px-4 bg-[#FF0000] text-white rounded-lg text-sm font-medium hover:bg-red-700 flex-shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
+              className="hidden md:flex px-3 py-2 sm:px-4 bg-[#FF0000] text-white rounded-lg text-sm font-medium hover:bg-red-700 flex-shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
             >
               <Youtube className="w-4 h-4" />
               Watch Video
             </a>
           </div>
-
-          {/* Stats */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 mb-3 text-sm text-gray-600">
-            <a href={video?.channelName} target='_blank' className="flex items-center gap-1 text-blue-500 underline">
+            <a href={video?.channelName} target="_blank" className="flex items-center gap-1 text-blue-500 underline">
               <Youtube className="w-4 h-4" />
               <span className="truncate">{video.channelName?.split('@')?.at(-1)}</span>
             </a>
@@ -107,13 +122,11 @@ const VideoCard = ({ video }) => {
               </div>
             </div>
           </div>
-
           <p className="text-sm text-gray-600 mb-3">
             {video.shortDescription.length > 150
               ? `${video.shortDescription.substring(0, 150)}...`
               : video.shortDescription}
           </p>
-
           {video.shortDescription.length > 150 && (
             <Link
               to={`/youtube/${video.id}/${encodeURIComponent(video?.videoTitle)}`}
@@ -122,12 +135,10 @@ const VideoCard = ({ video }) => {
               See More
             </Link>
           )}
-
-          {/* Tags */}
           {video.tags && (
             <div className="flex gap-2 items-center">
               <div>
-              <Tag className="w-3 h-3 text-gray-400 mt-1 flex-shrink-0" />
+                <Tag className="w-3 h-3 text-gray-400 mt-1 flex-shrink-0" />
               </div>
               <div className="flex justify-center gap-2">
                 {video.tags.split(',').map((tag, index) => (
@@ -141,16 +152,15 @@ const VideoCard = ({ video }) => {
               </div>
             </div>
           )}
-
-           <a
-              href={video.youtubeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className=" mt-2 md:hidden px-3 py-2 sm:px-4 bg-[#FF0000] text-white rounded-lg text-sm font-medium hover:bg-red-700 flex-shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
-            >
-              <Youtube className="w-4 h-4" />
-              Watch Video
-            </a>
+          <a
+            href={video.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 md:hidden px-3 py-2 sm:px-4 bg-[#FF0000] text-white rounded-lg text-sm font-medium hover:bg-red-700 flex-shrink-0 flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <Youtube className="w-4 h-4" />
+            Watch Video
+          </a>
         </div>
       </div>
     </div>
@@ -159,22 +169,22 @@ const VideoCard = ({ video }) => {
 
 const Youtub = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [showFilters, setShowFilters] = useState(false);
 
-  // Get current filters from URL
   const topic = searchParams.get("topic") || "";
-  const page = parseInt(searchParams.get("page")) || 0;
   const duration = searchParams.get("duration") || "";
+  const searchQuery = searchParams.get("searchQuery") || "";
+  const page = parseInt(searchParams.get("page")) || 0;
 
-  // State for data and dropdown options
   const [data, setData] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [dropdownOptions, setDropdownOptions] = useState({
     topics: [],
     durations: []
   });
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  // Fetch dropdown options
   const getDropdown = () => {
     axios.get(`${resources.APPLICATION_URL}drop-down?type=${types.YOUTUBE}`)
       .then(response => {
@@ -185,11 +195,10 @@ const Youtub = () => {
         });
       })
       .catch(error => {
-        console.log(error);
+        console.log('Dropdown error:', error);
       });
   };
 
-  // Fetch video data
   const getData = () => {
     setLoading(true);
     const params = new URLSearchParams({
@@ -204,6 +213,9 @@ const Youtub = () => {
     if (duration && duration.trim() !== "") {
       params.append("duration", duration);
     }
+    if (searchQuery && searchQuery.trim() !== "") {
+      params.append("searchQuery", searchQuery);
+    }
 
     axios.get(`${resources.APPLICATION_URL}view/data?${params}`)
       .then(response => {
@@ -213,95 +225,136 @@ const Youtub = () => {
         }
       })
       .catch(error => {
-        console.log(error);
+        console.log('Data fetch error:', error);
+        setData([]);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  // Update filters in URL
-  const updateFilter = (filterType, value) => {
-    const updatedParams = new URLSearchParams(searchParams);
+  const updateFilters = (newFilters) => {
+    const updatedParams = {
+      topic,
+      duration,
+      searchQuery,
+      page: "0",
+      ...newFilters
+    };
 
-    if (value && value.trim() !== "") {
-      updatedParams.set(filterType, value);
-    } else {
-      updatedParams.delete(filterType);
-    }
-
-    // Reset to first page when filters change
-    updatedParams.set("page", "0");
+    Object.keys(updatedParams).forEach(key => {
+      if (!updatedParams[key] || updatedParams[key] === "") {
+        delete updatedParams[key];
+      }
+    });
 
     setSearchParams(updatedParams);
   };
 
-  // Update page
   const updatePage = (newPage) => {
-    const updatedParams = new URLSearchParams(searchParams);
-    updatedParams.set("page", newPage.toString());
-    setSearchParams(updatedParams);
+    const currentParams = {
+      ...(topic && { topic }),
+      ...(duration && { duration }),
+      ...(searchQuery && { searchQuery }),
+      page: newPage.toString()
+    };
+    setSearchParams(currentParams);
   };
 
-  // Load dropdown options on mount
+  const handleTopicChange = (selected) => {
+    updateFilters({ topic: selected });
+  };
+
+  const handleDurationChange = (selected) => {
+    updateFilters({ duration: selected });
+  };
+
+  const clearAllFilters = () => {
+    setSearchParams({});
+  };
+
+  const hasActiveFilters = topic || duration || searchQuery;
+
   useEffect(() => {
     getDropdown();
   }, []);
 
-  // Fetch data when filters or page change
   useEffect(() => {
     getData();
-  }, [topic, page, duration]);
+  }, [topic, duration, searchQuery, page]);
 
   useEffect(() => {
-         window.scrollTo(0, 0);
-    },[page])
-
-  const currentPageDisplay = page + 1;
+    window.scrollTo(0, 0);
+  }, [page]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <div className='flex gap-1 items-center text-blue-500 mb-2'>
-            <Link to='/' className='hover:underline'>Home</Link>
+      <div className="fixed z-10 bg-white p-2 w-full">
+        <div className="">
+          <div className="flex gap-1 items-center text-blue-500 mb-2">
+            <Link to="/" className="hover:underline">Home</Link>
             <ChevronRight size={18} />
-            <Link to='/career' className='hover:underline'>Youtube</Link>
+            <Link to="/youtube" className="hover:underline">YouTube</Link>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">YouTube Videos</h1>
-          <p className="text-gray-600">Learn Faster with  Curated YouTube Videos Across Tech & Business</p>
+          <p className="text-gray-600 text-sm sm:text-base">Learn Faster with Curated YouTube Videos Across Tech & Business</p>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="md:hidden my-2">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${
+              hasActiveFilters
+                ? 'bg-red-100 text-red-700 border border-red-300'
+                : 'bg-white text-black border border-gray-300'
+            }`}
+          >
+            <Filter className="w-4 h-4" />
+            <span>Filters</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+
+        <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[50%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <FilterDropdown
               label="Topic"
               options={dropdownOptions.topics}
               selected={topic}
-              onChange={(value) => updateFilter('topic', value)}
+              onChange={handleTopicChange}
               icon={Tag}
             />
-
             <FilterDropdown
               label="Duration"
               options={dropdownOptions.durations}
               selected={duration}
-              onChange={(value) => updateFilter('duration', value)}
+              onChange={handleDurationChange}
               icon={Clock}
             />
+            {/* <div className="lg:col-span-1">
+              <input
+                type="text"
+                placeholder="Search by video title"
+                value={searchQuery}
+                onChange={e => updateFilters({ searchQuery: e.target.value })}
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base"
+              />
+            </div> */}
+            <div className="hidden md:block">
+              {hasActiveFilters && (
+                <button
+                  onClick={clearAllFilters}
+                  className="text-sm text-red-600 hover:text-red-800 font-medium"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
           </div>
         </div>
-
-        {/* <div className="mb-4 sm:mb-6">
-          <p className="text-gray-600 text-sm sm:text-base">
-            {loading ? 'Loading...' : `Showing ${data.length} videos (Page ${currentPageDisplay} of ${totalPages})`}
-          </p>
-        </div> */}
-
-        
-        <div className="space-y-4 mb-6 sm:mb-8">
+      </div>
+      <div className="max-w-7xl mx-auto pt-52  p-4  ">
+        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
@@ -320,19 +373,16 @@ const Youtub = () => {
           )}
         </div>
 
-      
         {totalPages > 1 && (
           <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-            <div className="flex items-center gap-2 mb-2 sm:mb-0">
+            <div className="flex items-center gap-2 mb-2">
               <button
                 onClick={() => updatePage(Math.max(0, page - 1))}
                 disabled={page === 0}
                 className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <ChevronLeft/>
+                <ChevronLeft />
               </button>
-
-              {/* Show limited page numbers on mobile */}
               <div className="flex gap-1 sm:gap-2">
                 {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                   let pageNum;
@@ -361,13 +411,12 @@ const Youtub = () => {
                   );
                 })}
               </div>
-
               <button
                 onClick={() => updatePage(Math.min(totalPages - 1, page + 1))}
                 disabled={page === totalPages - 1}
                 className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <ChevronRight/>
+                <ChevronRight />
               </button>
             </div>
           </div>
