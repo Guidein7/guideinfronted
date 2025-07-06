@@ -63,7 +63,7 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
               Clear selection
             </button>
           )}
-          {options.map(option => (
+          {options.filter(item => item !== "null").map(option => (
             <button
               key={option}
               onClick={() => handleOptionSelect(option)}
