@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Play, Eye, Clock, Youtube, Search, Filter, Tag, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -37,9 +37,8 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-2 py-2 sm:px-4 sm:py-3 text-left bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 flex items-center justify-between hover:bg-gray-50 transition-colors ${
-          selected ? 'border-red-300 bg-red-50' : 'border-gray-300'
-        }`}
+        className={`w-full px-2 py-2 sm:px-4 sm:py-3 text-left bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 flex items-center justify-between hover:bg-gray-50 transition-colors ${selected ? 'border-red-300 bg-red-50' : 'border-gray-300'
+          }`}
       >
         <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
           {Icon && <Icon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${selected ? 'text-red-600' : 'text-gray-500'}`} />}
@@ -47,9 +46,8 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
             {selected || `Select ${label}`}
           </span>
         </div>
-        <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''} ${
-          selected ? 'text-red-600' : 'text-gray-500'
-        }`} />
+        <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''} ${selected ? 'text-red-600' : 'text-gray-500'
+          }`} />
       </button>
 
       {isOpen && (
@@ -66,9 +64,8 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
             <button
               key={option}
               onClick={() => handleOptionSelect(option)}
-              className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors ${
-                selected === option ? 'bg-red-50 text-red-700' : 'text-gray-700'
-              }`}
+              className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors ${selected === option ? 'bg-red-50 text-red-700' : 'text-gray-700'
+                }`}
             >
               {option}
             </button>
@@ -214,7 +211,7 @@ const Youtub = () => {
       params.append("duration", duration);
     }
     if (searchQuery && searchQuery.trim() !== "") {
-      params.append("searchQuery", searchQuery);
+      params.append("vedioTitle", searchQuery);
     }
 
     axios.get(`${resources.APPLICATION_URL}view/data?${params}`)
@@ -300,19 +297,27 @@ const Youtub = () => {
           <p className="text-gray-600 text-sm sm:text-base">Learn Faster with Curated YouTube Videos Across Tech & Business</p>
         </div>
 
-        <div className="md:hidden my-2">
+        <div className="md:hidden my-2 flex gap-3">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${
-              hasActiveFilters
+            className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${hasActiveFilters
                 ? 'bg-red-100 text-red-700 border border-red-300'
                 : 'bg-white text-black border border-gray-300'
-            }`}
+              }`}
           >
             <Filter className="w-4 h-4" />
             <span>Filters</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
+          <div className="">
+            <input
+              type="text"
+              placeholder="Search by video title"
+              value={searchQuery}
+              onChange={e => updateFilters({ searchQuery: e.target.value })}
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base"
+            />
+          </div>
         </div>
 
         <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[50%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
@@ -331,15 +336,16 @@ const Youtub = () => {
               onChange={handleDurationChange}
               icon={Clock}
             />
-            {/* <div className="lg:col-span-1">
-              <input
-                type="text"
-                placeholder="Search by video title"
-                value={searchQuery}
-                onChange={e => updateFilters({ searchQuery: e.target.value })}
-                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base"
-              />
-            </div> */}
+             <div className="hidden md:block">
+            <input
+              type="text"
+              placeholder="Search by video title"
+              value={searchQuery}
+              onChange={e => updateFilters({ searchQuery: e.target.value })}
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base"
+            />
+          </div>
+
             <div className="hidden md:block">
               {hasActiveFilters && (
                 <button
@@ -400,11 +406,10 @@ const Youtub = () => {
                     <button
                       key={pageNum}
                       onClick={() => updatePage(pageNum)}
-                      className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${
-                        page === pageNum
+                      className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${page === pageNum
                           ? 'bg-red-600 text-white'
                           : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       {pageNum + 1}
                     </button>

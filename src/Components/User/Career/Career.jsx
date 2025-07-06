@@ -295,7 +295,7 @@ const Career = () => {
           <p className="text-gray-600 text-sm sm:text-base">Explore Company Career Pages & Current Hiring Trends</p>
         </div>
 
-        <div className="md:hidden my-2">
+        <div className="md:hidden my-2 flex gap-3 items-center">
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${hasActiveFilters
@@ -307,6 +307,15 @@ const Career = () => {
             <span>Filters</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
+           <div className="  md:hidden">
+              <input
+                type="text"
+                placeholder="Search by company name"
+                value={companyName}
+                onChange={e => updateFilters({ companyName: e.target.value })}
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+              />
+            </div>
         </div>
 
         <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[50%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
@@ -325,7 +334,7 @@ const Career = () => {
               onChange={handleHiringStatusChange}
               icon={TrendingUp}
             />
-            <div className="lg:col-span-2">
+            <div className=" hidden md:block lg:col-span-2">
               <input
                 type="text"
                 placeholder="Search by company name"
@@ -347,7 +356,7 @@ const Career = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto pt-36 lg:pt-40 ">
+      <div className="max-w-7xl mx-auto pt-44 lg:pt-40 ">
 
 
         <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8  p-4 sm:p-6 lg:p-8">

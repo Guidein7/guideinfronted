@@ -493,7 +493,7 @@ export default function Certificate() {
             params.append("courseCategory", courseCategory);
         }
         if (courseDuration && courseDuration.trim() !== "") {
-            params.append("duration", courseDuration);
+            params.append("duration",courseDuration.trim());
         }
         if (searchQuery && searchQuery.trim() !== "") {
             params.append("searchQuery", searchQuery);
@@ -583,8 +583,8 @@ export default function Certificate() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
             <div className="fixed z-10 bg-white p-2 w-full">
-                <div className="max-w-7xl mx-auto px-6 py-3">
-                    <div className="mb-8">
+                <div className="max-w-7xl mx-auto px-6 py-1">
+                    <div className="mb-3">
                         <div className="flex gap-1 items-center text-blue-500 mb-2">
                             <Link to="/" className="hover:underline">Home</Link>
                             <ChevronRight size={18} />
@@ -650,7 +650,7 @@ export default function Certificate() {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 pt-54  ">
+            <div className="max-w-7xl mx-auto px-6 pt-54   ">
                 {loading ? (
                     <div className="flex justify-center items-center py-20">
                         <div className="flex items-center gap-3 text-slate-600">

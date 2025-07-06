@@ -901,7 +901,7 @@ const Institute = () => {
       params.append("modeOfClass", selectedMode);
     }
     if (searchCompany && searchCompany.trim() !== "") {
-      params.append("instituteName", searchCompany);
+      params.append("key", searchCompany);
     }
 
     axios.get(`${resources.APPLICATION_URL}view/data?${params}`)
@@ -1017,7 +1017,7 @@ const Institute = () => {
           <p className="md:text-lg text-gray-600 text-sm sm:text-base">Find the Best Coaching Institutes – Online & Offline</p>
         </div>
 
-        <div className="md:hidden my-2">
+        <div className="md:hidden my-2 flex gap-3">
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${
@@ -1030,9 +1030,18 @@ const Institute = () => {
             <span>Filters</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
+          <div className="lg:col-span-1">
+              <input
+                type="text"
+                placeholder="institute name or course name"
+                value={searchCompany}
+                onChange={e => updateFilters({ instituteName: e.target.value })}
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+              />
+            </div>
         </div>
 
-        <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[50%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
+        <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[80%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <SingleSelectDropdown
               label="Location"
@@ -1066,15 +1075,15 @@ const Institute = () => {
               icon={GraduationCap}
               placeholder=" Mode"
             />
-            {/* <div className="lg:col-span-1">
+            <div className="hidden md:block lg:col-span-1 ">
               <input
                 type="text"
-                placeholder="Search by institute name"
+                placeholder="institute name or course name"
                 value={searchCompany}
                 onChange={e => updateFilters({ instituteName: e.target.value })}
-                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                className="w-full min-w-[400px]  px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
               />
-            </div> */}
+            </div>
             <div className="hidden md:block">
               {hasActiveFilters && (
                 <button
