@@ -691,6 +691,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
   const navigate = useNavigate();
   // Map API response to expected format
   const mappedCourse = {
+    subLocation: course.subLocation,
     courseName: course.courseName,
     instituteName: course.instituteName,
     location: course.location,
@@ -738,7 +739,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div title="location" className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium">{mappedCourse.location}</span>
+                <span className="font-medium">{mappedCourse.location}, <span>{mappedCourse.subLocation}</span></span>
               </div>
               <div title="course duration" className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
                 <Clock className="w-4 h-4 text-gray-500" />
@@ -820,7 +821,7 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
               </span>
               <div className="flex">
                 <img className="w-6 h-6" src={maps} />
-                <span>{mappedCourse.location}</span>
+                <span>{mappedCourse.location}, <span>{mappedCourse.subLocation}</span></span>
               </div>
             </div>
           </div>
