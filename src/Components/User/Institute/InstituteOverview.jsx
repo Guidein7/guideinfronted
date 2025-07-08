@@ -228,7 +228,7 @@ export default function InstituteOverview() {
                                     <Monitor className="w-6 h-6 text-red-600 mr-3" />
                                     <h4 className="font-semibold text-gray-900">Computer Lab</h4>
                                 </div>
-                                <p className="text-lg text-gray-700">{data.computerLab === "1.0" ? "Available" : "Not Available"}</p>
+                                <p className="text-lg text-gray-700">{data.computerLab}</p>
                             </div>
 
                             <div className="bg-gray-50 rounded-lg p-6">
@@ -236,7 +236,7 @@ export default function InstituteOverview() {
                                     <Briefcase className="w-6 h-6 text-indigo-600 mr-3" />
                                     <h4 className="font-semibold text-gray-900">Job Assistance</h4>
                                 </div>
-                                <p className="text-lg text-gray-700">{data.jobAssistance === "1.0" ? "Available" : "Not Available"}</p>
+                                <p className="text-lg text-gray-700">{data.jobAssistance}</p>
                             </div>
                         </div>
 
