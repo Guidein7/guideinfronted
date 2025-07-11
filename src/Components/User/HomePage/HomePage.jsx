@@ -115,7 +115,7 @@ export default function HomePage() {
                             <div className='text-4xl text-white'><img src={Company} className='w-18 h-18' /></div>
                         </div>
 
-                        <div className='h-1/2 bg-white p-4 text-center'>
+                        <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
                             <h3 className='font-bold text-xl text-gray-800'>Company Careers</h3>
                             <p className='text-sm text-gray-600'>Explore company career pages and know their current hiring status, median employee tenure, and more — all in one place</p>
                         </div>
@@ -125,7 +125,7 @@ export default function HomePage() {
                         <div className='h-1/2 white flex items-center justify-center'>
                             <div className='text-4xl text-white'><img src={youtubeimg} className='w-18 h-18' /></div>
                         </div>
-                        <div className='h-1/2 bg-white p-4 text-center'>
+                        <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
                             <h3 className='font-bold text-xl text-gray-800'>YouTube Learning</h3>
                             <p className='text-sm text-gray-600'>Don’t waste time searching for good videos — we’ve already done the research. Learn from the best YouTube videos.</p>
                         </div>
@@ -134,7 +134,7 @@ export default function HomePage() {
                         <div className='h-1/2 bg-white flex items-center justify-center'>
                             <div className='text-4xl text-white'><img src={instituteimg} className='w-18 h-18' /></div>
                         </div>
-                        <div className='h-1/2 bg-white p-4 text-center'>
+                        <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
                             <h3 className='font-bold text-xl text-gray-800'>Coaching Centers</h3>
                             <p className='text-sm text-gray-600'>Find the right coaching center without leaving your home. We’ve researched it all — explore course details, reviews, and request a call back</p>
                         </div>
@@ -143,7 +143,7 @@ export default function HomePage() {
                         <div className='h-1/2 bg-white flex items-center justify-center'>
                             <div className='text-4xl text-white'><img src={certificateimg} className='w-18 h-18' /></div>
                         </div>
-                        <div className='h-1/2 bg-white p-4 text-center'>
+                        <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
                             <h3 className='font-bold text-xl text-gray-800'>Free Certifications</h3>
                             <p className='text-sm text-gray-600'>Boost your career with 100% free certification courses. We’ve curated the best from top platforms — start learning and get certified</p>
                         </div>

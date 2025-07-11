@@ -1,24 +1,33 @@
 import React from 'react';
 import { Target, Compass, CheckCircle, Users, Mail, Star, BookOpen, Building, Youtube, Award } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AboutUs = () => {
+  const navigate = useNavigate()
   const offerings = [
     {
+      links:'/career',
       icon: <Building className="w-6 h-6" />,
       title: "Company Careers",
       description: "Access career pages of hundreds of companies to explore job opportunities, hiring trends, and application links."
     },
     {
+            links:'/youtube',
+
       icon: <Youtube className="w-6 h-6" />,
       title: "YouTube Learning Hub",
       description: "Handpicked, high-quality YouTube videos for upskilling across AI, ML, coding, data, product management, business analysis, and more."
     },
     {
+            links:'/institute',
+
       icon: <BookOpen className="w-6 h-6" />,
       title: "Coaching Center Directory",
       description: "Discover verified coaching centers across India. Read about them and request a call-back without leaving your seat."
     },
     {
+            links:'/certificate',
+
       icon: <Award className="w-6 h-6" />,
       title: "Free Certification Courses",
       description: "Find curated, authentic certification programs offered for free by leading platforms and institutions."
@@ -72,7 +81,7 @@ const AboutUs = () => {
 
       {/* What We Offer Section */}
       <div className="bg-gradient-to-r from-gray-50 to-indigo-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div  className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full mb-6">
               <Compass className="w-8 h-8 text-white" />
@@ -82,7 +91,7 @@ const AboutUs = () => {
           
           <div className="grid md:grid-cols-2 gap-8">
             {offerings.map((item, index) => (
-              <div key={index} className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div  onClick={() => navigate(item.links)} key={index} className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
                     {item.icon}

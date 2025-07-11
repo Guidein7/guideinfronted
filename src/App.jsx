@@ -20,6 +20,7 @@ import StudentInfo from './Components/Admin/StudentInfo/StudentInfo'
 import AboutUs from './Components/User/Aboutus/Aboutus'
 import Contactus from './Components/User/Contactus/Contactus'
 import NotFound from './Components/User/NotFound'
+import Footer from './Components/User/Footer'
 
 
 
@@ -55,20 +56,31 @@ function App() {
           <Route path='/admin-data' element={<StudentInfo />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact-us' element={<Contactus />} />
-           <Route path='*' element={<NotFound/>} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
 
-      <div className='bg-black text-white flex justify-between items-center h-[60px] px-2  md:px-10 py-4'>
-        <div className='flex flex-col gap-2'>
-          <p  className="cursor-pointer" onClick={() => navigate('/contact-us')}>Contact us</p>
+      <div className='bg-black text-white flex flex-col gap-5 px-2  md:px-10 py-4'>
+        <div className='flex justify-around  md:justify-evenly gap-2'>
+          <p className="cursor-pointer" onClick={() => navigate('/contact-us')}>Contact us</p>
           <p className='cursor-pointer' onClick={() => navigate('/about')}>About us</p>
+          <p className='cursor-pointer ' onClick={() => navigate('/privacy-policy')}>Privacy Policy</p>
 
         </div>
-        <p>CopyRight&#169;{new Date().getFullYear()}</p>
-        <p className='cursor-pointer ' onClick={() => navigate('/privacy-policy')}>Privacy Policy</p>
+        <div className='flex justify-center'>
+
+          <Footer />
+
+        </div>
+        <div className='flex justify-center'>
+
+         
+          <p>CopyRight&#169;{new Date().getFullYear()}</p>
+
+        </div>
 
       </div>
+     
     </div>
   )
 }
