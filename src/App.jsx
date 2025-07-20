@@ -22,6 +22,7 @@ import Contactus from './Components/User/Contactus/Contactus'
 import NotFound from './Components/User/NotFound'
 import Footer from './Components/User/Footer'
 import TermsAndConditions from './Components/User/PrivacyPolicy/TermsAndConditions'
+import BlogEditor from './Components/Admin/Blog/UplaodBlog'
 
 
 
@@ -58,6 +59,7 @@ function App() {
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact-us' element={<Contactus />} />
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
+          <Route path='/admin-blog' element={<BlogEditor/>} />
 
           <Route path='*' element={<NotFound />} />
         </Routes>
