@@ -506,7 +506,7 @@ export default function CoachingUpload() {
 
                     <div style={{ marginTop: '20px' }}>
                         <button
-                            onClick={clearFilters_test}
+                            onClick={clearFilters}
                             style={{
                                 padding: '8px 15px',
                                 backgroundColor: '#6c757d',
