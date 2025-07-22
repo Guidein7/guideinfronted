@@ -264,7 +264,7 @@ export default function CoachingUpload() {
             params.append("location", location);
         }
         if (price && price.trim() !== "") {
-            params.append("price", price);
+            params.append("price123", price);
         }
         if (courseDuration && courseDuration.trim() !== "") {
             params.append("courseDuration", courseDuration);
