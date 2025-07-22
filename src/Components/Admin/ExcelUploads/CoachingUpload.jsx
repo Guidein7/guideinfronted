@@ -264,7 +264,7 @@ export default function CoachingUpload() {
             params.append("location", location);
         }
         if (price && price.trim() !== "") {
-            params.append("price123", price);
+            params.append("price", price);
         }
         if (courseDuration && courseDuration.trim() !== "") {
             params.append("courseDuration", courseDuration);
@@ -506,7 +506,7 @@ export default function CoachingUpload() {
 
                     <div style={{ marginTop: '20px' }}>
                         <button
-                            onClick={clearFilters}
+                            onClick={clearFilters_test}
                             style={{
                                 padding: '8px 15px',
                                 backgroundColor: '#6c757d',
