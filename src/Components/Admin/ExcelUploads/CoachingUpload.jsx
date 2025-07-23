@@ -562,12 +562,12 @@ export default function CoachingUpload() {
                                     <td>{item.courseDuration}</td>
                                     <td>
                                         <a
-                                            href={item.courseLink_errortest}
+                                            href={item.courseLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             style={{ color: '#007bff', textDecoration: 'none' }}
                                         >
-                                            {item.courseLink_errortest}
+                                            {item.courseLink}
                                         </a>
                                     </td>
                                 </tr>
