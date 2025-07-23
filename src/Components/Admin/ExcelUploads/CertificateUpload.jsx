@@ -410,7 +410,7 @@ export default function CertificateUpload() {
                             onChange={(e) => updateFilters({ courseCategory: e.target.value })}
                             style={{ padding: '8px', minWidth: '150px', borderRadius: '4px', border: '1px solid #ccc' }}
                         >
-                            <option value="">All Categories</option>
+                            <option value="">All Categories_test</option>
                             {courseCategoryOptions.map((option, index) => (
                                 <option key={index} value={option}>
                                     {option}
@@ -429,7 +429,7 @@ export default function CertificateUpload() {
                             onChange={(e) => updateFilters({ courseDuration: e.target.value })}
                             style={{ padding: '8px', minWidth: '150px', borderRadius: '4px', border: '1px solid #ccc' }}
                         >
-                            <option value="">All Durations</option>
+                            <option value="">All Durations_test</option>
                             {courseDurationOptions.map((option, index) => (
                                 <option key={index} value={option}>
                                     {option}
