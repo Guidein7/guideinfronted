@@ -28,8 +28,9 @@ jobs:
           subject: ✅ Build Success - ${{ github.repository }}
           body: |
             GitHub Actions Job succeeded 🎉
+            Wait for 2 mins app deploying....
             Repo: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Actor: ${{ github.actor }}
-          to: saikumartanakala2001@gmail.com
+          to: saikumartanakala2001@gmail.com , inti.vvsn@gmail.com
           from: GitHub Actions <s4resh9o@gmail.com>
