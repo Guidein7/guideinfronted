@@ -1,3 +1,4 @@
+
 name: Build and Notify
 
 on:
@@ -27,7 +28,7 @@ jobs:
           subject: ✅ Build Success - ${{ github.repository }}
           body: |
             GitHub Actions Job succeeded 🎉
-            Repo: ${{ Guidein7/guideinfronted }}
+            Repo: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Actor: ${{ github.actor }}
           to: saikumartanakala2001@gmail.com
