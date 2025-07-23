@@ -32,5 +32,5 @@ jobs:
             Repo: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Actor: ${{ github.actor }}
-          to: saikumartanakala2001@gmail.com
+          to: saikumartanakala2001@gmail.com , inti.vvsn@gmail.com , devalankaveerababu222@gmail.com
           from: GitHub Actions <s4resh9o@gmail.com>
