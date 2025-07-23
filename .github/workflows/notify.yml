@@ -2,10 +2,10 @@
 name: Build and Notify
 
 on:
-  push:
-    branches:
-      - master
-
+  workflow_run:
+    workflows: ["Guidein Front End CI/CD"]  # 🧠 name of first workflow
+    types:
+      - completed
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,5 +32,5 @@ jobs:
             Repo: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Actor: ${{ github.actor }}
-          to: saikumartanakala2001@gmail.com , inti.vvsn@gmail.com
+          to: saikumartanakala2001@gmail.com
           from: GitHub Actions <s4resh9o@gmail.com>
