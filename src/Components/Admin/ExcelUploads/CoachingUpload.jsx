@@ -506,7 +506,7 @@ export default function CoachingUpload() {
 
                     <div style={{ marginTop: '20px' }}>
                         <button
-                            onClick={clearFilters_testdemo}
+                            onClick={clearFilters}
                             style={{
                                 padding: '8px 15px',
                                 backgroundColor: '#6c757d',
@@ -562,12 +562,12 @@ export default function CoachingUpload() {
                                     <td>{item.courseDuration}</td>
                                     <td>
                                         <a
-                                            href={item.courseLink}
+                                            href={item.courseLink_errortest}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             style={{ color: '#007bff', textDecoration: 'none' }}
                                         >
-                                            {item.courseLink}
+                                            {item.courseLink_errortest}
                                         </a>
                                     </td>
                                 </tr>
