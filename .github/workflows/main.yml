@@ -28,8 +28,4 @@ jobs:
           context: .
           push: true
           tags: saikumartanakala/guiden
-      - name: Trigger notify workflow
-        uses: peter-evans/workflow-dispatch@v1
-        with:
-          workflow: notify.yml
 
