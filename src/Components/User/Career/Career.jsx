@@ -34,6 +34,12 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
     setIsOpen(false);
   };
 
+  function stripHtml(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || "";
+}
+
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -80,6 +86,13 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
 };
 
 const CompanyCard = ({ company }) => {
+
+
+  function stripHtml(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || "";
+}
+
   const navigate = useNavigate();
 
   return (
@@ -128,10 +141,10 @@ const CompanyCard = ({ company }) => {
           </div>
 
           <p className="text-sm text-gray-600 mb-1">
-            {company.companyOverview.length > 150
-              ? `${company.companyOverview.substring(0, 150)}...`
-              : company.companyOverview}
-          </p>
+  {stripHtml(company.companyOverview).length > 150
+    ? `${stripHtml(company.companyOverview).substring(0, 150)}...`
+    : stripHtml(company.companyOverview)}
+</p>
 
           {company.companyOverview.length > 30 && (
             <Link

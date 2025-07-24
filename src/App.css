@@ -14,3 +14,69 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(107, 114, 128, 0.8); /* Tailwind gray-500/80 */
 }
+.custom-html ul {
+  list-style-type: disc;
+  padding-left: 1.25rem; /* same as pl-5 */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.custom-html ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.custom-html li {
+  margin-bottom: 0.25rem;
+  color: #374151;
+font-family: Inter;
+}
+
+.custom-html p {
+font-size: 18px;
+color: #374151;
+font-family: Inter;
+margin: 22.5px 0px;
+}
+
+.custom-html h2{
+  font-weight: 700;
+  font-size: 22px;
+}
+
+
+/* Add this to your CSS file */
+.ql-font-arial {
+  font-family: 'Arial', sans-serif;
+}
+.ql-font-times-new-roman {
+  font-family: 'Times New Roman', serif;
+}
+.ql-font-courier-new {
+  font-family: 'Courier New', monospace;
+}
+.ql-font-helvetica {
+  font-family: 'Helvetica', sans-serif;
+}
+.ql-font-georgia {
+  font-family: 'Georgia', serif;
+}
+
+/* Dropdown options */
+.ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
+.ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
+  content: 'Arial';
+  font-family: 'Arial', sans-serif;
+}
+.ql-picker.ql-font .ql-picker-label[data-value="times-new-roman"]::before,
+.ql-picker.ql-font .ql-picker-item[data-value="times-new-roman"]::before {
+  content: 'Times New Roman';
+  font-family: 'Times New Roman', serif;
+}
+.ql-picker.ql-font .ql-picker-label[data-value="courier-new"]::before,
+.ql-picker.ql-font .ql-picker-item[data-value="courier-new"]::before {
+  content: 'Courier New';
+  font-family: 'Courier New', monospace;
+}

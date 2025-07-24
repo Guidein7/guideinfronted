@@ -1,3 +1,4 @@
+import BlogCard from '../../Admin/Blog/BlogCard.jsx'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { resources } from '../../resources'
@@ -41,6 +42,37 @@ export default function HomePage() {
         }
         navigate(searchValue)
     }
+
+
+    const [blogs, setBlogs] = useState([]);
+
+
+    const fetchBlogs = async (page = 0, size = 10) => {
+
+        try {
+            const response = await fetch(
+                `${resources.APPLICATION_URL}admin/get-blogs?page=${page}&size=${size}`
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch blogs');
+            }
+
+            const data = await response.json();
+
+            setBlogs(data.content || []);
+
+        } catch (err) {
+            console.log(err)
+        }
+    };
+
+
+    useEffect(() => {
+        fetchBlogs(0, 6)
+    }, [])
+
+
 
     const getCareerData = (type) => {
         axios.get(`${resources.APPLICATION_URL}view/data?type=${type}&page=0&size=6`).then(response => {
@@ -93,6 +125,10 @@ export default function HomePage() {
 
     const navigate = useNavigate()
 
+    const handleBlogClick = (blogSlug) => {
+        navigate(`/blog/${blogSlug}`);
+    };
+
     console.log(data.careerData)
     return (
         <div className="bg-[#f5faff] w-full min-h-screen">
@@ -104,7 +140,7 @@ export default function HomePage() {
                     <h1>Your Career Journey</h1>
                 </div>
                 <div className='w-[450px] mx-auto flex justify-center mt-2'>
-                <CustomSearchDropdown/>
+                    <CustomSearchDropdown />
                 </div>
 
                 <div className='grid grid-cols-4 gap-4 mt-8 -mb-36'>
@@ -150,15 +186,30 @@ export default function HomePage() {
                     </div>
                 </div>
             </div>
-            <div className=' hidden lg:block mt-36 p-5'>
+            <div className='hidden lg:block mt-36  p-5'>
+                <div className='flex justify-between items-center mb-6'>
+                    <h1 className='font-bold text-xl'>Knowledge Hub</h1>
+                    {blogs.length > 3 && (
+                        <Link to='/blogs' className='cursor-pointer text-blue-400 font-semibold'>
+                            View all
+                        </Link>
+                    )}
+                </div>
+                <div className='flex overflow-x-auto scrollbar-hide gap-4 pb-4'>
+                    {blogs.slice(0, 5).map((blog, idx) => (
+                        <div key={blog.id} className='min-w-[300px]'>
+                            <BlogCard blog={blog} onClick={() => handleBlogClick(blog.slug)} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className=' hidden lg:block  p-5'>
                 <h1 className=' font-bold text-xl '>Top Searches</h1>
                 <div className='grid grid-cols-3 p-5 gap-3 text-[#244ad1]'>
                     < p className='cursor-pointer' onClick={() => navigate(`career/1314/TCS`)}>TCS Careers</p>
                     <p className='cursor-pointer' onClick={() => navigate(`career/1374/Swiggy`)}>Swiggy</p>
                     <p className='cursor-pointer' onClick={() => navigate(`career/1376/PhonePe`)}>PhonePe</p>
-                    {/* <p>Data Science</p>
-                    <p>IAS Coaching Centers</p>
-                    <p>Excel Courses</p> */}
+
                 </div>
             </div>
 
@@ -168,19 +219,10 @@ export default function HomePage() {
                         <h1>One-Stop Guide for</h1>
                         <h1>Your Career Journey</h1>
                     </div>
-                <div className='mx-auto flex justify-center mt-3'>
-                        <CustomSearchDropdown/>
-                </div>
-                    {/* <div className='flex bg-white items-center rounded-lg justify-between px-3 mt-8 w-[60%] mx-auto'>
-                        <select onChange={(e) => setSearchValue(e.target.value)} className=' border bg-white border-gray-100 rounded-lg px-4 py-2 outline-none' >
-                            <option value="">Select Category</option>
-                            <option value="career">Career Pages</option>
-                            <option value="youtube">Youtube</option>
-                            <option value="institute">Coaching Centers</option>
-                            <option value="certificate">Certificates</option>
-                        </select>
-                        <SearchIcon className='bg-white text-[#244ad1]' strokeWidth={2.5} size={24} onClick={navigatFunciton} />
-                    </div> */}
+                    <div className='mx-auto flex justify-center mt-3'>
+                        <CustomSearchDropdown />
+                    </div>
+
                 </div>
 
 
@@ -221,6 +263,27 @@ export default function HomePage() {
 
 
 
+                 <div className='flex flex-col'>
+                    <div className='flex justify-between items-center p-2 font-sans'>
+                        <span className='text-lg font-semibold'>Knowledge Hub</span>
+                        {blogs.length > 3 && (
+                            <Link to='/blogs' className='cursor-pointer text-blue-400 font-semibold'>
+                                View all
+                            </Link>
+                        )}
+                    </div>
+                    <div className='flex overflow-x-auto scrollbar-hide gap-4 px-2 pb-2 mb-3'>
+                        {blogs.slice(0, 5).map((blog, idx) => (
+                            <div className='w-full min-w-[300px]'>
+                                <BlogCard key={blog.id} blog={blog} onClick={() => handleBlogClick(blog.slug)} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
+
+
 
                 <div className='flex flex-col'>
                     <div className='flex justify-between items-center p-2 font-sans'>
@@ -249,22 +312,7 @@ export default function HomePage() {
                                 </span>
                             </div>
                         ))}
-                        {/* {data.careerData.length > 5 && (
-                            <Link
-                                to='/career'
-                                className='bg-white  flex flex-col items-center justify-center gap-3 py-2 px-4 rounded-lg flex-shrink-0 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-colors'
-                            >
-                                <div className='bg-blue-100 p-3 rounded-xl'>
-                                    <Building size={48} className='text-blue-600' />
-                                </div>
-                                <span className='text-lg font-sans font-semibold text-blue-600 text-center'>
-                                    View All
-                                </span>
-                                <span className='text-xs text-blue-500 text-center'>
-                                    +{data.careerData.length - 5} more companies
-                                </span>
-                            </Link>
-                        )} */}
+
                     </div>
                 </div>
 
@@ -278,9 +326,9 @@ export default function HomePage() {
 
                         </div>
                         {data.instituteData?.length > 5 && (
-                           
-                                <Link className='text-blue-400 font-semibold cursor-pointer' to='/institute'>View all</Link>
-                              
+
+                            <Link className='text-blue-400 font-semibold cursor-pointer' to='/institute'>View all</Link>
+
                         )}
                     </div>
 
@@ -320,32 +368,10 @@ export default function HomePage() {
                                         <span className="font-medium">{item.location}</span>
                                     </div>
                                 </div>
-                                {/* <button className="group/btn w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-gray-900 to-gray-800 hover:from-blue-600 hover:to-indigo-600 text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
-                                <Phone className="w-4 h-4 group-hover/btn:animate-pulse" />
-                                Request Callback
-                            </button> */}
+
                             </div>
                         ))}
-                        {/* {data.instituteData?.length > 5 && (
-                            <div className='group bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 flex flex-col items-center justify-center gap-4 min-w-[280px] p-6 rounded-2xl border-2 border-dashed border-blue-200 hover:border-blue-300 cursor-pointer transition-all duration-300 transform hover:-translate-y-2'>
-                                <div className='bg-gradient-to-br from-blue-500 to-indigo-600 p-4 rounded-2xl shadow-lg group-hover:shadow-xl transition-shadow'>
-                                    <Building size={32} className='text-white' />
 
-                                </div>
-                                <div className='text-center'>
-                                    <h3 className='text-xl font-bold text-blue-700 mb-2'>
-                                        Explore More
-                                    </h3>
-                                    <p className='text-blue-600 font-medium mb-2'>
-                                        +{data.instituteData.length - 5} more institutes
-                                    </p>
-                                    <p className='text-sm text-blue-500'>
-                                        Discover all coaching centers in your area
-                                    </p>
-                                </div>
-                                <ArrowRight className="w-5 h-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
-                            </div>
-                        )} */}
                     </div>
                 </div>
 
@@ -375,7 +401,7 @@ export default function HomePage() {
 
 
                                 <span className=' font-sans font-semibold text-center'>
-                                    {extractBracketOrOriginal(item?.videoTitle.substring(0,28))}
+                                    {extractBracketOrOriginal(item?.videoTitle.substring(0, 28))}
                                 </span>
 
 
@@ -398,22 +424,7 @@ export default function HomePage() {
 
                             </div>
                         ))}
-                        {/* {data.youtubeData.length > 5 && (
-                            <Link
-                                to='/youtube'
-                                className='bg-white  flex flex-col items-center justify-center gap-3 py-2 px-4 rounded-lg flex-shrink-0 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-colors'
-                            >
-                                <div className='bg-blue-100 p-3 rounded-xl'>
-                                    <Building size={48} className='text-blue-600' />
-                                </div>
-                                <span className='text-lg font-sans font-semibold text-blue-600 text-center'>
-                                    View All
-                                </span>
-                                <span className='text-xs text-blue-500 text-center'>
-                                    +{data.careerData.length - 5} more companies
-                                </span>
-                            </Link>
-                        )} */}
+
                     </div>
                 </div>
 
@@ -446,41 +457,21 @@ export default function HomePage() {
                                 </div>
                                 <div className='flex flex-col'>
                                     <span className=' font-sans font-semibold text-center'>
-                                        {item?.courseTitle.substring(0,28)}
+                                        {item?.courseTitle.substring(0, 28)}
                                     </span>
-                                    {/* <span className='text-lg font-sans font-semibold '>
-                                    {item?.platform}
-                                </span> */}
-                                    {/* <div className="flex items-center gap-2">
-                                    <RxClock size={16} />
-                                    <p>{item.courseDuration}</p>
-                                </div> */}
+
                                 </div>
 
-                                {/* <button className="p-2 border border-gray-300 rounded-lg text-[10px] font-medium text-white bg-black">
-                                    Enroll  Now
-                                </button> */}
+
                             </div>
                         ))}
-                        {/* {data.certificateData.length > 5 && (
-                            <Link
-                                to='/certificate'
-                                className='bg-white  flex flex-col items-center justify-center gap-3 py-2 px-4 rounded-lg flex-shrink-0 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition-colors'
-                            >
-                                <div className='bg-blue-100 p-3 rounded-xl'>
-                                    <GrCertificate size={96} />
-                                </div>
-                                <span className='text-lg font-sans font-semibold text-blue-600 text-center'>
-                                    View All
-                                </span>
-                                <span className='text-xs text-blue-500 text-center'>
-                                    +{data.careerData.length - 5} more companies
-                                </span>
-                            </Link>
-                        )} */}
+
                     </div>
                 </div>
 
+
+
+               
 
 
             </div>

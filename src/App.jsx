@@ -23,6 +23,8 @@ import NotFound from './Components/User/NotFound'
 import Footer from './Components/User/Footer'
 import TermsAndConditions from './Components/User/PrivacyPolicy/TermsAndConditions'
 import BlogEditor from './Components/Admin/Blog/UplaodBlog'
+import BlogList from './Components/Admin/Blog/BlogList'
+import SingleBlog from './Components/User/Blogs/SingleBlog'
 
 
 
@@ -60,6 +62,9 @@ function App() {
           <Route path='/contact-us' element={<Contactus />} />
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
           <Route path='/admin-blog' element={<BlogEditor/>} />
+          <Route path='/admin-blog-list' element={<BlogList/>} />
+           <Route path='/blogs' element={<BlogList/>} />
+          <Route path="/blog/:slug" element={<SingleBlog />} />
 
           <Route path='*' element={<NotFound />} />
         </Routes>
