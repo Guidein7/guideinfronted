@@ -157,7 +157,7 @@ export default function YoutubeOverView() {
 
                         {/* Course Description */}
                         <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
-                            <h2 className="text-lg font-bold text-gray-900 mb-4 sm:mb-6">Course Overview</h2>
+                            <h2 className="text-lg font-bold text-gray-900 mb-4 sm:mb-6">What You'll Learn from This Video</h2>
                             {courseData.shortDescription && (
                                 <p className="text-gray-700  leading-relaxed mb-6 lg:mb-8">
                                     {courseData.shortDescription}

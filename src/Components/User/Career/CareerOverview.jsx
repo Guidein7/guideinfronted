@@ -196,7 +196,7 @@ export default function CareerOverview() {
                 <hr className="border-gray-400 my-3"/>
                 
                 <div className="">
-                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">About</h2>
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Analyse <i>{data.companyName}</i> Before You Join</h2>
                     <div
                         className="text-gray-600 leading-relaxed text-sm md:text-base custom-html"
                         dangerouslySetInnerHTML={{ __html: data.companyOverview }}
@@ -229,7 +229,7 @@ export default function CareerOverview() {
                 href={data.careerPageUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="blink-animation flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-lg transition-all duration-300 font-semibold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                className=" flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-lg transition-all duration-300 font-semibold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
             >
                 <ExternalLink className="w-5 h-5 mr-2" />
                 Visit Career Page

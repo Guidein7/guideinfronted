@@ -230,29 +230,37 @@ export default function HomePage() {
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
+                                <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
                                 <img src={Company} className='w-12 h-12' />
+                                </div>
                             </div>
                             <span className='font-bold'>Company Careers</span>
                         </div>
                         <div onClick={() => navigate('/youtube')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
+                                  <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
                                 <img src={youtubeimg} className='w-12 h-12' />
+                                </div>
                             </div>
 
-                            <span className='font-bold '>YouTube Learning</span>
+                            <span className='font-bold '>Interview Q&A</span>
                         </div>
                     </div>
 
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/institute')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
+                                  <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
                                 <img src={instituteimg} className='w-12 h-12' />
+                                </div>
                             </div>
                             <span className='font-bold '>Coaching Centers</span>
                         </div>
                         <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
+                                  <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
                                 <img src={certificateimg} className='w-12 h-12' />
+                                </div>
                             </div>
 
                             <span className='font-bold '>Free Certifications</span>
@@ -301,7 +309,7 @@ export default function HomePage() {
                                 key={idx}
                                 className='bg-white flex flex-col items-center gap-5 py-2 px-4 rounded-lg  flex-shrink-0'
                             >
-                                <div className='bg-blue-100 p-3 rounded-xl'>
+                                <div className='border border-gray-400 p-3 rounded-xl'>
                                     <img src={Company} className='w-12 h-12' />
                                 </div>
                                 <span className=' font-sans font-semibold text-center'>
@@ -342,8 +350,9 @@ export default function HomePage() {
                             >
 
                                 <div className='flex items-start gap-4 mb-4'>
-                                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:shadow-xl transition-shadow">
-                                        <GraduationCap className="w-12 h-12 text-white" />
+                                    <div className="w-[76px] h-[76px]  rounded-2xl flex items-center justify-center p-3 border border-gray-400">
+                                        {/* <GraduationCap className="w-12 h-12 text-white" /> */}
+                                        <img src={instituteimg} />
                                     </div>
                                     <div className='flex-1'>
                                         <h3 className=' font-semibold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors'>
@@ -378,7 +387,7 @@ export default function HomePage() {
 
                 <div className='flex flex-col p-2'>
                     <div className='flex justify-between items-center p-2 font-sans'>
-                        <span className='text-lg font-semibold'>Learn From Youtube</span>
+                        <span className='text-lg font-semibold'>Interview Q&A</span>
                         {data.youtubeData.length > 5 && (
                             <Link to='/youtube' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
@@ -392,8 +401,10 @@ export default function HomePage() {
                                 key={idx}
                                 className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
-                                <div className=' p-3 rounded-xl flex items-center gap-5'>
+                                <div className='  rounded-xl flex items-center gap-5'>
+                                    <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
                                     <img src={youtubeimg} className='w-12 h-12' />
+                                    </div>
                                     <span className='text-lg font-sans font-semibold text-center'>
                                         {item.topic}
                                     </span>
@@ -449,7 +460,9 @@ export default function HomePage() {
                                 className='group bg-white gap-3 hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className='flex items-center gap-3 rounded-xl'>
+                                      <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
                                     <img src={certificateimg} className='w-12 h-12' />
+                                    </div>
                                     <span className=' font-sans font-semibold text-center'>
                                         {item?.courseCategory}
                                     </span>

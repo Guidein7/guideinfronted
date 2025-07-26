@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import ExcelUpload from './Components/Admin/ExcelUploads/ExcelUpload'
 import HomePage from './Components/User/HomePage/HomePage'
 import Career from './Components/User/Career/Career'
@@ -30,7 +30,8 @@ import SingleBlog from './Components/User/Blogs/SingleBlog'
 
 function App() {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
 
 
   return (
@@ -69,7 +70,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
-
+{}
       <div className='bg-black text-white flex flex-col gap-2 px-2  md:px-10 py-1'>
         <div className='flex  justify-around  md:justify-evenly gap-2'>
            <div className='flex flex-col gap-2'>

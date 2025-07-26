@@ -179,7 +179,7 @@ export default function InstituteOverview() {
                     {/* Course Information */}
                     <div className="p-6 sm:p-8">
                         <div className="mb-8">
-                            <h2 className="text-xl font-bold text-gray-900 mb-6">Course Information</h2>
+                            <h2 className="text-xl font-bold text-gray-900 mb-6">Analyse <i>{data?.instituteName}</i> Before You Join</h2>
                             <div className="bg-blue-50 rounded-lg p-6 mb-6">
                                 <div className="flex items-center mb-2">
                                     <GraduationCap className="w-6 h-6 text-blue-600 mr-3" />
