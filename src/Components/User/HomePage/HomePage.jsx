@@ -187,23 +187,25 @@ export default function HomePage() {
                     </div>
                 </div>
             </div>
-            <div className='hidden lg:block mt-36  p-5'>
-                <div className='flex justify-between items-center mb-6'>
-                    <h1 className='font-bold text-xl'>Knowledge Hub</h1>
-                    {blogs.length > 3 && (
-                        <Link to='/blogs' className='cursor-pointer text-blue-400 font-semibold'>
-                            View all
-                        </Link>
-                    )}
-                </div>
-                <div className='flex overflow-x-auto scrollbar-hide gap-4 pb-4'>
-                    {blogs.slice(0, 5).map((blog, idx) => (
-                        <div key={blog.id} className='min-w-[300px]'>
-                            <BlogCard blog={blog} onClick={() => handleBlogClick(blog.slug)} />
-                        </div>
-                    ))}
-                </div>
-            </div>
+
+            {blogs.length > 0 &&
+                <div className='hidden lg:block mt-36  p-5'>
+                    <div className='flex justify-between items-center mb-6'>
+                        <h1 className='font-bold text-xl'>Knowledge Hub</h1>
+                        {blogs.length > 3 && (
+                            <Link to='/blogs' className='cursor-pointer text-blue-400 font-semibold'>
+                                View all
+                            </Link>
+                        )}
+                    </div>
+                    <div className='flex overflow-x-auto scrollbar-hide gap-4 pb-4'>
+                        {blogs.slice(0, 5).map((blog, idx) => (
+                            <div key={blog.id} className='min-w-[300px]'>
+                                <BlogCard blog={blog} onClick={() => handleBlogClick(blog.slug)} />
+                            </div>
+                        ))}
+                    </div>
+                </div>}
             <div className=' hidden lg:block  p-5'>
                 <h1 className=' font-bold text-xl '>Top Searches</h1>
                 <div className='grid grid-cols-3 p-5 gap-3 text-[#244ad1]'>
@@ -231,16 +233,16 @@ export default function HomePage() {
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
-                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
-                                <img src={Company} className='w-12 h-12' />
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={Company} className='w-12 h-12' />
                                 </div>
                             </div>
                             <span className='font-bold'>Company Careers</span>
                         </div>
                         <div onClick={() => navigate('/youtube')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
-                                  <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
-                                <img src={youtubeimg} className='w-12 h-12' />
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={youtubeimg} className='w-12 h-12' />
                                 </div>
                             </div>
 
@@ -251,16 +253,16 @@ export default function HomePage() {
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/institute')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
-                                  <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
-                                <img src={instituteimg} className='w-12 h-12' />
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={instituteimg} className='w-12 h-12' />
                                 </div>
                             </div>
                             <span className='font-bold '>Coaching Centers</span>
                         </div>
                         <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
-                                  <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
-                                <img src={certificateimg} className='w-12 h-12' />
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={certificateimg} className='w-12 h-12' />
                                 </div>
                             </div>
 
@@ -271,7 +273,7 @@ export default function HomePage() {
                 </div>
 
 
-{blogs.length > 0 &&  <div className='flex flex-col'>
+                {blogs.length > 0 && <div className='flex flex-col'>
                     <div className='flex justify-between items-center p-2 font-sans'>
                         <span className='text-lg font-semibold'>Knowledge Hub</span>
                         {blogs.length > 3 && (
@@ -288,7 +290,7 @@ export default function HomePage() {
                         ))}
                     </div>
                 </div>}
-                
+
 
 
 
@@ -403,8 +405,8 @@ export default function HomePage() {
                                 className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className='  rounded-xl flex items-center gap-5'>
-                                    <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
-                                    <img src={youtubeimg} className='w-12 h-12' />
+                                    <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                        <img src={youtubeimg} className='w-12 h-12' />
                                     </div>
                                     <span className='text-lg font-sans font-semibold text-center'>
                                         {item.topic}
@@ -461,8 +463,8 @@ export default function HomePage() {
                                 className='group bg-white gap-3 hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className='flex items-center gap-3 rounded-xl'>
-                                      <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
-                                    <img src={certificateimg} className='w-12 h-12' />
+                                    <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                        <img src={certificateimg} className='w-12 h-12' />
                                     </div>
                                     <span className=' font-sans font-semibold text-center'>
                                         {item?.courseCategory}
@@ -485,11 +487,11 @@ export default function HomePage() {
 
 
 
-               
+
 
 
             </div>
-            <Footer/>
+            <Footer />
 
         </div >
     )
