@@ -392,8 +392,9 @@ import { RxClock } from "react-icons/rx";
 import { HiOutlineAcademicCap, HiOutlineGlobeAlt, HiOutlineExternalLink } from "react-icons/hi";
 import { BiFilterAlt } from "react-icons/bi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { ChevronLeft, ChevronRight, ChevronDown, Filter, Search,  } from "lucide-react";
-import {Link } from 'react-router-dom'
+import { ChevronLeft, ChevronRight, ChevronDown, Filter, Search, } from "lucide-react";
+import { Link } from 'react-router-dom'
+import certificate from '../../../assets/certificate.png'
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -493,7 +494,7 @@ export default function Certificate() {
             params.append("courseCategory", courseCategory);
         }
         if (courseDuration && courseDuration.trim() !== "") {
-            params.append("duration",courseDuration.trim());
+            params.append("duration", courseDuration.trim());
         }
         if (searchQuery && searchQuery.trim() !== "") {
             params.append("searchQuery", searchQuery);
@@ -661,7 +662,7 @@ export default function Certificate() {
                 ) : data.length === 0 ? (
                     <div className="text-center py-20">
                         <div className="mb-4">
-                            <GrCertificate className="w-16 h-16 text-slate-400 mx-auto" />
+                            <img src={certificate} className="w-16 h-16 text-slate-400 mx-auto" />
                         </div>
                         <h3 className="text-xl font-semibold text-slate-600 mb-2">No courses found</h3>
                         <p className="text-slate-500">Try adjusting your filters to see more results</p>
@@ -677,8 +678,8 @@ export default function Certificate() {
                                 >
                                     <div className="p-8 flex flex-col lg:flex-row gap-8">
                                         <div className="flex-shrink-0">
-                                            <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
-                                                <GrCertificate className="w-12 h-12 text-blue-600" />
+                                            <div className="w-20 h-20 bg-gray-200   rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
+                                                <img src={certificate} className="w-16 h-16 text-slate-400 mx-auto" />
                                             </div>
                                         </div>
                                         <div className="flex-1 space-y-4">
@@ -728,10 +729,12 @@ export default function Certificate() {
                                     key={idx}
                                     className="md:hidden bg-white rounded-2xl shadow-lg border border-slate-200 hover:shadow-2xl hover:border-blue-200 transition-all duration-300 overflow-hidden group py-2"
                                 >
-                                    <div className="p-6 flex gap-4">
+                                    <div className="p-2 flex gap-4 items-center">
                                         <div className="flex-shrink-0">
-                                            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
-                                                <GrCertificate className="w-10 h-10 text-blue-600" />
+                                            <div className="w-16 h-16 bg-gray-200  rounded-2xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
+
+                                                <img src={certificate} className="w-12 h-12 text-slate-400 mx-auto" />
+
                                             </div>
                                         </div>
                                         <h2 className="md:text-xl font-semibold md:font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">

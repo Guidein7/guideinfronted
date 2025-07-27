@@ -230,7 +230,7 @@ export default function HomePage() {
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
-                                <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
                                 <img src={Company} className='w-12 h-12' />
                                 </div>
                             </div>
@@ -238,7 +238,7 @@ export default function HomePage() {
                         </div>
                         <div onClick={() => navigate('/youtube')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
-                                  <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
+                                  <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
                                 <img src={youtubeimg} className='w-12 h-12' />
                                 </div>
                             </div>
@@ -250,7 +250,7 @@ export default function HomePage() {
                     <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/institute')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
-                                  <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
+                                  <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
                                 <img src={instituteimg} className='w-12 h-12' />
                                 </div>
                             </div>
@@ -258,7 +258,7 @@ export default function HomePage() {
                         </div>
                         <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
-                                  <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
+                                  <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
                                 <img src={certificateimg} className='w-12 h-12' />
                                 </div>
                             </div>
@@ -309,7 +309,7 @@ export default function HomePage() {
                                 key={idx}
                                 className='bg-white flex flex-col items-center gap-5 py-2 px-4 rounded-lg  flex-shrink-0'
                             >
-                                <div className='border border-gray-400 p-3 rounded-xl'>
+                                <div className=' p-3 rounded-xl'>
                                     <img src={Company} className='w-12 h-12' />
                                 </div>
                                 <span className=' font-sans font-semibold text-center'>
@@ -350,7 +350,7 @@ export default function HomePage() {
                             >
 
                                 <div className='flex items-start gap-4 mb-4'>
-                                    <div className="w-[76px] h-[76px]  rounded-2xl flex items-center justify-center p-3 border border-gray-400">
+                                    <div className="w-[76px] h-[76px]  rounded-2xl flex items-center justify-center p-3 ">
                                         {/* <GraduationCap className="w-12 h-12 text-white" /> */}
                                         <img src={instituteimg} />
                                     </div>
@@ -402,7 +402,7 @@ export default function HomePage() {
                                 className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className='  rounded-xl flex items-center gap-5'>
-                                    <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
+                                    <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
                                     <img src={youtubeimg} className='w-12 h-12' />
                                     </div>
                                     <span className='text-lg font-sans font-semibold text-center'>
@@ -460,7 +460,7 @@ export default function HomePage() {
                                 className='group bg-white gap-3 hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
                                 <div className='flex items-center gap-3 rounded-xl'>
-                                      <div className=' w-[73.6px] h-[73.6px] border border-gray-400 flex justify-center items-center rounded-lg'> 
+                                      <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'> 
                                     <img src={certificateimg} className='w-12 h-12' />
                                     </div>
                                     <span className=' font-sans font-semibold text-center'>

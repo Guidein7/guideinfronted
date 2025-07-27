@@ -597,6 +597,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import maps from '../../../assets/maps.webp';
 import EnquiryModal from './EnquiryModel';
 import 'react-toastify/dist/ReactToastify.css';
+import institute from '../../../assets/institute.png'
 
 const successMessage = (message) => {
   toast.success(message, {
@@ -715,8 +716,8 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
     <>
       <div className="hidden md:block bg-white border border-gray-200 rounded-2xl p-2 hover:shadow-xl transition-all duration-300 hover:border-blue-200 transform hover:-translate-y-1">
         <div className="flex flex lg:flex-row gap-6">
-          <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-            <GraduationCap className="w-10 h-10 text-white" />
+          <div className="w-12 h-12 lg:w-16 lg:h-16  rounded-2xl flex items-center justify-center border border-gray-400">
+            <img src={institute} className="w-10 h-10 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
@@ -801,8 +802,8 @@ const InstituteCard = ({ course, setShowModel, setId }) => {
       >
         <div className="flex gap-5">
           <div>
-            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-              <GraduationCap className="w-10 h-10 text-white" />
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gray-200">
+              <img src={institute} className="w-10 h-10 text-white" />
             </div>
           </div>
           <div className="flex flex-col gap-1">
