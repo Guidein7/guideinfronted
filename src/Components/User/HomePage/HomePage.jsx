@@ -216,7 +216,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <div className='flex flex-col gap-5 lg:hidden'>
+            <div className={`flex flex-col gap-5 lg:hidden ${blogs.length === 0 ? 'mt-36': '' }`}>
                 <div className=' p-2 bg-gradient-to-r from-blue-600 to-indigo-700' >
                     <div className='text-center  flex flex-col gap-3 text-white text-2xl font-[500]'>
                         <h1>One-Stop Guide for</h1>
