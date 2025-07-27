@@ -206,7 +206,7 @@ export default function HomePage() {
                         ))}
                     </div>
                 </div>}
-            <div className=' hidden lg:block  p-5'>
+            <div className={`hidden lg:block  p-5 ${blogs.length === 0 ? 'mt-40': '' }`}>
                 <h1 className=' font-bold text-xl '>Top Searches</h1>
                 <div className='grid grid-cols-3 p-5 gap-3 text-[#244ad1]'>
                     < p className='cursor-pointer' onClick={() => navigate(`career/1314/TCS`)}>TCS Careers</p>
@@ -216,7 +216,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <div className={`flex flex-col gap-5 lg:hidden ${blogs.length === 0 ? 'mt-36': '' }`}>
+            <div className={`flex flex-col gap-5 lg:hidden `}>
                 <div className=' p-2 bg-gradient-to-r from-blue-600 to-indigo-700' >
                     <div className='text-center  flex flex-col gap-3 text-white text-2xl font-[500]'>
                         <h1>One-Stop Guide for</h1>
