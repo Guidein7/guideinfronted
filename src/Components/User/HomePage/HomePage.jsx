@@ -12,6 +12,7 @@ import youtubeimg from '../../../assets/youtube.png'
 import instituteimg from '../../../assets/institute.png'
 import certificateimg from '../../../assets/certificate.png'
 import CustomSearchDropdown from './CustomSearchDropDown.jsx'
+import Footer from '../Footer.jsx'
 
 
 export default function HomePage() {
@@ -270,8 +271,7 @@ export default function HomePage() {
                 </div>
 
 
-
-                 <div className='flex flex-col'>
+{blogs.length > 0 &&  <div className='flex flex-col'>
                     <div className='flex justify-between items-center p-2 font-sans'>
                         <span className='text-lg font-semibold'>Knowledge Hub</span>
                         {blogs.length > 3 && (
@@ -287,7 +287,8 @@ export default function HomePage() {
                             </div>
                         ))}
                     </div>
-                </div>
+                </div>}
+                
 
 
 
@@ -488,6 +489,7 @@ export default function HomePage() {
 
 
             </div>
+            <Footer/>
 
         </div >
     )

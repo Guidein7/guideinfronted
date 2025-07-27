@@ -70,36 +70,8 @@ function App() {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
-{}
-      <div className='bg-black text-white flex flex-col gap-2 px-2  md:px-10 py-1'>
-        <div className='flex  justify-around  md:justify-evenly gap-2'>
-           <div className='flex flex-col gap-2'>
-          <p className="cursor-pointer" onClick={() => navigate('/contact-us')}>Contact us</p>
-                       <p className='cursor-pointer md:hidden' onClick={() => navigate('/terms-conditions')}>Terms & Conditions</p>
 
-            </div>
-          <p className='cursor-pointer' onClick={() => navigate('/about')}>About us</p>
-       
-            <p className='cursor-pointer ' onClick={() => navigate('/privacy-policy')}>Privacy Policy</p>
-
-           
-      
-           <p className='cursor-pointer hidden md:block' onClick={() => navigate('/terms-conditions')}>Terms & Conditions</p>
-
-        </div>
-        <div className='flex justify-center'>
-
-          <Footer />
-
-        </div>
-        <div className='flex justify-center'>
-
-         
-          <p>CopyRight&#169;{new Date().getFullYear()}</p>
-
-        </div>
-
-      </div>
+    
      
     </div>
   )

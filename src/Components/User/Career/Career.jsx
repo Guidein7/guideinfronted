@@ -5,6 +5,7 @@ import { resources } from '../../resources';
 import { types } from '../../Admin/ExcelUploads/types';
 import Company from '../../../assets/company.png'
 import React, { useState, useEffect, useRef } from 'react';
+import Footer from '../Footer';
 
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
@@ -442,6 +443,7 @@ const Career = () => {
           </div>
         )}
       </div>
+      <Footer/>
     </div>
   );
 };

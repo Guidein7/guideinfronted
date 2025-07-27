@@ -598,6 +598,7 @@ import maps from '../../../assets/maps.webp';
 import EnquiryModal from './EnquiryModel';
 import 'react-toastify/dist/ReactToastify.css';
 import institute from '../../../assets/institute.png'
+import Footer from '../Footer';
 
 const successMessage = (message) => {
   toast.success(message, {
@@ -1171,6 +1172,7 @@ const Institute = () => {
         )}
         <EnquiryModal showModel={showModel} setId={setId} id={id} setShowModel={setShowModel} successMessage={successMessage} errorMessage={errorMessage} />
       </div>
+      <Footer/>
     </div>
   );
 };

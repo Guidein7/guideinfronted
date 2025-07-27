@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, ArrowLeft, Search, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 const NotFound = () => {
 
@@ -60,6 +61,7 @@ const NotFound = () => {
           </p>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

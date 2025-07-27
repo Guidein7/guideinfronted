@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Tag, Clock, Share2 } from 'lucide-react';
 import { resources } from '../../resources';
+import Footer from '../Footer';
 
 const SingleBlog = () => {
     const { slug } = useParams();
@@ -277,6 +278,7 @@ const RelatedBlogCard = ({ blog, onClick }) => {
                     )}
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 };

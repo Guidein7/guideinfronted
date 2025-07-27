@@ -4,6 +4,7 @@ import axios from "axios";
 import { resources } from "../../resources";
 import { types } from "../../Admin/ExcelUploads/types";
 import { useNavigate } from "react-router-dom";
+import Footer from "../Footer";
 
 export default function CertificateOverview() {
     const { id, name } = useParams();
@@ -88,34 +89,6 @@ export default function CertificateOverview() {
                     <div className="px-6 py-8 sm:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             {/* Course Details */}
-                            <div className="lg:col-span-2 space-y-6">
-                                <div>
-                                    <h2 className="text-xl font-semibold text-gray-900 mb-3">What you'll learn</h2>
-                                    <p className="text-gray-600 leading-relaxed">
-                                        {data.shortDescription}
-                                    </p>
-                                </div>
-
-                                {/* Course Link */}
-                                {data.courseLink && (
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Access Course</h3>
-                                        <a
-                                            href={data.courseLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
-                                        >
-                                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                            </svg>
-                                            Visit Course
-                                        </a>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Sidebar */}
                             <div className="space-y-6">
                                 {/* Course Info Card */}
                                 <div className="bg-gray-50 rounded-lg p-6">
@@ -141,20 +114,74 @@ export default function CertificateOverview() {
                                 </div>
 
                                 {/* Certificate Badge */}
-                                <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                        <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <h4 className="text-sm font-semibold text-green-800 mb-1">Certificate Available</h4>
-                                    <p className="text-xs text-green-600">Complete the course to earn your certificate</p>
-                                </div>
+                               
                             </div>
+                            <div className="lg:col-span-2 space-y-6">
+                               
+
+                                {/* Course Link */}
+                                {data.courseLink && (
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Access Course</h3>
+                                        <a
+                                            href={data.courseLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+                                        >
+                                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                            Visit Course
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Sidebar */}
+                            
                         </div>
+                         <div>
+                                    <h2 className="text-xl font-semibold text-gray-900 mb-3">What you'll learn</h2>
+                                    <p className="text-gray-600 leading-relaxed">
+                                        {data.shortDescription}
+                                    </p>
+                                </div>
                     </div>
+
+                    
                 </div>
             </div>
+            <div className="mb-0">
+            <Footer/>
+            </div>
+             {data?.courseLink && (
+                <div className=" md:hidden mt-8  mb-4 ">
+                    <a
+                        href={data.courseLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className=" fixed bottom-0 md:hidden flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-lg transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                        {/* <ExternalLink className="w-5 h-5 mr-2" /> */}
+                        Visit Course
+                    </a>
+                </div>
+            )}
         </div>
     );
+
+
+
 }
+
+
+//  <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+//                                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+//                                         <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+//                                         </svg>
+//                                     </div>
+//                                     <h4 className="text-sm font-semibold text-green-800 mb-1">Certificate Available</h4>
+//                                     <p className="text-xs text-green-600">Complete the course to earn your certificate</p>
+//                                 </div>

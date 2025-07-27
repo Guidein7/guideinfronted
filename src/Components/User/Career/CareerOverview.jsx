@@ -5,11 +5,12 @@ import { resources } from "../../resources";
 import { types } from "../../Admin/ExcelUploads/types";
 import { useEffect, useState } from "react";
 import Company from '../../../assets/company.png'
+import Footer from "../Footer";
 
 export default function CareerOverview() {
     const { id, name } = useParams();
     const [data, setData] = useState({});
-    const [activeReviewTab, setActiveReviewTab] = useState('glassdoor'); 
+    const [activeReviewTab, setActiveReviewTab] = useState('glassdoor');
 
     const getData = () => {
         axios.get(`${resources.APPLICATION_URL}unique-record?type=${types.CAREER}&id=${id}`).then(response => {
@@ -33,7 +34,7 @@ export default function CareerOverview() {
         if (num >= 1000) return (num / 1000).toFixed(0) + 'K+';
         return num.toString();
     };
-    
+
     const formatReviewCount = (count) => {
         const num = parseFloat(count);
         if (num >= 1000) {
@@ -121,7 +122,7 @@ export default function CareerOverview() {
                 </div>
 
                 <hr className="border-gray-300 mb-6 md:mb-8" />
-               
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                     <div className="space-y-4 md:space-y-6">
                         <div>
@@ -161,8 +162,8 @@ export default function CareerOverview() {
                                 <button
                                     onClick={() => setActiveReviewTab('glassdoor')}
                                     className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base ${activeReviewTab === 'glassdoor'
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                                         }`}
                                 >
                                     Glassdoor
@@ -170,8 +171,8 @@ export default function CareerOverview() {
                                 <button
                                     onClick={() => setActiveReviewTab('ambitionbox')}
                                     className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base ${activeReviewTab === 'ambitionbox'
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                                         }`}
                                 >
                                     AmbitionBox
@@ -190,11 +191,22 @@ export default function CareerOverview() {
                                 </div>
                             </div>
                         </div>
+                        <div className="max-w-4xl mx-auto p-4 hidden md:block">
+                            <a
+                                href={data.careerPageUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className=" flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-lg transition-all duration-300 font-semibold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                            >
+                                <ExternalLink className="w-5 h-5 mr-2" />
+                                Visit Career Page
+                            </a>
+                        </div>
                     </div>
                 </div>
-                
-                <hr className="border-gray-400 my-3"/>
-                
+
+                <hr className="border-gray-400 my-3" />
+
                 <div className="">
                     <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Analyse <i>{data.companyName}</i> Before You Join</h2>
                     <div
@@ -222,7 +234,7 @@ export default function CareerOverview() {
             )} */}
 
             {/* Fixed Bottom Button - Mobile: Always Visible, Desktop: Hidden on scroll to footer */}
-{data?.careerPageUrl && (
+            {/* {data?.careerPageUrl && (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg ">
         <div className="max-w-4xl mx-auto p-4">
             <a 
@@ -236,22 +248,27 @@ export default function CareerOverview() {
             </a>
         </div>
     </div>
-)}
-
-{/* Desktop Button - Regular button at bottom of content */}
-{/* {data?.careerPageUrl && (
-    <div className="hidden md:block mt-8 mb-4">
-        <a 
-            href={data.careerPageUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="blink-animation flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-lg transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
-        >
-            <ExternalLink className="w-5 h-5 mr-2" />
-            Visit Career Page
-        </a>
-    </div>
 )} */}
+
+            {/* Desktop Button - Regular button at bottom of content */}
+            <div className="mb-12">
+                    <Footer/>
+            </div>
+            {data?.careerPageUrl && (
+                <div className=" md:hidden mt-8  mb-4 ">
+                    <a
+                        href={data.careerPageUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className=" fixed bottom-0 flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-lg transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                        <ExternalLink className="w-5 h-5 mr-2" />
+                        Visit Career Page
+                    </a>
+                </div>
+            )}
+
+           
         </>
     );
 }

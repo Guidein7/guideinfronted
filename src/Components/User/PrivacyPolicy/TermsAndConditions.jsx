@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Footer from '../Footer';
 
 const TermsAndConditions = () => {
   return (
@@ -117,6 +118,7 @@ const TermsAndConditions = () => {
           </p>
         </section>
       </div>
+      <Footer/>
     </div>
   );
 };

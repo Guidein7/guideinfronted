@@ -1,5 +1,6 @@
 import emailicon from '../../../assets/emailicon.png'
 import callicon from '../../../assets/callicon.png'
+import Footer from '../Footer'
 export default function Contactus(){
     return (
         <div className='flex-grow justify-center items-center pt-24'>
@@ -16,6 +17,7 @@ export default function Contactus(){
                     </div>
 
                 </div>
+                <Footer/>
             </div>
     )
 }

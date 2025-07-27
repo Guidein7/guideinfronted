@@ -395,6 +395,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { ChevronLeft, ChevronRight, ChevronDown, Filter, Search, } from "lucide-react";
 import { Link } from 'react-router-dom'
 import certificate from '../../../assets/certificate.png'
+import Footer from "../Footer";
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -825,6 +826,7 @@ export default function Certificate() {
                     </div>
                 )}
             </div>
+            <Footer/>
         </div>
     );
 }

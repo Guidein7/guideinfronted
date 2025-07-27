@@ -5,6 +5,7 @@ import axios from 'axios';
 import { types } from '../../Admin/ExcelUploads/types';
 import { resources } from '../../resources';
 import youtube from '../../../assets/youtube.png'
+import Footer from '../Footer';
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -427,6 +428,7 @@ const Youtub = () => {
           </div>
         )}
       </div>
+      <Footer/>
     </div>
   );
 };

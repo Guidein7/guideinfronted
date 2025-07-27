@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 
 import { ArrowLeft, MapPin, Clock, Users, Phone, Globe, Star, Calendar, Monitor, Briefcase, DollarSign, GraduationCap, IndianRupee } from "lucide-react";
 import EnquiryModal from "./EnquiryModel";
+import Footer from "../Footer";
 
 
 
@@ -297,6 +298,8 @@ export default function InstituteOverview() {
                 <EnquiryModal showModel={showModal}  id={id} setShowModel={setShowModal} successMessage={successMessage} errorMessage={errorMessage}/>
             )}
         </div>
+
+        <Footer/>
 
         </>
     );

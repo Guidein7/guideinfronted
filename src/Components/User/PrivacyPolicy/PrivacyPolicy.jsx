@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from '../Footer';
 
 const PrivacyPolicy = () => {
   return (
@@ -110,6 +111,7 @@ const PrivacyPolicy = () => {
           <li>🌐 Website: <a href="https://guidein.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.guidein.org</a></li>
         </ul>
       </section>
+      <Footer/>
     </div>
   );
 };

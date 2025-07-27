@@ -1,6 +1,7 @@
 import React from 'react';
 import { Target, Compass, CheckCircle, Users, Mail, Star, BookOpen, Building, Youtube, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Footer';
 
 const AboutUs = () => {
   const navigate = useNavigate()
@@ -174,6 +175,7 @@ const AboutUs = () => {
           </p>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
