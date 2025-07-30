@@ -128,7 +128,7 @@ const SingleBlog = () => {
                 </div>
             </div> */}
 
-            <div className="max-w-4xl mx-auto px-6 py-8">
+            <div className="max-w-4xl md:mx-auto px-6 py-8">
                 {/* Blog Header */}
 
                 
@@ -136,7 +136,7 @@ const SingleBlog = () => {
                    
                     {/* Blog Meta */}
 
-                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                     <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                         {blog.title}
                     </h1>
                     
@@ -192,15 +192,9 @@ const SingleBlog = () => {
                 </header>
 
                 {/* Blog Content */}
-                <article className=" rounded-2xl  p-8 mb-12">
+                <article className=" rounded-2xl   mb-12">
                     <div 
-                        className="prose prose-lg max-w-none 
-                                 prose-headings:text-gray-900 prose-headings:font-bold
-                                 prose-p:text-[#374151] prose-p:leading-relaxed
-                                 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                                 prose-strong:text-gray-900
-                                 prose-ul:text-gray-700 prose-ol:text-gray-700
-                                 prose-blockquote:border-blue-200 prose-blockquote:bg-blue-50 prose-blockquote:p-4 prose-blockquote:rounded-lg custom-html"
+                        className=" custom-html"
                         dangerouslySetInnerHTML={{ __html: blog.content }}
                     />
                 </article>
@@ -221,6 +215,8 @@ const SingleBlog = () => {
                     </section>
                 )}
             </div>
+
+            <Footer/>
         </div>
     );
 };

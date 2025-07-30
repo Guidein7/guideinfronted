@@ -108,7 +108,7 @@ export default function CareerOverview() {
             `}</style>
 
             <div className="max-w-4xl mx-auto bg-gray-50 rounded-xl p-4 md:p-6 shadow-lg mb-20">
-                <h1 onClick={() => navigate(-1)} className="cursor-pointer text-blue-600 hover:text-blue-800 mb-4 md:mb-6">← Back</h1>
+                <h1 onClick={() => navigate('/career')} className="cursor-pointer text-blue-600 hover:text-blue-800 mb-4 md:mb-6">← Back</h1>
 
                 <div className="flex flex md:flex-row items-start gap-4 md:gap-6 mb-6 md:mb-8">
                     <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">

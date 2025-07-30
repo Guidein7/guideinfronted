@@ -69,7 +69,7 @@ const CustomSearchDropdown = () => {
 
     const placeholders = [
     "Search for Careers",
-    "Search for YouTube",
+    "Search for Interview Q&A",
     "Search for Institute",
     "Search for Certifications"
   ];

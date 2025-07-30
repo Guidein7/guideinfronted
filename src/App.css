@@ -1,3 +1,6 @@
+body{
+  width: 100%;
+}
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -14,37 +17,7 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(107, 114, 128, 0.8); /* Tailwind gray-500/80 */
 }
-.custom-html ul {
-  list-style-type: disc;
-  padding-left: 1.25rem; /* same as pl-5 */
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.custom-html ol {
-  list-style-type: decimal;
-  padding-left: 1.25rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.custom-html li {
-  margin-bottom: 0.25rem;
-  color: #374151;
-font-family: Inter;
-}
-
-.custom-html p {
-font-size: 18px;
-color: #374151;
-font-family: Inter;
-margin: 22.5px 0px;
-}
-
-.custom-html h2{
-  font-weight: 700;
-  font-size: 22px;
-}
+/*  */
 
 
 /* Add this to your CSS file */
@@ -80,3 +53,79 @@ margin: 22.5px 0px;
   content: 'Courier New';
   font-family: 'Courier New', monospace;
 }
+
+.custom-html {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.custom-html ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.custom-html ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.custom-html li {
+  margin-bottom: 0.25rem;
+  color: #374151;
+  font-family: Inter;
+}
+
+.custom-html p {
+  font-size: 18px;
+  color: #374151;
+  font-family: Inter;
+  margin: 22.5px 0px;
+  text-align: justify;
+  word-break: break-word;
+}
+
+.custom-html h2 {
+  font-weight: 700;
+  font-size: 22;
+}
+
+/* ✅ Prevent images from overflowing */
+.custom-html img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ✅ Prevent code/pre from breaking layout */
+.custom-html pre,
+.custom-html code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* ✅ Make tables responsive */
+.custom-html table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+/* ✅ Prevent iframes and embeds from overflowing */
+.custom-html iframe,
+.custom-html embed,
+.custom-html video {
+  max-width: 100%;
+}
+
+/* ✅ Force long URLs or words to break */
+.custom-html a {
+  word-break: break-word;
+}
+

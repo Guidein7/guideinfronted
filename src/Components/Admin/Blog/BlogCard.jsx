@@ -16,11 +16,11 @@ const BlogCard = ({ blog, onClick }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
+        <div className="bg-white w-full max-w-[400px] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
              onClick={onClick}>
             {/* Thumbnail */}
             {blog.thumbnail && (
-                <div className="w-full h-48 bg-gray-200 overflow-hidden">
+                <div className="w-full h-auto bg-gray-200 overflow-hidden">
                     <img
                         src={`data:image/jpeg;base64,${blog.thumbnail}`}
                         alt={blog.title}
@@ -47,7 +47,8 @@ const BlogCard = ({ blog, onClick }) => {
 
                 {/* Content Preview */}
                 <p className="text-gray-600 text-sm mb-3 line-clamp-3">
-                    {getTextPreview(blog.content)}
+                    {/* {getTextPreview(blog.content)} */}
+                    {blog.description.substring(0,50)}
                 </p>
 
                 {/* Footer */}
@@ -68,7 +69,7 @@ const BlogCard = ({ blog, onClick }) => {
                 </div>
 
                 {/* Action Button */}
-                <button 
+                {/* <button 
                     className="w-full mt-3 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent card click when button is clicked
@@ -76,7 +77,7 @@ const BlogCard = ({ blog, onClick }) => {
                     }}
                 >
                     Read More
-                </button>
+                </button> */}
             </div>
         </div>
     );

@@ -16,7 +16,7 @@ const AboutUs = () => {
             links:'/youtube',
 
       icon: <Youtube className="w-6 h-6" />,
-      title: "YouTube Learning Hub",
+      title: "Interview Q&A",
       description: "Handpicked, high-quality YouTube videos for upskilling across AI, ML, coding, data, product management, business analysis, and more."
     },
     {

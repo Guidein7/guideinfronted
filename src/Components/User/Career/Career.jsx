@@ -115,9 +115,9 @@ const CompanyCard = ({ company }) => {
               <p className="text-sm text-gray-600 mb-2">{company.industry}</p>
             </div>
             <button className="hidden md:block px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 flex-shrink-0 transition-colors">
-              <a href={company.careerPageUrl} target='_blank' rel="noopener noreferrer">
-                Visit Career Page
-              </a>
+              <Link to={`/career/${company.id}/${company?.companyName}`}  target='_blank' rel="noopener noreferrer"> 
+                Company Insights
+              </Link>
             </button>
           </div>
 
@@ -157,9 +157,9 @@ const CompanyCard = ({ company }) => {
           )}
           <div className='flex justify-end'>
             <button className=" md:hidden px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 flex-shrink-0 transition-colors">
-              <a href={company.careerPageUrl} target='_blank' rel="noopener noreferrer">
-                Visit Career Page
-              </a>
+              <Link  to={`/career/${company.id}/${company?.companyName}`} rel="noopener noreferrer">
+                Company Insights
+              </Link>
             </button>
           </div>
 
@@ -306,7 +306,7 @@ const Career = () => {
                       <Link to="/career" className="hover:underline">Careers</Link>
                     </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Company Careers</h1>
-          <p className="text-gray-600 text-sm sm:text-base">Explore Company Career Pages & Current Hiring Trends</p>
+          <p className="text-gray-600 text-sm sm:text-base"> Explore Company Insights & Current Hiring Trends</p>
         </div>
 
         <div className="md:hidden my-2 flex gap-3 items-center">
