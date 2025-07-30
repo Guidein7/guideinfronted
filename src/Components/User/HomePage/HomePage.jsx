@@ -61,7 +61,7 @@ export default function HomePage() {
 
             const data = await response.json();
 
-            setBlogs(data.content || []);
+            setBlogs(data.content.reverse() || []);
 
         } catch (err) {
             console.log(err)
