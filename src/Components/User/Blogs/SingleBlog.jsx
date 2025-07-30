@@ -146,7 +146,7 @@ const SingleBlog = () => {
                             <img
                                 src={`data:image/jpeg;base64,${blog.thumbnail}`}
                                 alt={blog.title}
-                                className="w-full h-64 md:h-96 object-cover"
+                                className="blog-img"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                 }}

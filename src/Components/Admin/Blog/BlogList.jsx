@@ -454,15 +454,16 @@ const BlogCard = ({ blog, onClick }) => {
     };
 
     return (
-        <div className="bg-white flex flex-row-reverse md:block rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
+        <>
+        <div className="hidden bg-white md:block  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
             onClick={onClick}>
             {/* Thumbnail */}
             {blog.thumbnail && (
-                <div className="w-full flex-1 aspect-[16/9] bg-gray-200 overflow-hidden">
+                <div className="flex-1">
                     <img
                         src={`data:${blog?.fileType};base64,${blog?.thumbnail}`}
                         alt={blog.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="blog-img "
                         onError={(e) => {
                             e.target.style.display = 'none';
                         }}
@@ -508,7 +509,7 @@ const BlogCard = ({ blog, onClick }) => {
                 </div>
 
                 {/* Action Button */}
-                <button
+                {/* <button
                     className="w-full hidden md:block mt-3 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent card click when button is clicked
@@ -516,9 +517,68 @@ const BlogCard = ({ blog, onClick }) => {
                     }}
                 >
                     Read More
-                </button>
+                </button> */}
             </div>
         </div>
+
+          <div className="md:hidden bg-white flex flex-row-reverse md:block rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
+            onClick={onClick}>
+            {/* Thumbnail */}
+            {blog.thumbnail && (
+                <div className="flex-1">
+                    <img
+                        src={`data:${blog?.fileType};base64,${blog?.thumbnail}`}
+                        alt={blog.title}
+                        className="blog-img "
+                        onError={(e) => {
+                            e.target.style.display = 'none';
+                        }}
+                    />
+                </div>
+
+            )}
+
+            <div className="p-4 flex-1">
+                {/* Title */}
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
+                    {blog.title}
+                </h3>
+
+                {/* Category */}
+              
+
+                
+
+                {/* Footer */}
+                <div className="flex justify-between items-center text-xs text-gray-500">
+                    <span>{formatDate(blog.createdAt)}</span>
+                    <div className="flex items-center gap-2">
+                        {blog.published && (
+                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
+                                Published
+                            </span>
+                        )}
+                        {/* {!blog.published && (
+                            <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                                Draft
+                            </span>
+                        )} */}
+                    </div>
+                </div>
+
+                {/* Action Button */}
+                {/* <button
+                    className="w-full hidden md:block mt-3 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent card click when button is clicked
+                        onClick();
+                    }}
+                >
+                    Read More
+                </button> */}
+            </div>
+        </div>
+        </>
     );
 };
 
