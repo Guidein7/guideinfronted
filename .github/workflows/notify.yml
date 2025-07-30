@@ -1,13 +1,13 @@
-
-name: Build and Notify
+name: Frontend Notify
 
 on:
   workflow_run:
-    workflows: ["Guidein Front End CI/CD"]  # 🧠 name of first workflow
+    workflows: ["Guidein Front End CI/CD"]
     types:
       - completed
+
 jobs:
-  build:
+  notify:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,22 +15,21 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run your Build or Deployment
-        run: echo "✅ Build or Deploy Successful"
+        run: echo "✅ Frontend Build or Deploy Successful"
 
       - name: Send Success Email
-        if: success()  # Only run if job is successful
+        if: success()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: ✅ Build Success - ${{ github.repository }}
+          subject: ✅ Frontend Build Success - ${{ github.repository }}
           body: |
-            GitHub Actions Job succeeded 🎉
-            Wait for 2 mins app deploying....
+            🎉 Frontend CI/CD Job completed successfully!
             Repo: ${{ github.repository }}
             Commit: ${{ github.sha }}
             Actor: ${{ github.actor }}
-          to: saikumartanakala2001@gmail.com , inti.vvsn@gmail.com , devalankaveerababu222@gmail.com
+          to: saikumartanakala2001@gmail.com, inti.vvsn@gmail.com, devalankaveerababu222@gmail.com
           from: GitHub Actions <s4resh9o@gmail.com>
