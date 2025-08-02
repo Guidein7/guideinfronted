@@ -127,7 +127,7 @@ const VideoCard = ({ video }) => {
           </p>
           {video.shortDescription.length > 150 && (
             <Link
-              to={`/youtube/${video.id}/${encodeURIComponent(video?.videoTitle)}`}
+              to={`/interview-Q&A/${video.id}/${encodeURIComponent(video?.videoTitle)}`}
               className="text-blue-500 hover:underline text-sm mb-3 inline-block"
             >
               See More
@@ -292,7 +292,7 @@ const Youtub = () => {
           <div className="flex gap-1 items-center text-blue-500 mb-2">
             <Link to="/" className="hover:underline">Home</Link>
             <ChevronRight size={18} />
-            <Link to="/youtube" className="hover:underline">Interview Q&A</Link>
+            <Link to="/interview-Q&A" className="hover:underline">Interview Q&A</Link>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Interview Q&A</h1>
           <p className="text-gray-600 text-sm sm:text-base">Learn Faster with Curated Interview Q&A Videos Across Tech & Business</p>

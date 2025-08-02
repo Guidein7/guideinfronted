@@ -345,7 +345,7 @@ const BlogList = () => {
 
             const data = await response.json();
 
-            setBlogs(data.content || []);
+            setBlogs(data.content.reverse() || []);
             setPagination({
                 currentPage: data.currentPage,
                 totalItems: data.totalItems,
@@ -378,7 +378,7 @@ const BlogList = () => {
 
     // Handle blog click - navigate to single blog page
     const handleBlogClick = (blogSlug) => {
-        navigate(`/blog/${blogSlug}`);
+        navigate(`/knowledge-hub/${blogSlug}`);
     };
 
     if (loading) {
@@ -525,11 +525,11 @@ const BlogCard = ({ blog, onClick }) => {
             onClick={onClick}>
             {/* Thumbnail */}
             {blog.thumbnail && (
-                <div className="flex-1">
+                <div className=" rounded-lg">
                     <img
                         src={`data:${blog?.fileType};base64,${blog?.thumbnail}`}
                         alt={blog.title}
-                        className="blog-img "
+                        className="w-[120px] h-[150px]"
                         onError={(e) => {
                             e.target.style.display = 'none';
                         }}
@@ -540,7 +540,7 @@ const BlogCard = ({ blog, onClick }) => {
 
             <div className="p-4 flex-1">
                 {/* Title */}
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-sm font-semibold mb-2 group-hover:text-blue-600 transition-colors">
                     {blog.title}
                 </h3>
 

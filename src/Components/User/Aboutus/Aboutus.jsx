@@ -13,7 +13,7 @@ const AboutUs = () => {
       description: "Access career pages of hundreds of companies to explore job opportunities, hiring trends, and application links."
     },
     {
-            links:'/youtube',
+            links:'/interview-Q&A',
 
       icon: <Youtube className="w-6 h-6" />,
       title: "Interview Q&A",

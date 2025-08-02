@@ -50,10 +50,10 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/admin-upload' element={<ExcelUpload />} />
           <Route path='/career' element={<Career />} />
-          <Route path='/youtube' element={<Youtub />} />
+          <Route path='/interview-Q&A' element={<Youtub />} />
           <Route path='/institute' element={<Institute />} />
           <Route path='career/:id/:name' element={<CareerOverview />} />
-          <Route path='/youtube/:id/:name' element={<YoutubeOverView />} />
+          <Route path='/interview-Q&A/:id/:name' element={<YoutubeOverView />} />
           <Route path='/certificate' element={<Certificate />} />
           <Route path='/institute/:id/:name' element={<InstituteOverview />} />
           <Route path='/certificate/:id/:name' element={<CertificateOverview />} />
@@ -64,8 +64,8 @@ function App() {
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
           <Route path='/admin-blog' element={<BlogEditor/>} />
           <Route path='/admin-blog-list' element={<BlogList/>} />
-           <Route path='/blogs' element={<BlogList/>} />
-          <Route path="/blog/:slug" element={<SingleBlog />} />
+           <Route path='/knowledge-hub' element={<BlogList/>} />
+          <Route path="/knowledge-hub/:slug" element={<SingleBlog />} />
 
           <Route path='*' element={<NotFound />} />
         </Routes>

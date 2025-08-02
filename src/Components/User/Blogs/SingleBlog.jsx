@@ -102,7 +102,7 @@ const SingleBlog = () => {
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Blog Not Found</h2>
                     <p className="text-gray-600 mb-6">{error || 'The blog you are looking for does not exist.'}</p>
                     <button
-                        onClick={() => navigate('/blogs')}
+                        onClick={() => navigate('/knowledge-hub')}
                         className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
@@ -116,17 +116,17 @@ const SingleBlog = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Navigation */}
-            {/* <div className="bg-white shadow-sm sticky top-0 z-10">
-                <div className="max-w-4xl mx-auto px-6 py-4">
+            <div className="bg-white  shadow-sm sticky top-0 z-10">
+                <div className="max-w-4xl px-6 py-4">
                     <button
-                        onClick={() => navigate('/blogs')}
+                        onClick={() => navigate('/knowledge-hub')}
                         className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Back
                     </button>
                 </div>
-            </div> */}
+            </div>
 
             <div className="max-w-4xl md:mx-auto px-6 py-8">
                 {/* Blog Header */}
@@ -208,7 +208,7 @@ const SingleBlog = () => {
                                 <RelatedBlogCard 
                                     key={relatedBlog.id} 
                                     blog={relatedBlog} 
-                                    onClick={() => navigate(`/blog/${relatedBlog.slug}`)}
+                                    onClick={() => navigate(`/knowledge-hub/${relatedBlog.slug}`)}
                                 />
                             ))}
                         </div>

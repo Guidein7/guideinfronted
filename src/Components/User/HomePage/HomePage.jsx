@@ -127,7 +127,7 @@ export default function HomePage() {
     const navigate = useNavigate()
 
     const handleBlogClick = (blogSlug) => {
-        navigate(`/blog/${blogSlug}`);
+        navigate(`/knowledge-hub/${blogSlug}`);
     };
 
     console.log(data.careerData)
@@ -158,12 +158,12 @@ export default function HomePage() {
                         </div>
                     </div>
 
-                    <div onClick={() => navigate('/youtube')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
+                    <div onClick={() => navigate('/interview-Q&A')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
                         <div className='h-1/2 white flex items-center justify-center'>
                             <div className='text-4xl text-white'><img src={youtubeimg} className='w-18 h-18' /></div>
                         </div>
                         <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
-                            <h3 className='font-bold text-xl text-gray-800'>YouTube Learning</h3>
+                            <h3 className='font-bold text-xl text-gray-800'>Interview Q&A</h3>
                             <p className='text-sm text-gray-600'>Don’t waste time searching for good videos — we’ve already done the research. Learn from the best YouTube videos.</p>
                         </div>
                     </div>
@@ -193,7 +193,7 @@ export default function HomePage() {
                     <div className='flex justify-between items-center mb-6'>
                         <h1 className='font-bold text-xl'>Knowledge Hub</h1>
                         {blogs.length > 3 && (
-                            <Link to='/blogs' className='cursor-pointer text-blue-400 font-semibold'>
+                            <Link to='/knowledge-hub' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
                             </Link>
                         )}
@@ -239,7 +239,7 @@ export default function HomePage() {
                             </div>
                             <span className='font-bold'>Company Careers</span>
                         </div>
-                        <div onClick={() => navigate('/youtube')} className='flex flex-col gap-2'>
+                        <div onClick={() => navigate('/interview-Q&A')} className='flex flex-col gap-2'>
                             <div className='flex justify-center'>
                                 <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
                                     <img src={youtubeimg} className='w-12 h-12' />
@@ -277,7 +277,7 @@ export default function HomePage() {
                     <div className='flex justify-between items-center p-2 font-sans'>
                         <span className='text-lg font-semibold'>Knowledge Hub</span>
                         {blogs.length > 3 && (
-                            <Link to='/blogs' className='cursor-pointer text-blue-400 font-semibold'>
+                            <Link to='/knowledge-hub' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
                             </Link>
                         )}
@@ -392,7 +392,7 @@ export default function HomePage() {
                     <div className='flex justify-between items-center p-2 font-sans'>
                         <span className='text-lg font-semibold'>Interview Q&A</span>
                         {data.youtubeData.length > 5 && (
-                            <Link to='/youtube' className='cursor-pointer text-blue-400 font-semibold'>
+                            <Link to='/interview-Q&A' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
                             </Link>
                         )}
@@ -400,7 +400,7 @@ export default function HomePage() {
                     <div className='flex  overflow-x-auto scrollbar-hide gap-4 px-2 pb-2'>
                         {data.youtubeData.slice(0, 5).map((item, idx) => (
                             <div
-                                onClick={() => navigate(`youtube/${item.id}/${item.videoTitle}`)}
+                                onClick={() => navigate(`/interview-Q&A/${item.id}/${item.videoTitle}`)}
                                 key={idx}
                                 className='group bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50 flex flex-col  p-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 min-w-[300px]'
                             >
