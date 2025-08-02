@@ -7,7 +7,8 @@ const NotFound = () => {
 
   const navigate =  useNavigate()
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <>
+    <div className="min-h-screen  w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col items-center justify-center p-4">
       <div className="max-w-4xl w-full text-center">
         {/* Animated 404 Number */}
         <div className="relative mb-8">
@@ -61,8 +62,12 @@ const NotFound = () => {
           </p>
         </div>
       </div>
-      <Footer/>
+     
     </div>
+     <div className='w-[100%]'>
+      <Footer/>
+      </div>
+    </>
   );
 };
 
