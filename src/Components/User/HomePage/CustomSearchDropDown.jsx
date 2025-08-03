@@ -13,7 +13,7 @@ const CustomSearchDropdown = () => {
 
     const options = [
         { value: '/career', label: 'Company Careers', icon: '🏢' },
-        { value: '/youtube', label: 'Interview Q&A', icon: '📺' },
+        { value: '/interview-Q&A', label: 'Interview Q&A', icon: '📺' },
         { value: '/institute', label: 'Coaching Centers', icon: '🎓' },
         { value: '/certificate', label: 'Free Certifications', icon: '📜' }
     ];
