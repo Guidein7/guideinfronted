@@ -70,7 +70,7 @@ export default function HomePage() {
 
 
     useEffect(() => {
-        fetchBlogs(0, 6)
+        fetchBlogs(0, 10)
     }, [])
 
 
