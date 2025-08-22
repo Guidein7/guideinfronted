@@ -18,13 +18,13 @@ const BlogCard = ({ blog, onClick }) => {
     return (
         <div className="bg-white w-full max-w-[400px] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
              onClick={onClick}>
-            {/* Thumbnail */}
+            {/* thumbnail */}
             {blog.thumbnail && (
                 <div className="w-full h-auto bg-gray-200 overflow-hidden">
                     <img
-                        src={blog.Thumbnail.length > 500
-    ? `data:${blog?.fileType};base64,${blog.Thumbnail}`
-    : blog.Thumbnail}
+                        src={blog?.thumbnail.length > 500
+    ? `data:${blog?.fileType};base64,${blog?.thumbnail}`
+    : blog?.thumbnail}
                         alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {

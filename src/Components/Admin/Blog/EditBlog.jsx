@@ -164,17 +164,17 @@ export default function EditBlog() {
       <h1 className="text-2xl font-bold mb-6">Edit Blog Post</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Existing Thumbnail */}
+        {/* Existing thumbnail */}
         {existingThumbnail && !thumbnail && (
           <div>
-            <p className="text-sm text-gray-600 mb-2">Current Thumbnail:</p>
+            <p className="text-sm text-gray-600 mb-2">Current thumbnail:</p>
             <img src={existingThumbnail} alt="Blog thumbnail" className="h-32 object-cover rounded" />
           </div>
         )}
 
-        {/* Thumbnail Upload */}
+        {/* thumbnail Upload */}
         <div>
-          <label className="block mb-1 font-medium">Change Thumbnail</label>
+          <label className="block mb-1 font-medium">Change thumbnail</label>
           <input
             type="file"
             accept="image/*"

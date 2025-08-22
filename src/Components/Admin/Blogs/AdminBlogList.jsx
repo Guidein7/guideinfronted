@@ -128,7 +128,7 @@
 
 //     return (
 //         <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-//             {/* Thumbnail */}
+//             {/* thumbnail */}
 //             {blog.thumbnail && (
 //                 <div className="w-full h-48 bg-gray-200">
 //                     <img
@@ -458,7 +458,7 @@ const BlogCard = ({ blog, onClick }) => {
         <>
         <div className="hidden bg-white md:block  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
             onClick={onClick}>
-            {/* Thumbnail */}
+            {/* thumbnail */}
             {blog.thumbnail && (
                 <div className="flex-1">
                     <img
@@ -525,7 +525,7 @@ const BlogCard = ({ blog, onClick }) => {
 
           <div className="md:hidden bg-white flex flex-row-reverse md:block rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
             onClick={onClick}>
-            {/* Thumbnail */}
+            {/* thumbnail */}
             {blog.thumbnail && (
                 <div className=" rounded-lg">
                     <img

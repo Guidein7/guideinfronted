@@ -179,10 +179,10 @@ Quill.register(Font, true);
       <h1 className="text-2xl font-bold mb-6">Create Blog Post</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Thumbnail Upload */}
+        {/* thumbnail Upload */}
         <div>
           <label className="block mb-1 font-medium">
-            Thumbnail Image <span className="text-red-500">*</span>
+            thumbnail Image <span className="text-red-500">*</span>
           </label>
           <input
             type="file"
