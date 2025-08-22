@@ -140,11 +140,13 @@ const SingleBlog = () => {
                         {blog.title}
                     </h1>
                     
+                    <p className='text-[#6b7280] text-xl mb-4 '>{blog.description}</p>
+
 
                      {blog.thumbnail && (
                         <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
                             <img
-                                src={`data:image/jpeg;base64,${blog.thumbnail}`}
+                                src={blog.Thumbnail.length > 500? `data:${blog.fileType};base64,${blog.Thumbnail}`: blog.Thumbnail}
                                 alt={blog.title}
                                 className="blog-img"
                                 onError={(e) => {
@@ -184,8 +186,7 @@ const SingleBlog = () => {
                    
 
 
-                    <p className='text-[#6b7280] text-xl  '>{blog.description}</p>
-
+                    
 
                     {/* Featured Image */}
                    
@@ -246,7 +247,7 @@ const RelatedBlogCard = ({ blog, onClick }) => {
             {blog.thumbnail && (
                 <div className="w-full h-32 bg-gray-200 overflow-hidden">
                     <img
-                        src={`data:image/jpeg;base64,${blog.thumbnail}`}
+                        src={blog.Thumbnail.length > 500? `data:${blog.fileType};base64,${blog.Thumbnail}` : blog.Thumbnail}
                         alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {

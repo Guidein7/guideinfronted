@@ -318,7 +318,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { resources } from '../../resources';
 
-const BlogList = () => {
+const AdminBlogList = () => {
     const navigate = useNavigate();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -437,6 +437,7 @@ const BlogList = () => {
 
 // BlogCard.jsx - Individual blog card component with routing
 const BlogCard = ({ blog, onClick }) => {
+    const navigate = useNavigate()
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -461,9 +462,7 @@ const BlogCard = ({ blog, onClick }) => {
             {blog.thumbnail && (
                 <div className="flex-1">
                     <img
-                        src={blog.Thumbnail.length > 500
-    ? `data:image/jpeg;base64,${blog.Thumbnail}`
-    : blog.Thumbnail}
+                        src={`${blog?.thumbnail}`}
                         alt={blog.title}
                         className="blog-img "
                         onError={(e) => {
@@ -520,6 +519,7 @@ const BlogCard = ({ blog, onClick }) => {
                 >
                     Read More
                 </button> */}
+
             </div>
         </div>
 
@@ -529,9 +529,7 @@ const BlogCard = ({ blog, onClick }) => {
             {blog.thumbnail && (
                 <div className=" rounded-lg">
                     <img
-                        src={blog.Thumbnail.length > 500
-    ? `data:image/jpeg;base64,${blog.Thumbnail}`
-    : blog.Thumbnail}
+                        src={`data:${blog?.fileType};base64,${blog?.thumbnail}`}
                         alt={blog.title}
                         className="w-[120px] h-[150px]"
                         onError={(e) => {
@@ -582,6 +580,13 @@ const BlogCard = ({ blog, onClick }) => {
                 </button> */}
             </div>
         </div>
+        <button onClick={(e) => {
+  e.stopPropagation();
+  navigate(`/edit-blog/${blog.id}`);
+}}>
+  Edit
+</button>
+
         </>
     );
 };
@@ -703,4 +708,4 @@ const Pagination = ({ pagination, onPageChange, onPageSizeChange }) => {
     );
 };
 
-export default BlogList;
+export default AdminBlogList;

@@ -25,6 +25,8 @@ import TermsAndConditions from './Components/User/PrivacyPolicy/TermsAndConditio
 import BlogEditor from './Components/Admin/Blog/UplaodBlog'
 import BlogList from './Components/Admin/Blog/BlogList'
 import SingleBlog from './Components/User/Blogs/SingleBlog'
+import AdminBlogList from './Components/Admin/Blogs/AdminBlogList'
+import EditBlog from './Components/Admin/Blog/EditBlog'
 
 
 
@@ -63,9 +65,11 @@ function App() {
           <Route path='/contact-us' element={<Contactus />} />
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
           <Route path='/admin-blog' element={<BlogEditor/>} />
-          <Route path='/admin-blog-list' element={<BlogList/>} />
+          <Route path='/admin-blog-list' element={<AdminBlogList/>} />
            <Route path='/knowledge-hub' element={<BlogList/>} />
           <Route path="/knowledge-hub/:slug" element={<SingleBlog />} />
+          <Route path="/edit-blog/:blogId" element={<EditBlog />} />
+
 
           <Route path='*' element={<NotFound />} />
         </Routes>

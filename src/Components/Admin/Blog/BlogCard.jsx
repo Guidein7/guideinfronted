@@ -22,7 +22,9 @@ const BlogCard = ({ blog, onClick }) => {
             {blog.thumbnail && (
                 <div className="w-full h-auto bg-gray-200 overflow-hidden">
                     <img
-                        src={`data:image/jpeg;base64,${blog.thumbnail}`}
+                        src={blog.Thumbnail.length > 500
+    ? `data:${blog?.fileType};base64,${blog.Thumbnail}`
+    : blog.Thumbnail}
                         alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
