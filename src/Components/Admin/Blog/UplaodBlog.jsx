@@ -132,10 +132,7 @@ Quill.register(Font, true);
         published: false // Set to true if you want to publish immediately
       };
 
-      console.log(blogData)
-
-
-      return
+     
 
       
 
