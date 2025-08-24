@@ -3,7 +3,7 @@ name: Guidein Front End CI/CD
 on:
   push:
     branches:
-      - master
+      - allinone-dev
   
 jobs:
   build-and-push:
