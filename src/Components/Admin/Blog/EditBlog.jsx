@@ -4,6 +4,7 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 import { resources } from "../../resources";
+import AdminNavbar from "../navbar/AdminNavbar";
 
 export default function EditBlog() {
   const { blogId } = useParams(); // assumes route like /edit-blog/:blogId
@@ -19,6 +20,7 @@ export default function EditBlog() {
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState("");
   const [published, setPublished] = useState(false);
+  const [formDataa,setFormData] = useState({});
 
   const quillRef = React.useRef(null);
 
@@ -29,23 +31,48 @@ export default function EditBlog() {
   // Load blog data for editing
   useEffect(() => {
     const fetchBlog = async () => {
-      try {
-        const res = await fetch(`${resources.APPLICATION_URL}admin/get-blog/${blogId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setId(data.id);
-          setTitle(data.title);
-          setDescription(data.description || "");
-          setContent(data.content);
-          setCategory(data.category || "");
-          setPublished(data.published);
-          setExistingThumbnail(data.thumbnail || null);
-        } else {
-          alert("Failed to load blog");
-        }
-      } catch (err) {
-        console.error("Error loading blog:", err);
-      }
+       try {
+    // Fetch all blogs
+    const response = await fetch(
+      `${resources.APPLICATION_URL}admin/get-blogs?page=0&size=100`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch blogs");
+    }
+
+    const data = await response.json();
+
+    // Find the blog by ID
+    const foundBlog = data.content.find(b => b.id == blogId);
+
+    if (!foundBlog) {
+      throw new Error("Blog not found");
+    }
+
+    setFormData(foundBlog);
+
+    // Set individual fields like in your first version
+    setId(foundBlog.id);
+    setTitle(foundBlog.title);
+    setDescription(foundBlog.description || "");
+    setContent(foundBlog.content);
+    setCategory(foundBlog.category || "");
+    setPublished(foundBlog.published);
+    setExistingThumbnail(foundBlog.thumbnail || null);
+
+    // Set related blogs (excluding current one)
+    // const related = data.content
+    //   .filter(b => b.id !== foundBlog.id && b.published)
+    //   .slice(0, 3);
+
+    // setRelatedBlogs(related);
+  } catch (err) {
+    console.error("Error loading blog:", err);
+    setError(err.message);
+  } finally {
+    // setLoading(false);
+  }
     };
     fetchBlog();
   }, [blogId]);
@@ -117,7 +144,7 @@ export default function EditBlog() {
 
     try {
       const blogData = {
-        id, // required for modify
+        ...formDataa,id, 
         title: title.trim(),
         content,
         description,
@@ -143,7 +170,7 @@ export default function EditBlog() {
 
       if (res.ok) {
         alert("Blog updated successfully!");
-        navigate("/admin/blogs"); // go back to list
+        navigate("/admin-blog-list"); // go back to list
       } else {
         const errorText = await res.text();
         console.error("Server error:", errorText);
@@ -160,6 +187,8 @@ export default function EditBlog() {
   const sanitizedContent = DOMPurify.sanitize(content);
 
   return (
+    <>
+    <AdminNavbar/>
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Edit Blog Post</h1>
 
@@ -254,5 +283,6 @@ export default function EditBlog() {
         </div>
       )}
     </div>
+    </>
   );
 }

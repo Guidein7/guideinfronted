@@ -957,7 +957,7 @@ const EditModal = ({ isOpen, onClose, editData, onSave, topics, durations }) => 
           {/* File Upload */}
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500', color: '#495057' }}>
-              Video thumbnail
+              Video Thumbnail
             </label>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <button

@@ -3,6 +3,7 @@ import { resources } from "../../resources"
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useState,useEffect } from "react";
 import { types } from "../ExcelUploads/types";
+import AdminNavbar from "../navbar/AdminNavbar";
 
 
 export default function StudentInfo (){
@@ -57,7 +58,7 @@ export default function StudentInfo (){
 
     return (
         <>
-        
+        <AdminNavbar/>
           <div className="table-wrapper" style={{
                 background: 'white',
                 borderRadius: '8px',

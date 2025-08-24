@@ -5,6 +5,7 @@ import CareerUpload from './CareerUPload';
 import YoutubeUpload from './YoutubeUpload';
 import CoachingUpload from './CoachingUpload';
 import CertificateUpload from './CertificateUpload';
+import AdminNavbar from '../navbar/AdminNavbar';
 
 
 export default function ExcelUpload() {
@@ -20,6 +21,8 @@ export default function ExcelUpload() {
 
 
     return(
+        <>
+        <AdminNavbar/>
         <div className="bg-[#f5faff] w-full min-h-screen">
             <div className="flex justify-between p-3">
                 <button onClick={() => changeTab('career')} className={`font-sans admin-tabbutton ${activeTab === 'career' ? 'admin-tabactive' :''}`}> Career Page</button>
@@ -35,6 +38,7 @@ export default function ExcelUpload() {
 
 
         </div>
+        </>
     )
     
 }

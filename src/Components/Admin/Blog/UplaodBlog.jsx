@@ -3,6 +3,7 @@ import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 import { resources } from "../../resources";
+import AdminNavbar from "../navbar/AdminNavbar";
 
 export default function BlogEditor() {
   const [title, setTitle] = useState("");
@@ -126,10 +127,15 @@ Quill.register(Font, true);
         title: title.trim(),
         content: content,
         description: description,
-        category: "", // Add category field if needed
+        category: category, // Add category field if needed
         slug: title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''), // Auto-generate slug
         published: false // Set to true if you want to publish immediately
       };
+
+      console.log(blogData)
+
+
+      return
 
       
 
@@ -175,6 +181,8 @@ Quill.register(Font, true);
   const sanitizedContent = DOMPurify.sanitize(content);
 
   return (
+    <>
+    <AdminNavbar/>
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Create Blog Post</h1>
 
@@ -182,7 +190,7 @@ Quill.register(Font, true);
         {/* thumbnail Upload */}
         <div>
           <label className="block mb-1 font-medium">
-            thumbnail Image <span className="text-red-500">*</span>
+            Thumbnail Image <span className="text-red-500">*</span>
           </label>
           <input
             type="file"
@@ -289,5 +297,6 @@ Quill.register(Font, true);
         </div>
       )}
     </div>
+    </>
   );
 }
