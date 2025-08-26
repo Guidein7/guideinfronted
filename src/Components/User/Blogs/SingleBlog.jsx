@@ -80,8 +80,6 @@ const SingleBlog = () => {
           dangerouslySetInnerHTML={{ __html: node.outerHTML }}
         />
       );
-
-      // Count <p> tags and insert ad after 2nd <p>
       if (node.tagName === "P") {
         pCount++;
         if (pCount === 2) {
