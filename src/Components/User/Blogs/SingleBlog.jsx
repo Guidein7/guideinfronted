@@ -62,26 +62,38 @@ const SingleBlog = () => {
         });
     };
 
-    const renderBlogWithAds = (htmlContent) => {
-        if (!htmlContent) {
-            return;
+  const renderBlogWithAds = (htmlContent) => {
+  if (!htmlContent) return;
+
+  const div = document.createElement("div");
+  div.innerHTML = htmlContent;
+
+  const children = Array.from(div.childNodes);
+  let elements = [];
+  let pCount = 0;
+
+  children.forEach((node, index) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      elements.push(
+        <div
+          key={`node-${index}`}
+          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+        />
+      );
+
+      // Count <p> tags and insert ad after 2nd <p>
+      if (node.tagName === "P") {
+        pCount++;
+        if (pCount === 2) {
+          elements.push(<AdSenseAd key={`ad-${index}`} />);
         }
-        const div = document.createElement("div");
-        div.innerHTML = htmlContent;
-        const paragraphs = Array.from(div.querySelectorAll("p"));
+      }
+    }
+  });
 
-        let elements = [];
-        paragraphs.forEach((p, index) => {
-            elements.push(<p key={index} dangerouslySetInnerHTML={{ __html: p.innerHTML }} />);
+  return elements;
+};
 
-         
-            if (index === 1) {
-                elements.push(<AdSenseAd key={`ad-${index}`} />);
-            }
-        });
-
-        return elements;
-    };
 
 
     const getReadingTime = (content) => {
