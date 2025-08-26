@@ -17,7 +17,9 @@ export default function Contactus(){
                     </div>
 
                 </div>
-                <Footer/>
+                <div className='mt-52 md:mt-14 '>
+                    <Footer/>
+                </div>
             </div>
     )
 }

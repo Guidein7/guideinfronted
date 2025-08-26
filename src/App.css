@@ -93,8 +93,8 @@ body {
   font-size: 18px;
   color: #374151;
   font-family: Inter;
-  margin: 22.5px 0px;
-  text-align: justify;
+  margin: 17.5px 0px;
+  /* text-align: justify; */
   word-break: break-word;
 }
 
