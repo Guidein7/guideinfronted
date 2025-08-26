@@ -120,9 +120,9 @@ const VideoCard = ({ video }) => {
               </div>
             </div>
           </div>
-          <p className="text-sm text-gray-600 mb-3">
-            {video.shortDescription.length > 150
-              ? `${video.shortDescription.substring(0, 150)}...`
+          <p className="text-sm text-gray-600 ">
+            {video.shortDescription.length > 50
+              ? `${video.shortDescription.substring(0, 70)}...`
               : video.shortDescription}
           </p>
           {video.shortDescription.length > 150 && (
