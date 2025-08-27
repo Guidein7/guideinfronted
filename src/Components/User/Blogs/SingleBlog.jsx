@@ -4,7 +4,6 @@ import { ArrowLeft, Calendar, Tag, Clock, Share2 } from 'lucide-react';
 import { resources } from '../../resources';
 import Footer from '../Footer';
 import { AdSenseAd } from '../AdsenseText';
-
 const SingleBlog = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
@@ -12,7 +11,6 @@ const SingleBlog = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [relatedBlogs, setRelatedBlogs] = useState([]);
-
     // Fetch single blog by slug
     const fetchBlogBySlug = async (blogSlug) => {
         setLoading(true);
@@ -62,7 +60,30 @@ const SingleBlog = () => {
         });
     };
 
-  const renderBlogWithAds = (htmlContent) => {
+
+  const getReadingTime = (content) => {
+        const wordsPerMinute = 200;
+        const div = document.createElement('div');
+        div.innerHTML = content;
+        const text = div.textContent || div.innerText || '';
+        const wordCount = text.trim().split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / wordsPerMinute);
+        return readingTime;
+    };
+
+    const handleShare = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: blog.title,
+                url: window.location.href
+            });
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard!');
+        }
+    };
+
+      const renderBlogWithAds = (htmlContent) => {
   if (!htmlContent) return;
 
   const div = document.createElement("div");
@@ -91,31 +112,6 @@ const SingleBlog = () => {
 
   return elements;
 };
-
-
-
-    const getReadingTime = (content) => {
-        const wordsPerMinute = 200;
-        const div = document.createElement('div');
-        div.innerHTML = content;
-        const text = div.textContent || div.innerText || '';
-        const wordCount = text.trim().split(/\s+/).length;
-        const readingTime = Math.ceil(wordCount / wordsPerMinute);
-        return readingTime;
-    };
-
-    const handleShare = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: blog.title,
-                url: window.location.href
-            });
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert('Link copied to clipboard!');
-        }
-    };
-
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex justify-center items-center">
@@ -126,7 +122,6 @@ const SingleBlog = () => {
             </div>
         );
     }
-
     if (error || !blog) {
         return (
             <div className="min-h-screen bg-gray-50 flex justify-center items-center">
@@ -145,7 +140,6 @@ const SingleBlog = () => {
             </div>
         );
     }
-
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Navigation */}
@@ -172,10 +166,7 @@ const SingleBlog = () => {
                     <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                         {blog.title}
                     </h1>
-
                     <p className='text-[#6b7280] text-xl mb-4 '>{blog.description}</p>
-
-
                     {blog.thumbnail && (
                         <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
                             <img
