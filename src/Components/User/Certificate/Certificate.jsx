@@ -396,6 +396,9 @@ import { ChevronLeft, ChevronRight, ChevronDown, Filter, Search, } from "lucide-
 import { Link } from 'react-router-dom'
 import certificate from '../../../assets/certificate.png'
 import Footer from "../Footer";
+import { InfeedAd } from "../InfeedAd";
+
+
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -773,6 +776,7 @@ export default function Certificate() {
                                         </div>
                                     </div>
                                 </div>
+                                  {idx === 0 && <InfeedAd key={`adsense-${page}`} />}
                             </>
                         ))}
                     </div>
