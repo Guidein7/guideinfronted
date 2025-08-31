@@ -6,6 +6,7 @@ import { types } from "../../Admin/ExcelUploads/types";
 import { useEffect, useState } from "react";
 import Company from '../../../assets/company.png'
 import Footer from "../Footer";
+import { AdSenseAd } from "../AdsenseText";
 
 export default function CareerOverview() {
     const { id, name } = useParams();
@@ -27,6 +28,57 @@ export default function CareerOverview() {
     useEffect(() => {
         getData();
     }, [id])
+
+
+    const renderBlogWithAds = (htmlContent) => {
+      if (!htmlContent) return;
+    
+      const div = document.createElement("div");
+      div.innerHTML = htmlContent;
+    
+      const children = Array.from(div.childNodes);
+    
+      // Count all <p> tags
+      const totalParagraphs = children.filter(
+        (node) => node.nodeType === Node.ELEMENT_NODE && node.tagName === "P"
+      ).length;
+    
+      let elements = [];
+      let pCount = 0;
+    
+      children.forEach((node, index) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.tagName === "P") {
+            pCount++;
+    
+            // Insert ad after 2nd paragraph
+            elements.push(
+              <div
+                key={`node-${index}`}
+                dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+              />
+            );
+            if (pCount === 2) {
+              elements.push(<AdSenseAd key={`ad-after-2`} />);
+            }
+    
+            // Insert ad before last 2 paragraphs
+            if (pCount === totalParagraphs - 2) {
+              elements.push(<AdSenseAd key={`ad-before-last-2`} />);
+            }
+          } else {
+            elements.push(
+              <div
+                key={`node-${index}`}
+                dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+              />
+            );
+          }
+        }
+      });
+    
+      return elements;
+    };
 
     const formatEmployeeCount = (count) => {
         const num = parseFloat(count);
@@ -209,10 +261,14 @@ export default function CareerOverview() {
 
                 <div className="">
                     <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Analyse <i>{data.companyName}</i> Before You Join</h2>
-                    <div
+                    {/* <div
                         className="text-gray-600 leading-relaxed text-sm md:text-base custom-html"
                         dangerouslySetInnerHTML={{ __html: data.companyOverview }}
-                    />
+                    /> */}
+                     <article className="rounded-2xl mb-12 custom-html">
+                    {renderBlogWithAds(data.companyOverview )}
+                </article>
+
                 </div>
             </div>
 

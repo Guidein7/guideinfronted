@@ -83,35 +83,85 @@ const SingleBlog = () => {
         }
     };
 
-      const renderBlogWithAds = (htmlContent) => {
+//       const renderBlogWithAds = (htmlContent) => {
+//   if (!htmlContent) return;
+
+//   const div = document.createElement("div");
+//   div.innerHTML = htmlContent;
+
+//   const children = Array.from(div.childNodes);
+//   let elements = [];
+//   let pCount = 0;
+
+//   children.forEach((node, index) => {
+//     if (node.nodeType === Node.ELEMENT_NODE) {
+//       elements.push(
+//         <div
+//           key={`node-${index}`}
+//           dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+//         />
+//       );
+//       if (node.tagName === "P") {
+//         pCount++;
+//         if (pCount === 2) {
+//           elements.push(<AdSenseAd key={`ad-${index}`} />);
+//         }
+//       }
+//     }
+//   });
+
+//   return elements;
+// };
+const renderBlogWithAds = (htmlContent) => {
   if (!htmlContent) return;
 
   const div = document.createElement("div");
   div.innerHTML = htmlContent;
 
   const children = Array.from(div.childNodes);
+
+  // Count all <p> tags
+  const totalParagraphs = children.filter(
+    (node) => node.nodeType === Node.ELEMENT_NODE && node.tagName === "P"
+  ).length;
+
   let elements = [];
   let pCount = 0;
 
   children.forEach((node, index) => {
     if (node.nodeType === Node.ELEMENT_NODE) {
-      elements.push(
-        <div
-          key={`node-${index}`}
-          dangerouslySetInnerHTML={{ __html: node.outerHTML }}
-        />
-      );
       if (node.tagName === "P") {
         pCount++;
+
+        // Insert ad after 2nd paragraph
+        elements.push(
+          <div
+            key={`node-${index}`}
+            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+          />
+        );
         if (pCount === 2) {
-          elements.push(<AdSenseAd key={`ad-${index}`} />);
+          elements.push(<AdSenseAd key={`ad-after-2`} />);
         }
+
+        // Insert ad before last 2 paragraphs
+        if (pCount === totalParagraphs - 4) {
+          elements.push(<AdSenseAd key={`ad-before-last-2`} />);
+        }
+      } else {
+        elements.push(
+          <div
+            key={`node-${index}`}
+            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+          />
+        );
       }
     }
   });
 
   return elements;
 };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex justify-center items-center">

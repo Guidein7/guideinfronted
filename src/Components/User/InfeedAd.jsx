@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const AdSenseAd = () => {
+export const InfeedAd = () => {
   
     useEffect(() => {
     try {
@@ -13,13 +13,13 @@ export const AdSenseAd = () => {
 
   return (
   <div className="my-2">
-    <ins className="adsbygoogle"
-style={{ display: "block", textAlign: "center" }}
-
-     data-ad-layout="in-article"
+   
+<ins className="adsbygoogle"
+     style={{display:'block'}}
      data-ad-format="fluid"
+     data-ad-layout-key="-ef+6k-30-ac+ty"
      data-ad-client="ca-pub-9006004231762171"
-     data-ad-slot="6991286230"></ins>
+     data-ad-slot="3174499576"></ins>
 
   </div>)
 };
