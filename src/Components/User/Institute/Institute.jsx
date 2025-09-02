@@ -600,6 +600,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import institute from '../../../assets/institute.png'
 import Footer from '../Footer';
 import { InfeedAd } from '../InfeedAd';
+import { InstituteAdSense } from './InstituteAdsense';
 
 const successMessage = (message) => {
   toast.success(message, {
@@ -1114,7 +1115,7 @@ const Institute = () => {
               data.map((course, index) => (
                 <div key={index}>
                 <InstituteCard key={course.id || index} course={course} setShowModel={setShowModel} setId={setId} />
-                  {index === 0 && <InfeedAd key={`adsense-${course?.id}`} />}
+                  {index === 0 && <InstituteAdSense key={`adsense-${course?.id}`} />}
                 </div>
               ))
             ) : (

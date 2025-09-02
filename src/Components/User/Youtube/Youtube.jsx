@@ -7,6 +7,7 @@ import { resources } from '../../resources';
 import youtube from '../../../assets/youtube.png'
 import Footer from '../Footer';
 import { InfeedAd } from '../InfeedAd';
+import { InterviewAdsense } from './InterviewAdSense';
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -372,7 +373,7 @@ const Youtub = () => {
             data.map((video, index) => (
               <div key={index}>
                 <VideoCard key={video.id} video={video} />
-                {index === 0 && <InfeedAd key={`adsense-${page}`} />}
+                {index === 0 && <InterviewAdsense key={`adsense-${page}`} />}
 
               </div>
             ))

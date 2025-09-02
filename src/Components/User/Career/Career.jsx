@@ -7,6 +7,7 @@ import Company from '../../../assets/company.png'
 import React, { useState, useEffect, useRef } from 'react';
 import Footer from '../Footer';
 import { InfeedAd } from '../InfeedAd';
+import { CareerAdSense } from './CareerAdSense';
 
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
@@ -384,7 +385,7 @@ const Career = () => {
             data.map((company, index) => (
               <div  key={company.id || company.companyName}>
                 <CompanyCard key={company.id || company.companyName} company={company} />
-                {index === 0 && <InfeedAd key={`adsense-${page}`} />}
+                {index === 0 && <CareerAdSense key={`adsense-${page}`} />}
               </div>
             ))
           ) : (
