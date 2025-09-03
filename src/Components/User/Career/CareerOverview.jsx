@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Company from '../../../assets/company.png'
 import Footer from "../Footer";
 import { AdSenseAd } from "../AdsenseText";
+import { InsideCareerCard } from "./InsideCareerCard";
 
 export default function CareerOverview() {
     const { id, name } = useParams();
@@ -307,6 +308,7 @@ export default function CareerOverview() {
 )} */}
 
             {/* Desktop Button - Regular button at bottom of content */}
+            <InsideCareerCard/>
             <div className="mb-12">
                     <Footer/>
             </div>

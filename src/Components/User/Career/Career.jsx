@@ -8,6 +8,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Footer from '../Footer';
 import { InfeedAd } from '../InfeedAd';
 import { CareerAdSense } from './CareerAdSense';
+import { CareerDisplayAd } from './DisplayAddBelow';
 
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
@@ -448,6 +449,7 @@ const Career = () => {
           </div>
         )}
       </div>
+      <CareerDisplayAd/>
       <Footer />
     </div>
   );

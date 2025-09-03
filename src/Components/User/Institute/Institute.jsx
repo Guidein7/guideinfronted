@@ -601,6 +601,7 @@ import institute from '../../../assets/institute.png'
 import Footer from '../Footer';
 import { InfeedAd } from '../InfeedAd';
 import { InstituteAdSense } from './InstituteAdsense';
+import { InstituteOutside } from './InstituteOutside';
 
 const successMessage = (message) => {
   toast.success(message, {
@@ -1177,6 +1178,7 @@ const Institute = () => {
         )}
         <EnquiryModal showModel={showModel} setId={setId} id={id} setShowModel={setShowModel} successMessage={successMessage} errorMessage={errorMessage} />
       </div>
+      <InstituteOutside/>
       <Footer/>
     </div>
   );
