@@ -8,6 +8,7 @@ import youtube from '../../../assets/youtube.png'
 import Footer from '../Footer';
 import { InfeedAd } from '../InfeedAd';
 import { InterviewAdsense } from './InterviewAdSense';
+import { InterviewOutside } from './InterviewOutside';
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -434,6 +435,7 @@ const Youtub = () => {
           </div>
         )}
       </div>
+      <InterviewOutside/>
       <Footer />
     </div>
   );
