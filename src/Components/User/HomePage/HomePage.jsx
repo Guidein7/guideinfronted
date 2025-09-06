@@ -270,6 +270,26 @@ export default function HomePage() {
                         </div>
                     </div>
 
+                    {/* <div className='w-full flex  justify-evenly'>
+                        <div onClick={() => navigate('/interviewqa')} className='flex flex-col gap-2'>
+                            <div className='flex justify-center '>
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={instituteimg} className='w-12 h-12' />
+                                </div>
+                            </div>
+                            <span className='font-bold '>Interviews</span>
+                        </div>
+                        <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2'>
+                            <div className='flex justify-center'>
+                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={certificateimg} className='w-12 h-12' />
+                                </div>
+                            </div>
+
+                            <span className='font-bold '>Free Certifications</span>
+                        </div>
+                    </div> */}
+
                 </div>
 
 
@@ -493,6 +513,6 @@ export default function HomePage() {
             </div>
             <Footer />
 
-        </div >
+        </div>
     )
 }

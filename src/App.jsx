@@ -27,6 +27,8 @@ import BlogList from './Components/Admin/Blog/BlogList'
 import SingleBlog from './Components/User/Blogs/SingleBlog'
 import AdminBlogList from './Components/Admin/Blogs/AdminBlogList'
 import EditBlog from './Components/Admin/Blog/EditBlog'
+import InterviewQA from './Components/User/Interviews/InterviewQA'
+import Answer from './Components/User/Interviews/Answer'
 
 
 
@@ -66,9 +68,11 @@ function App() {
           <Route path='/terms-conditions' element={<TermsAndConditions />} />
           <Route path='/admin-blog' element={<BlogEditor/>} />
           <Route path='/admin-blog-list' element={<AdminBlogList/>} />
-           <Route path='/knowledge-hub' element={<BlogList/>} />
+          <Route path='/knowledge-hub' element={<BlogList/>} />
           <Route path="/knowledge-hub/:slug" element={<SingleBlog />} />
           <Route path="/edit-blog/:blogId" element={<EditBlog />} />
+          <Route path='/interviewqa' element={<InterviewQA />}/>
+          <Route path='/answer' element={<Answer/>}/>
 
 
           <Route path='*' element={<NotFound />} />
