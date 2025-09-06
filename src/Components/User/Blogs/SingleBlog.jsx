@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Tag, Clock, Share2 } from 'lucide-react';
 import { resources } from '../../resources';
 import Footer from '../Footer';
-
+import { AdSenseAd } from '../AdsenseText';
 const SingleBlog = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
@@ -11,7 +11,6 @@ const SingleBlog = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [relatedBlogs, setRelatedBlogs] = useState([]);
-
     // Fetch single blog by slug
     const fetchBlogBySlug = async (blogSlug) => {
         setLoading(true);
@@ -20,26 +19,26 @@ const SingleBlog = () => {
             const response = await fetch(
                 `${resources.APPLICATION_URL}admin/get-blogs?page=0&size=100`
             );
-            
+
             if (!response.ok) {
                 throw new Error('Failed to fetch blog');
             }
-            
+
             const data = await response.json();
             const foundBlog = data.content.find(b => b.slug === blogSlug);
-            
+
             if (!foundBlog) {
                 throw new Error('Blog not found');
             }
-            
+
             setBlog(foundBlog);
-            
+
             // Set related blogs (excluding current blog)
             const related = data.content
                 .filter(b => b.id !== foundBlog.id && b.published)
                 .slice(0, 3);
             setRelatedBlogs(related);
-            
+
         } catch (err) {
             setError(err.message);
         } finally {
@@ -61,7 +60,8 @@ const SingleBlog = () => {
         });
     };
 
-    const getReadingTime = (content) => {
+
+  const getReadingTime = (content) => {
         const wordsPerMinute = 200;
         const div = document.createElement('div');
         div.innerHTML = content;
@@ -83,6 +83,86 @@ const SingleBlog = () => {
         }
     };
 
+//       const renderBlogWithAds = (htmlContent) => {
+//   if (!htmlContent) return;
+
+//   const div = document.createElement("div");
+//   div.innerHTML = htmlContent;
+
+//   const children = Array.from(div.childNodes);
+//   let elements = [];
+//   let pCount = 0;
+
+//   children.forEach((node, index) => {
+//     if (node.nodeType === Node.ELEMENT_NODE) {
+//       elements.push(
+//         <div
+//           key={`node-${index}`}
+//           dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+//         />
+//       );
+//       if (node.tagName === "P") {
+//         pCount++;
+//         if (pCount === 2) {
+//           elements.push(<AdSenseAd key={`ad-${index}`} />);
+//         }
+//       }
+//     }
+//   });
+
+//   return elements;
+// };
+const renderBlogWithAds = (htmlContent) => {
+  if (!htmlContent) return;
+
+  const div = document.createElement("div");
+  div.innerHTML = htmlContent;
+
+  const children = Array.from(div.childNodes);
+
+  // Count all <p> tags
+  const totalParagraphs = children.filter(
+    (node) => node.nodeType === Node.ELEMENT_NODE && node.tagName === "P"
+  ).length;
+
+  let elements = [];
+  let pCount = 0;
+
+  children.forEach((node, index) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === "P") {
+        pCount++;
+
+        // Insert ad after 2nd paragraph
+        elements.push(
+          <div
+            key={`node-${index}`}
+            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+          />
+        );
+        if (pCount === 2) {
+          elements.push(<AdSenseAd key={`ad-after-2`} />);
+        }
+
+        // Insert ad before last 2 paragraphs
+        if (pCount === totalParagraphs - 4) {
+          elements.push(<AdSenseAd key={`ad-before-last-2`} />);
+        }
+      } else {
+        elements.push(
+          <div
+            key={`node-${index}`}
+            dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+          />
+        );
+      }
+    }
+  });
+
+  return elements;
+};
+
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex justify-center items-center">
@@ -93,7 +173,6 @@ const SingleBlog = () => {
             </div>
         );
     }
-
     if (error || !blog) {
         return (
             <div className="min-h-screen bg-gray-50 flex justify-center items-center">
@@ -106,13 +185,12 @@ const SingleBlog = () => {
                         className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        Back 
+                        Back
                     </button>
                 </div>
             </div>
         );
     }
-
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header Navigation */}
@@ -131,22 +209,19 @@ const SingleBlog = () => {
             <div className="max-w-4xl md:mx-auto px-6 py-8">
                 {/* Blog Header */}
 
-                
+
                 <header className="mb-8">
-                   
+
                     {/* Blog Meta */}
 
-                     <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                    <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                         {blog.title}
                     </h1>
-                    
                     <p className='text-[#6b7280] text-xl mb-4 '>{blog.description}</p>
-
-
-                     {blog.thumbnail && (
+                    {blog.thumbnail && (
                         <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
                             <img
-                                src={blog.thumbnail.length > 500? `data:${blog.fileType};base64,${blog.thumbnail}`: blog.thumbnail}
+                                src={blog.thumbnail.length > 500 ? `data:${blog.fileType};base64,${blog.thumbnail}` : blog.thumbnail}
                                 alt={blog.title}
                                 className="blog-img"
                                 onError={(e) => {
@@ -174,7 +249,7 @@ const SingleBlog = () => {
                         </button>
                     </div>
 
-                     {blog.category && (
+                    {blog.category && (
                         <div className="mb-4">
                             <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
                                 <Tag className="w-3 h-3" />
@@ -183,21 +258,18 @@ const SingleBlog = () => {
                         </div>
                     )}
 
-                   
 
 
-                    
+
+
 
                     {/* Featured Image */}
-                   
+
                 </header>
 
                 {/* Blog Content */}
-                <article className=" rounded-2xl   mb-12">
-                    <div 
-                        className=" custom-html"
-                        dangerouslySetInnerHTML={{ __html: blog.content }}
-                    />
+                <article className="rounded-2xl mb-12 custom-html">
+                    {renderBlogWithAds(blog.content)}
                 </article>
 
                 {/* Related Blogs */}
@@ -206,9 +278,9 @@ const SingleBlog = () => {
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2>
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {relatedBlogs.map((relatedBlog) => (
-                                <RelatedBlogCard 
-                                    key={relatedBlog.id} 
-                                    blog={relatedBlog} 
+                                <RelatedBlogCard
+                                    key={relatedBlog.id}
+                                    blog={relatedBlog}
                                     onClick={() => navigate(`/knowledge-hub/${relatedBlog.slug}`)}
                                 />
                             ))}
@@ -217,7 +289,7 @@ const SingleBlog = () => {
                 )}
             </div>
 
-            <Footer/>
+            <Footer />
         </div>
     );
 };
@@ -240,14 +312,14 @@ const RelatedBlogCard = ({ blog, onClick }) => {
     };
 
     return (
-        <div 
+        <div
             onClick={onClick}
             className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer group"
         >
             {blog.thumbnail && (
                 <div className="w-full h-32 bg-gray-200 overflow-hidden">
                     <img
-                        src={blog.thumbnail.length > 500? `data:${blog.fileType};base64,${blog.thumbnail}` : blog.thumbnail}
+                        src={blog.thumbnail.length > 500 ? `data:${blog.fileType};base64,${blog.thumbnail}` : blog.thumbnail}
                         alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
@@ -261,7 +333,7 @@ const RelatedBlogCard = ({ blog, onClick }) => {
                 <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {blog.title}
                 </h3>
-                
+
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                     {getTextPreview(blog.content)}
                 </p>
@@ -275,9 +347,10 @@ const RelatedBlogCard = ({ blog, onClick }) => {
                     )}
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };
+
 
 export default SingleBlog;

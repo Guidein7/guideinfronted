@@ -5,7 +5,7 @@ import Footer from '../Footer';
 
 const TermsAndConditions = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+    <>    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-6 sm:p-8 lg:p-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 text-center">
           Terms and Conditions
@@ -118,8 +118,10 @@ const TermsAndConditions = () => {
           </p>
         </section>
       </div>
-      <Footer/>
+      
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -1,0 +1,3 @@
+.github/workflows/main.yml merge=ours
+src/Components/resources.js merge=ours
+index.html merge=ours

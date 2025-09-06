@@ -599,6 +599,9 @@ import EnquiryModal from './EnquiryModel';
 import 'react-toastify/dist/ReactToastify.css';
 import institute from '../../../assets/institute.png'
 import Footer from '../Footer';
+import { InfeedAd } from '../InfeedAd';
+import { InstituteAdSense } from './InstituteAdsense';
+import { InstituteOutside } from './InstituteOutside';
 
 const successMessage = (message) => {
   toast.success(message, {
@@ -1111,7 +1114,10 @@ const Institute = () => {
           <div className="space-y-6 mb-8">
             {data.length > 0 ? (
               data.map((course, index) => (
+                <div key={index}>
                 <InstituteCard key={course.id || index} course={course} setShowModel={setShowModel} setId={setId} />
+                  {index === 0 && <InstituteAdSense key={`adsense-${course?.id}`} />}
+                </div>
               ))
             ) : (
               <div className="text-center py-20">
@@ -1172,6 +1178,7 @@ const Institute = () => {
         )}
         <EnquiryModal showModel={showModel} setId={setId} id={id} setShowModel={setShowModel} successMessage={successMessage} errorMessage={errorMessage} />
       </div>
+      <InstituteOutside/>
       <Footer/>
     </div>
   );

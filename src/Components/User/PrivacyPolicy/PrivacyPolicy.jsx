@@ -3,6 +3,7 @@ import Footer from '../Footer';
 
 const PrivacyPolicy = () => {
   return (
+    <>
     <div className="max-w-5xl mx-auto px-4 py-10 text-gray-800">
       <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Privacy Policy</h1>
       <p className="mb-6">
@@ -111,8 +112,10 @@ const PrivacyPolicy = () => {
           <li>🌐 Website: <a href="https://guidein.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.guidein.org</a></li>
         </ul>
       </section>
-      <Footer/>
+    
     </div>
+      <Footer/>
+    </>
   );
 };
 

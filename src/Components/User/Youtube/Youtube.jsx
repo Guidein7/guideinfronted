@@ -6,6 +6,9 @@ import { types } from '../../Admin/ExcelUploads/types';
 import { resources } from '../../resources';
 import youtube from '../../../assets/youtube.png'
 import Footer from '../Footer';
+import { InfeedAd } from '../InfeedAd';
+import { InterviewAdsense } from './InterviewAdSense';
+import { InterviewOutside } from './InterviewOutside';
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -120,9 +123,9 @@ const VideoCard = ({ video }) => {
               </div>
             </div>
           </div>
-          <p className="text-sm text-gray-600 mb-3">
-            {video.shortDescription.length > 150
-              ? `${video.shortDescription.substring(0, 150)}...`
+          <p className="text-sm text-gray-600 ">
+            {video.shortDescription.length > 50
+              ? `${video.shortDescription.substring(0, 70)}...`
               : video.shortDescription}
           </p>
           {video.shortDescription.length > 150 && (
@@ -302,8 +305,8 @@ const Youtub = () => {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${hasActiveFilters
-                ? 'bg-red-100 text-red-700 border border-red-300'
-                : 'bg-white text-black border border-gray-300'
+              ? 'bg-red-100 text-red-700 border border-red-300'
+              : 'bg-white text-black border border-gray-300'
               }`}
           >
             <Filter className="w-4 h-4" />
@@ -337,15 +340,15 @@ const Youtub = () => {
               onChange={handleDurationChange}
               icon={Clock}
             />
-             <div className="hidden md:block">
-            <input
-              type="text"
-              placeholder="Search by video title"
-              value={searchQuery}
-              onChange={e => updateFilters({ searchQuery: e.target.value })}
-              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base"
-            />
-          </div>
+            <div className="hidden md:block">
+              <input
+                type="text"
+                placeholder="Search by video title"
+                value={searchQuery}
+                onChange={e => updateFilters({ searchQuery: e.target.value })}
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm sm:text-base"
+              />
+            </div>
 
             <div className="hidden md:block">
               {hasActiveFilters && (
@@ -368,8 +371,12 @@ const Youtub = () => {
               <p className="text-gray-500">Loading videos...</p>
             </div>
           ) : data.length > 0 ? (
-            data.map((video) => (
-              <VideoCard key={video.id} video={video} />
+            data.map((video, index) => (
+              <div key={index}>
+                <VideoCard key={video.id} video={video} />
+                {index === 0 && <InterviewAdsense key={`adsense-${page}`} />}
+
+              </div>
             ))
           ) : (
             <div className="text-center py-12">
@@ -408,8 +415,8 @@ const Youtub = () => {
                       key={pageNum}
                       onClick={() => updatePage(pageNum)}
                       className={`px-3 py-2 sm:px-4 rounded-lg text-sm font-medium ${page === pageNum
-                          ? 'bg-red-600 text-white'
-                          : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-red-600 text-white'
+                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       {pageNum + 1}
@@ -428,7 +435,8 @@ const Youtub = () => {
           </div>
         )}
       </div>
-      <Footer/>
+      <InterviewOutside/>
+      <Footer />
     </div>
   );
 };

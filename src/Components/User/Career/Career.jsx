@@ -6,6 +6,9 @@ import { types } from '../../Admin/ExcelUploads/types';
 import Company from '../../../assets/company.png'
 import React, { useState, useEffect, useRef } from 'react';
 import Footer from '../Footer';
+import { InfeedAd } from '../InfeedAd';
+import { CareerAdSense } from './CareerAdSense';
+import { CareerDisplayAd } from './DisplayAddBelow';
 
 
 const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
@@ -36,9 +39,9 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
   };
 
   function stripHtml(html) {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || "";
-}
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  }
 
 
   return (
@@ -46,8 +49,8 @@ const FilterDropdown = ({ label, options, selected, onChange, icon: Icon }) => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full px-2 py-2 sm:px-4 sm:py-3 text-left bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex items-center justify-between hover:bg-gray-50 transition-colors ${selected
-            ? 'border-blue-300 bg-blue-50'
-            : 'border-gray-300'
+          ? 'border-blue-300 bg-blue-50'
+          : 'border-gray-300'
           }`}
       >
         <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
@@ -90,9 +93,9 @@ const CompanyCard = ({ company }) => {
 
 
   function stripHtml(html) {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  return doc.body.textContent || "";
-}
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  }
 
   const navigate = useNavigate();
 
@@ -115,7 +118,7 @@ const CompanyCard = ({ company }) => {
               <p className="text-sm text-gray-600 mb-2">{company.industry}</p>
             </div>
             <button className="hidden md:block px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 flex-shrink-0 transition-colors">
-              <Link to={`/career/${company.id}/${company?.companyName}`}  target='_blank' rel="noopener noreferrer"> 
+              <Link to={`/career/${company.id}/${company?.companyName}`} target='_blank' rel="noopener noreferrer">
                 Company Insights
               </Link>
             </button>
@@ -142,10 +145,10 @@ const CompanyCard = ({ company }) => {
           </div>
 
           <p className="text-sm text-gray-600 mb-1">
-  {stripHtml(company.companyOverview).length > 150
-    ? `${stripHtml(company.companyOverview).substring(0, 150)}...`
-    : stripHtml(company.companyOverview)}
-</p>
+            {stripHtml(company.companyOverview).length > 150
+              ? `${stripHtml(company.companyOverview).substring(0, 150)}...`
+              : stripHtml(company.companyOverview)}
+          </p>
 
           {company.companyOverview.length > 30 && (
             <Link
@@ -157,14 +160,14 @@ const CompanyCard = ({ company }) => {
           )}
           <div className='flex justify-end'>
             <button className=" md:hidden px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-lg text-sm font-medium text-white bg-blue-600 flex-shrink-0 transition-colors">
-              <Link  to={`/career/${company.id}/${company?.companyName}`} rel="noopener noreferrer">
+              <Link to={`/career/${company.id}/${company?.companyName}`} rel="noopener noreferrer">
                 Company Insights
               </Link>
             </button>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-           
+
           </div>
         </div>
 
@@ -301,10 +304,10 @@ const Career = () => {
       <div className='fixed z-10 bg-white p-2  w-full'>
         <div className="">
           <div className="flex gap-1 items-center text-blue-500 mb-2">
-                      <Link to="/" className="hover:underline">Home</Link>
-                      <ChevronRight size={18} />
-                      <Link to="/career" className="hover:underline">Careers</Link>
-                    </div>
+            <Link to="/" className="hover:underline">Home</Link>
+            <ChevronRight size={18} />
+            <Link to="/career" className="hover:underline">Careers</Link>
+          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Company Careers</h1>
           <p className="text-gray-600 text-sm sm:text-base"> Explore Company Insights & Current Hiring Trends</p>
         </div>
@@ -313,23 +316,23 @@ const Career = () => {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`px-3 py-2 rounded-md flex items-center justify-center gap-2 transition-colors ${hasActiveFilters
-                ? 'bg-blue-100 text-blue-700 border border-blue-300'
-                : 'bg-white text-black border border-gray-300'
+              ? 'bg-blue-100 text-blue-700 border border-blue-300'
+              : 'bg-white text-black border border-gray-300'
               }`}
           >
             <Filter className="w-4 h-4" />
             <span>Filters</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
-           <div className="  md:hidden">
-              <input
-                type="text"
-                placeholder="Search by company name"
-                value={companyName}
-                onChange={e => updateFilters({ companyName: e.target.value })}
-                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-              />
-            </div>
+          <div className="  md:hidden">
+            <input
+              type="text"
+              placeholder="Search by company name"
+              value={companyName}
+              onChange={e => updateFilters({ companyName: e.target.value })}
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+            />
+          </div>
         </div>
 
         <div className={`bg-white rounded-lg md:mt-2 p-4 md:p-0 md:w-[50%] mx-auto ${showFilters ? 'block' : 'hidden'} md:block`}>
@@ -373,15 +376,18 @@ const Career = () => {
       <div className="max-w-7xl mx-auto pt-44 lg:pt-40 ">
 
 
-        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8  p-4 sm:p-6 lg:p-8">
+        <div className="space-y-4 sm:space-y-6 mb-6  md:mt-4 sm:mb-8  p-4 sm:p-6 lg:p-8">
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
               <p className="text-gray-500 text-base sm:text-lg">Loading companies...</p>
             </div>
           ) : data.length > 0 ? (
-            data.map(company => (
-              <CompanyCard key={company.id || company.companyName} company={company} />
+            data.map((company, index) => (
+              <div  key={company.id || company.companyName}>
+                <CompanyCard key={company.id || company.companyName} company={company} />
+                {index === 0 && <CareerAdSense key={`adsense-${page}`} />}
+              </div>
             ))
           ) : (
             <div className="text-center py-12">
@@ -443,7 +449,8 @@ const Career = () => {
           </div>
         )}
       </div>
-      <Footer/>
+      <CareerDisplayAd/>
+      <Footer />
     </div>
   );
 };

@@ -317,6 +317,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { resources } from '../../resources';
+import Footer from '../../User/Footer';
+import { BlogOutside } from '../../User/Blogs/BlogOutside';
 
 const BlogList = () => {
     const navigate = useNavigate();
@@ -398,6 +400,7 @@ const BlogList = () => {
     }
 
     return (
+        <>
         <div className="max-w-6xl mx-auto p-6">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold">Knowledge Hub</h1>
@@ -431,7 +434,11 @@ const BlogList = () => {
                     onPageSizeChange={handlePageSizeChange}
                 />
             )}
+             
         </div>
+           <BlogOutside/>
+            <Footer/>
+        </>
     );
 };
 
@@ -699,6 +706,7 @@ const Pagination = ({ pagination, onPageChange, onPageSizeChange }) => {
                     Next
                 </button>
             </div>
+        
         </div>
     );
 };

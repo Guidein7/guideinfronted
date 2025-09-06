@@ -5,6 +5,7 @@ import axios from "axios";
 import { types } from "../../Admin/ExcelUploads/types";
 import { useParams } from "react-router-dom";
 import Footer from "../Footer";
+import { InterviewInside } from "./InterviewInside";
 
 export default function YoutubeOverView() {
     const {id,name} = useParams()
@@ -258,6 +259,7 @@ export default function YoutubeOverView() {
                     </div>
                 </div>
             </div>
+            <InterviewInside/>
             <Footer/>
         </div>
     );
