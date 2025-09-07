@@ -149,20 +149,21 @@ const InterviewQA = () => {
             <div className="flex gap-1 items-center text-blue-500 mb-2">
               <Link to="/" className="hover:underline">Home</Link>
               <ChevronRight size={18} />
-              <Link to="" className="hover:underline">Interview QAA</Link>
+              <Link to="" className="hover:underline">Interview QA</Link>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 mt-6 ">
               Interview Q&A
             </h1>
+            <p  className='text-gray-600 text-sm sm:text-base'>Prepare with the top interview Q&As across every job role</p>
           </div>
 
 
           <div className="bg-white rounded-lg mt-2 p-4 md:w-[60%] mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="flex gap-4">
 
               <input
                 type="text"
-                placeholder="Search courses..."
+                placeholder="Search by roles..."
                 value={domainParam}
                 onChange={handleSearchChange}
                 className=" w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -171,11 +172,11 @@ const InterviewQA = () => {
               <select
                 value={exp}
                 onChange={handleExperienceChange}
-                className="w-full hidden md:block px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full  px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
-                <option value="" className="">Select Experience</option>
+                <option value="" className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors`}>Select Experience</option>
                 {experiences.map((exp, idx) => (
-                  <option key={idx} value={exp}>
+                  <option  className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors`} key={idx} value={exp}>
                     {exp}
                   </option>
                 ))}
@@ -187,9 +188,9 @@ const InterviewQA = () => {
                 onChange={handleDomainChange}
                 className="w-full hidden md:block px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
-                <option value="" className="py-3 px-2">Select Domain</option>
+                <option value="" className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors`}>Select Domain</option>
                 {domains.map((dom, idx) => (
-                  <option key={idx} value={dom} className="py-3 px-2">
+                  <option key={idx} value={dom} className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors`}>
                     {dom}
                   </option>
                 ))}
@@ -199,51 +200,23 @@ const InterviewQA = () => {
 
 
 
-              <div className="flex gap-2 md:hidden">
-                <select
-                  value={experience}
-                  onChange={(e) => setExperience(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Experience</option>
-                  {experiences.map((exp, idx) => (
-                    <option key={idx} value={exp}>
-                      {exp}
-                    </option>
-                  ))}
-                </select>
-
-                {/* Domain Dropdown */}
-                <select
-                  value={domain}
-                  onChange={(e) => setDomain(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Domain</option>
-                  {domains.map((dom, idx) => (
-                    <option key={idx} value={dom}>
-                      {dom}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
             </div>
           </div>
         </div>
 
         {/* Results Section */}
-        <div className="max-w-6xl mx-auto pt-60 md:pt-48 px-4 ">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-2">
+        <div className="max-w-6xl mx-auto pt-56 md:pt-56 px-4 ">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-2 mb-2">
             {datas.map((data, index) => (
               <div
                 key={index}
                 onClick={() => navigate(`/interviewqa-hub/${data.roles.replace(/\s+/g, "-").toLowerCase()}`, {
-  state: data,
-})}
-                className="cursor-pointer flex flex-col gap-2 items-center bg-white  px-1  py-5 border  border-blue-200 rounded-lg hover:shadow-lg"
+                  state: data,
+                })}
+                className="cursor-pointer flex flex-col gap-2 items-center bg-white  px-1  py-5 border  border-gray-300 rounded-lg hover:shadow-lg"
               >
-                <div className="w-[50.6px] h-[50.6px] bg-blue-500 rounded-full flex justify-center items-center">
+                <div className="w-[50.6px] h-[50.6px] bg-[#244ad1] rounded-full flex justify-center items-center">
                   <span className="font-semibold text-white">{getInitials(data?.roles)}</span>
                 </div>
                 <span className="font-bold text-black text-center break-words whitespace-normal">

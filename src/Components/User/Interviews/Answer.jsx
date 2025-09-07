@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { ChevronRight, ChevronUp } from "lucide-react";
 import Footer from "../Footer";
+import Q from '../../../assets/q.png'
 
 const Answer = () => {
   const location = useLocation();
@@ -41,14 +42,14 @@ const Answer = () => {
             </Link>
             <ChevronRight size={18} />
             <Link to="/interviewqa-hub" className="hover:underline">
-              Interview QAA
+              Interview QA
             </Link>
             <ChevronRight size={18} />
             <p className="hover:underline">Q&A</p>
           </div>
 
           <h1 className="text-2xl font-bold mb-4 mt-2">
-            {displayData.roles} ({displayData.experience})
+          Top {displayData.experience.toLowerCase() === "fresher" ? '50+': '25+'}  {displayData.roles} Interview Questions
           </h1>
         </div>
 
@@ -56,15 +57,17 @@ const Answer = () => {
         <div className="mt-28 px-4 ">
           <div className="space-y-4 pt-5 md:pt-0"> 
             {displayData.questions?.map((qa, index) => (
-              <div key={index} className="rounded-lg shadow-lg bg-white">
+              <div key={index} className="rounded-lg border border-gray-300 bg-white relative">
                 {/* Question */}
+                  <img className="top-0 left-0 absolute w-5c:\Users\HP\Downloads\letter-q_11483963.png h-5" src={Q}/>  
                 <button
                   onClick={() => handleQuestionClick(index)}
                   className="w-full text-left p-4 pb-4 font-semibold flex justify-between items-center"
-                >                  
+                >   
+                           
                  <div>
                   <span className="">{qa.question}</span>
-                  <span>{activeQuestion === index && (<span className="text-xs text-gray-500 px-2 pb-1 pt-1 font-bold bg-blue-200 m-2 rounded-full">{qa.difficulty}</span>)}</span>
+                  <span>{activeQuestion === index && (<span className="text-xs  px-2 pb-1 pt-1 text-white font-bold bg-[#244ad1] m-2 rounded-full">{qa.difficulty}</span>)}</span>
                  </div>
                   <span>
                     {activeQuestion === index ? <ChevronUp /> : <ChevronRight />}
@@ -78,10 +81,10 @@ const Answer = () => {
                     <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:justify-start">                            
                        <button
                         onClick={() => setActiveTab("how")}
-                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full transition ${
+                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-lg  transition ${
                           activeTab === "how"
-                            ? "bg-gray-300 text-black font-bold"
-                            : "bg-gray-200 text-gray-800"
+                            ? " bg-black text-white font-bold"
+                            : ""
                         }`}
                       >
                         How to Answer
@@ -89,20 +92,20 @@ const Answer = () => {
                
                       <button
                         onClick={() => setActiveTab("checks")}
-                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full transition ${
+                        className={`whitespace-nowrap px-2 rounded-lg border border-gray-300 sm:px-3 py-1.5 text-xs sm:text-sm  transition ${
                           activeTab === "checks"
-                            ? "bg-gray-300 text-black font-bold"
-                            : "bg-gray-200 text-gray-800"
+                            ? "bg-black text-white font-bold"
+                            : ""
                         }`}
                       >
                        Interviewer Checks
                       </button>
                       <button
                         onClick={() => setActiveTab("sample")}
-                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full transition ${
+                        className={`whitespace-nowrap border border-gray-300 px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-lg transition ${
                           activeTab === "sample"
-                            ? "bg-gray-300 text-black font-bold"
-                            : "bg-gray-200 text-gray-800"
+                            ? "font-bold bg-black text-white"
+                            : ""
                         }`}
                       >
                         Best Answer
