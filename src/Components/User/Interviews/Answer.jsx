@@ -113,7 +113,7 @@ const Answer = () => {
                     {activeTab === "how" && (
                       <div>
                         <h3 className="font-bold mb-2">How to Answer</h3>
-                        <p className="text-gray-700">{qa.howToAnswer}</p>
+                        <p className="text-gray-700 whitespace-pre-line">{qa.howToAnswer}</p>
                       </div>
                     )}
                     {activeTab === "checks" && (
@@ -121,13 +121,13 @@ const Answer = () => {
                         <h3 className="font-bold mb-2">
                           What Interviewer Checks
                         </h3>
-                        <p className="text-gray-700">{qa.whatInterviewerChecks}</p>
+                        <p className="text-gray-700 whitespace-pre-line">{qa.whatInterviewerChecks}</p>
                       </div>
                     )}
                     {activeTab === "sample" && (
                       <div>
                         <h3 className="font-bold mb-2">Best Answer</h3>
-                        <p className="text-gray-700">{qa.bestAnswer}</p>
+                        <p className="text-gray-700 whitespace-pre-line">{qa.bestAnswer}</p>
                       </div>
                     )}
                   </div>
