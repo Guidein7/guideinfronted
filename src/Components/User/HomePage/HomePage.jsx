@@ -11,8 +11,10 @@ import Company from '../../../assets/company.png'
 import youtubeimg from '../../../assets/youtube.png'
 import instituteimg from '../../../assets/institute.png'
 import certificateimg from '../../../assets/certificate.png'
+import interviewhub from '../../../assets/interviewhub.png'
 import CustomSearchDropdown from './CustomSearchDropDown.jsx'
 import Footer from '../Footer.jsx'
+
 
 
 export default function HomePage() {
@@ -158,9 +160,9 @@ export default function HomePage() {
                         </div>
                     </div>
 
-                    <div onClick={() => navigate('/interviewqa')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
+                    <div onClick={() => navigate('/interviewqa-hub')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
                         <div className='h-1/2 white flex items-center justify-center'>
-                            <div className='text-4xl text-white'><img src={youtubeimg} className='w-18 h-18' /></div>
+                            <div className='text-4xl text-white'><img src={interviewhub} className='w-18 h-18' /></div>
                         </div>
                         <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
                             <h3 className='font-bold text-xl text-gray-800'>Interview Q&A Hub</h3>
@@ -248,10 +250,10 @@ export default function HomePage() {
                         </div>
                         <span className='font-bold text-xs text-center'>Company Careers</span>
                     </div>
-                    <div onClick={() => navigate('/interviewqa')} className='flex flex-col gap-2'>
+                    <div onClick={() => navigate('interviewqa-hub')} className='flex flex-col gap-2'>
                         <div className='flex justify-center'>
                             <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
-                                <img src={youtubeimg} className='w-12 h-12' />
+                                <img src={interviewhub} className='w-12 h-12' />
                             </div>
                         </div>
 

@@ -7,6 +7,7 @@ const Answer = () => {
   const location = useLocation();
   const data = location.state || {}; // comes from navigate("/answer", { state: { data } })
 
+  console.log(data)
   // ✅ Fallback if no data
   const displayData =
     data || {
@@ -39,7 +40,7 @@ const Answer = () => {
               Home
             </Link>
             <ChevronRight size={18} />
-            <Link to="/interviewqa" className="hover:underline">
+            <Link to="/interviewqa-hub" className="hover:underline">
               Interview QAA
             </Link>
             <ChevronRight size={18} />

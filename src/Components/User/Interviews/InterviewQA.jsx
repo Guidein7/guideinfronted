@@ -152,7 +152,7 @@ const InterviewQA = () => {
               <Link to="" className="hover:underline">Interview QAA</Link>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 mt-6 ">
-              Interview QAA
+              Interview Q&A
             </h1>
           </div>
 

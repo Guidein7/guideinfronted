@@ -71,7 +71,7 @@ function App() {
           <Route path='/knowledge-hub' element={<BlogList/>} />
           <Route path="/knowledge-hub/:slug" element={<SingleBlog />} />
           <Route path="/edit-blog/:blogId" element={<EditBlog />} />
-          <Route path='/interviewqa' element={<InterviewQA />}/>
+          <Route path='/interviewqa-hub' element={<InterviewQA />}/>
           <Route path='/answer' element={<Answer/>}/>
 
 
