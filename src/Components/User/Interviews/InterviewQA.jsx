@@ -146,12 +146,12 @@ const InterviewQA = () => {
         {/* Header */}
         <div className="fixed z-10 bg-white p-2 w-full shadow-sm">
           <div>
-            <div className="flex gap-1 items-center text-blue-500 mb-2">
+            <div className="flex gap-1 items-center text-blue-500 ">
               <Link to="/" className="hover:underline">Home</Link>
               <ChevronRight size={18} />
               <Link to="" className="hover:underline">Interview QA</Link>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 mt-6 ">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 ">
               Interview Q&A
             </h1>
             <p  className='text-gray-600 text-sm sm:text-base'>Prepare with the top interview Q&As across every job role</p>
@@ -166,13 +166,13 @@ const InterviewQA = () => {
                 placeholder="Search by roles..."
                 value={domainParam}
                 onChange={handleSearchChange}
-                className=" w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className=" w-full px-3 py-2 border border-gray-300 rounded-lg  outline-none"
               />
               {/* Experience Dropdown */}
               <select
                 value={exp}
                 onChange={handleExperienceChange}
-                className="w-full  px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full  px-3 py-2  border border-gray-300 rounded-lg outline-none"
               >
                 <option value="" className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors`}>Select Experience</option>
                 {experiences.map((exp, idx) => (
@@ -186,7 +186,7 @@ const InterviewQA = () => {
               <select
                 value={roleParam}
                 onChange={handleDomainChange}
-                className="w-full hidden md:block px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full hidden md:block px-3 py-2 border border-gray-300 rounded-lg  outline-none"
               >
                 <option value="" className={`w-full px-3 py-2 text-left hover:bg-gray-50 text-xs sm:text-sm transition-colors`}>Select Domain</option>
                 {domains.map((dom, idx) => (
@@ -206,7 +206,7 @@ const InterviewQA = () => {
         </div>
 
         {/* Results Section */}
-        <div className="max-w-6xl mx-auto pt-56 md:pt-56 px-4 ">
+        <div className="max-w-6xl mx-auto pt-52 md:pt-56 px-4 ">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-2 mb-2">
             {datas.map((data, index) => (
               <div

@@ -48,7 +48,7 @@ const Answer = () => {
             <p className="hover:underline">Q&A</p>
           </div>
 
-          <h1 className="text-2xl font-bold mb-4 mt-2">
+          <h1 className="text-lg font-bold mb-4 mt-2">
           Top {displayData.experience.toLowerCase() === "fresher" ? '50+': '25+'}  {displayData.roles} Interview Questions
           </h1>
         </div>
@@ -59,7 +59,7 @@ const Answer = () => {
             {displayData.questions?.map((qa, index) => (
               <div key={index} className="rounded-lg border border-gray-300 bg-white relative">
                 {/* Question */}
-                  <img className="top-0 left-0 absolute w-5c:\Users\HP\Downloads\letter-q_11483963.png h-5" src={Q}/>  
+                  <img className="top-0 left-0 absolute w-4 h-4" src={Q}/>  
                 <button
                   onClick={() => handleQuestionClick(index)}
                   className="w-full text-left p-4 pb-4 font-semibold flex justify-between items-center"
