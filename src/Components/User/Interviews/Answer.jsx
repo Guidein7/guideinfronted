@@ -33,7 +33,7 @@ const Answer = () => {
     <>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="fixed top-14 z-10 bg-white p-2 w-full shadow-sm">
+        <div className="fixed top-14 z-10 bg-white p-2 w-full shadow-sm ">
           <div className="flex gap-1 items-center text-blue-500 mb-2">
             <Link to="/" className="hover:underline">
               Home
@@ -52,54 +52,59 @@ const Answer = () => {
         </div>
 
         {/* Questions & Answers */}
-        <div className="mt-28 px-4">
-          <div className="space-y-4">
+        <div className="mt-28 px-4 ">
+          <div className="space-y-4 pt-5 md:pt-0"> 
             {displayData.questions?.map((qa, index) => (
-              <div key={index} className="rounded-lg shadow bg-white">
+              <div key={index} className="rounded-lg shadow-lg bg-white">
                 {/* Question */}
                 <button
                   onClick={() => handleQuestionClick(index)}
-                  className="w-full text-left p-4 font-semibold flex justify-between items-center"
-                >
-                  <span>{qa.question}</span>
+                  className="w-full text-left p-4 pb-4 font-semibold flex justify-between items-center"
+                >                  
+                 <div>
+                  <span className="">{qa.question}</span>
+                  <span>{activeQuestion === index && (<span className="text-xs text-gray-500 px-2 pb-1 pt-1 font-bold bg-blue-200 m-2 rounded-full">{qa.difficulty}</span>)}</span>
+                 </div>
                   <span>
                     {activeQuestion === index ? <ChevronUp /> : <ChevronRight />}
                   </span>
                 </button>
+                {/* <span>{activeQuestion === index && (<span className="text-xs text-gray-500 px-2 pb-1 font-bold bg-blue-100 my-2">{qa.difficulty}</span>)}</span> */}
 
                 {/* Answer Section */}
                 {activeQuestion === index && (
-                  <div className="p-4">
-                    <div className="flex gap-2 sm:gap-4 mb-4">
-                      <button
+                  <div className="p-3">
+                    <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:justify-start">                            
+                       <button
                         onClick={() => setActiveTab("how")}
-                        className={`flex-1 px-3 py-2 text-sm rounded-full transition ${
+                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full transition ${
                           activeTab === "how"
-                            ? "bg-blue-500 text-white"
+                            ? "bg-gray-300 text-black font-bold"
                             : "bg-gray-200 text-gray-800"
                         }`}
                       >
                         How to Answer
                       </button>
+               
                       <button
                         onClick={() => setActiveTab("checks")}
-                        className={`flex-1 px-3 py-2 text-sm rounded-full transition ${
+                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full transition ${
                           activeTab === "checks"
-                            ? "bg-blue-500 text-white"
+                            ? "bg-gray-300 text-black font-bold"
                             : "bg-gray-200 text-gray-800"
                         }`}
                       >
-                        What Interviewer Checks
+                       Interviewer Checks
                       </button>
                       <button
                         onClick={() => setActiveTab("sample")}
-                        className={`flex-1 px-3 py-2 text-sm rounded-full transition ${
+                        className={`whitespace-nowrap px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full transition ${
                           activeTab === "sample"
-                            ? "bg-blue-500 text-white"
+                            ? "bg-gray-300 text-black font-bold"
                             : "bg-gray-200 text-gray-800"
                         }`}
                       >
-                        Sample Answer
+                        Best Answer
                       </button>
                     </div>
 
@@ -120,7 +125,7 @@ const Answer = () => {
                     )}
                     {activeTab === "sample" && (
                       <div>
-                        <h3 className="font-bold mb-2">Sample Answer</h3>
+                        <h3 className="font-bold mb-2">Best Answer</h3>
                         <p className="text-gray-700">{qa.bestAnswer}</p>
                       </div>
                     )}
