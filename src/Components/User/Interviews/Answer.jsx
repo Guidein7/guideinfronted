@@ -67,7 +67,7 @@ const Answer = () => {
                            
                  <div>
                   <span className="">{qa.question}</span>
-                  <span>{activeQuestion === index && (<span className="text-xs  px-2 pb-1 pt-1 text-white font-bold bg-[#244ad1] m-2 rounded-full">{qa.difficulty}</span>)}</span>
+                  <span>{activeQuestion === index && (<span className="text-xs  px-2 pb-1 pt-1 text-white font-bold bg-[#244ad1] m-2 rounded-full">{qa.conceptTag}</span>)}</span>
                  </div>
                   <span>
                     {activeQuestion === index ? <ChevronUp /> : <ChevronRight />}

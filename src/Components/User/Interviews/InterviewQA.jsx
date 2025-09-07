@@ -154,7 +154,7 @@ const InterviewQA = () => {
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 ">
               Interview Q&A
             </h1>
-            <p  className='text-gray-600 text-sm sm:text-base'>Prepare with the top interview Q&As across every job role</p>
+            <p  className='text-gray-600 text-sm sm:text-base'>Prepare With The Top Interview Q&As Across Every Job Role</p>
           </div>
 
 
