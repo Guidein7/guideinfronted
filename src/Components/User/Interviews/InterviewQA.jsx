@@ -11,29 +11,29 @@ const InterviewQA = () => {
   const [experience, setExperience] = useState("");
   const [domain, setDomain] = useState("");
   const [search, setSearch] = useState("");
-  const [experiences,setExperiences] = useState([]);
-  const [domains,setDomains] = useState([]);
+  const [experiences, setExperiences] = useState([]);
+  const [domains, setDomains] = useState([]);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [datas, setdatas] = useState([]);
   const domainParam = searchParams.get("search") || "";   // actually domain
-const roleParam = searchParams.get("domain") || "";     // actually role
-const exp = searchParams.get("experience") || "";
+  const roleParam = searchParams.get("domain") || "";     // actually role
+  const exp = searchParams.get("experience") || "";
   const page = parseInt(searchParams.get("page")) || 0;
   const [totalPages, setTotalPages] = useState(1);
 
 
-   const getDropdown = () => {
+  const getDropdown = () => {
     axios.get(`${resources.APPLICATION_URL}drop-down?type=${types.INTERVIEW}`)
       .then(response => {
 
-        if(Array.isArray(response.data?.experience)){
+        if (Array.isArray(response.data?.experience)) {
           setExperiences(response.data?.experience)
         }
-        if(Array.isArray(response.data?.roles)){
+        if (Array.isArray(response.data?.roles)) {
           setDomains(response.data.roles);
         }
-        
+
       })
       .catch(error => {
         console.log('Dropdown error:', error);
@@ -42,88 +42,101 @@ const exp = searchParams.get("experience") || "";
 
   useEffect(() => {
     getDropdown()
-  },[])
+  }, [])
 
 
-  
- const getData = () => {
-  const params = new URLSearchParams({
-    type: types.INTERVIEW,
-  });
 
-  if (roleParam && roleParam.trim() !== "") {
-    params.append("role", roleParam); // correct
-  }
-  if (exp && exp.trim() !== "") {
-    params.append("experience", exp);
-  }
-  if (domainParam && domainParam.trim() !== "") {
-    params.append("domain", domainParam); // correct
-  }
-
-  axios.get(`${resources.APPLICATION_URL}view/data?${params}`)
-    .then(response => {
-      if (response.data.content && typeof response.data.content === "object") {
-        const transformed = Object.entries(response.data.content).map(([key, value]) => {
-          const roleMatch = key.match(/roles=(.*?),/);
-          const expMatch = key.match(/experienceLevel=(.*?)]/);
-
-          return {
-            roles: roleMatch ? roleMatch[1] : "N/A",
-            experience: expMatch ? expMatch[1] : "N/A",
-            questions: value,
-          };
-        });
-        setdatas(transformed);
-      } else {
-        setdatas([]);
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      setdatas([]);
+  const getData = () => {
+    const params = new URLSearchParams({
+      type: types.INTERVIEW,
     });
-};
+
+    if (roleParam && roleParam.trim() !== "") {
+      params.append("role", roleParam); // correct
+    }
+    if (exp && exp.trim() !== "") {
+      params.append("experience", exp);
+    }
+    if (domainParam && domainParam.trim() !== "") {
+      params.append("domain", domainParam); // correct
+    }
+
+    axios.get(`${resources.APPLICATION_URL}view/data?${params}`)
+      .then(response => {
+        if (response.data.content && typeof response.data.content === "object") {
+          const transformed = Object.entries(response.data.content).map(([key, value]) => {
+            const roleMatch = key.match(/roles=(.*?),/);
+            const expMatch = key.match(/experienceLevel=(.*?)]/);
+
+            return {
+              roles: roleMatch ? roleMatch[1] : "N/A",
+              experience: expMatch ? expMatch[1] : "N/A",
+              questions: value,
+            };
+          });
+          setdatas(transformed);
+        } else {
+          setdatas([]);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setdatas([]);
+      });
+  };
 
   useEffect(() => {
     getData()
-  }, [roleParam,exp,domainParam])
+  }, [roleParam, exp, domainParam])
 
 
   const handleExperienceChange = (e) => {
-  const value = e.target.value;
-  setExperience(value);
+    const value = e.target.value;
+    setExperience(value);
 
-  const newParams = new URLSearchParams(searchParams);
-  if (value) newParams.set("experience", value);
-  else newParams.delete("experience");
+    const newParams = new URLSearchParams(searchParams);
+    if (value) newParams.set("experience", value);
+    else newParams.delete("experience");
 
-  setSearchParams(newParams);
-};
+    setSearchParams(newParams);
+  };
 
-// For search (domain actually)
-const handleSearchChange = (e) => {
-  const value = e.target.value;
-  setSearch(value);
+  // For search (domain actually)
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
 
-  const newParams = new URLSearchParams(searchParams);
-  if (value) newParams.set("search", value);   // backend treats this as domain
-  else newParams.delete("search");
+    const newParams = new URLSearchParams(searchParams);
+    if (value) newParams.set("search", value);   // backend treats this as domain
+    else newParams.delete("search");
 
-  setSearchParams(newParams);
-};
+    setSearchParams(newParams);
+  };
 
-// For domain dropdown (actually role)
-const handleDomainChange = (e) => {
-  const value = e.target.value;
-  setDomain(value);
+  // For domain dropdown (actually role)
+  const handleDomainChange = (e) => {
+    const value = e.target.value;
+    setDomain(value);
 
-  const newParams = new URLSearchParams(searchParams);
-  if (value) newParams.set("domain", value);   // backend treats this as role
-  else newParams.delete("domain");
+    const newParams = new URLSearchParams(searchParams);
+    if (value) newParams.set("domain", value);   // backend treats this as role
+    else newParams.delete("domain");
 
-  setSearchParams(newParams);
-};
+    setSearchParams(newParams);
+  };
+
+
+  function getInitials(str) {
+    if (!str)
+      return
+    return str
+      .trim()
+      .split(/\s+/)
+      .map(word => word[0] || "")
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  }
 
 
 
@@ -143,7 +156,7 @@ const handleDomainChange = (e) => {
             </h1>
           </div>
 
-          
+
           <div className="bg-white rounded-lg mt-2 p-4 md:w-[60%] mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
@@ -220,27 +233,27 @@ const handleDomainChange = (e) => {
         </div>
 
         {/* Results Section */}
-        <div className="max-w-6xl mx-auto pt-48 px-4 ">
+        <div className="max-w-6xl mx-auto pt-60 md:pt-48 px-4 ">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-2">
             {datas.map((data, index) => (
               <div
                 key={index}
-                // onClick={() => navigate("/answer", { state: { data })
-                onClick={() => navigate('/answer',{state:data})}
-            className="cursor-pointer flex flex-col gap-2 items-center bg-white shadow- p-4 rounded-lg hover:shadow-lg transition"
-    >
-            {/* <div className="w-[73.6px] h-[73.6px] flex justify-center items-center rounded-lg">
-              <img src={data.imgSrc || "/default.png"} alt={data.roles} className="w-12 h-12" />
-            </div> */}
-            <span className="font-bold">{data.roles}</span>
-            <p className="text-sm text-gray-500">{data.experience}</p>
-            <p className="text-xs text-gray-400">{data.questions.length} Questions</p>
+                onClick={() => navigate('/answer', { state: data })}
+                className="cursor-pointer flex flex-col gap-2 items-center bg-white  px-1  py-5 border  border-blue-200 rounded-lg hover:shadow-lg"
+              >
+                <div className="w-[50.6px] h-[50.6px] bg-blue-500 rounded-full flex justify-center items-center">
+                  <span className="font-semibold text-white">{getInitials(data?.roles)}</span>
+                </div>
+                <span className="font-bold text-black text-center break-words whitespace-normal">
+                  {data.roles}
+                </span>                <p className="text-sm ">{data.experience}</p>
+                <p className="text-xs ">{data.questions.length} Questions</p>
+              </div>
+            ))}
           </div>
-  ))}
-        </div>
 
-      </div>
-    </div >
+        </div>
+      </div >
 
       <Footer />
     </>

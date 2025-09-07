@@ -144,7 +144,7 @@ export default function HomePage() {
                     <CustomSearchDropdown />
                 </div>
 
-                <div className='grid grid-cols-4 gap-4 mt-8 -mb-36'>
+                <div className='grid grid-cols-5 gap-4 mt-8 -mb-36'>
 
                     <div onClick={() => navigate('/career')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
 
@@ -158,13 +158,13 @@ export default function HomePage() {
                         </div>
                     </div>
 
-                    <div onClick={() => navigate('/interview-Q&A')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
+                    <div onClick={() => navigate('/interviewqa')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
                         <div className='h-1/2 white flex items-center justify-center'>
                             <div className='text-4xl text-white'><img src={youtubeimg} className='w-18 h-18' /></div>
                         </div>
                         <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
-                            <h3 className='font-bold text-xl text-gray-800'>Interview Q&A</h3>
-                            <p className='text-sm text-gray-600'>Don’t waste time searching for good videos — we’ve already done the research. Learn from the best YouTube videos.</p>
+                            <h3 className='font-bold text-xl text-gray-800'>Interview Q&A Hub</h3>
+                            <p className='text-sm text-gray-600'>Stop struggling to find interview Questions — we’ve researched the best Q&A for every role from fresher to  experienced</p>
                         </div>
                     </div>
                     <div onClick={() => navigate('/institute')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
@@ -183,6 +183,15 @@ export default function HomePage() {
                         <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
                             <h3 className='font-bold text-xl text-gray-800'>Free Certifications</h3>
                             <p className='text-sm text-gray-600'>Boost your career with 100% free certification courses. We’ve curated the best from top platforms — start learning and get certified</p>
+                        </div>
+                    </div>
+                    <div onClick={() => navigate('/interview-Q&A')} className='bg-white rounded-lg shadow-lg overflow-hidden relative h-60 cursor-pointer'>
+                        <div className='h-1/2 white flex items-center justify-center'>
+                            <div className='text-4xl text-white'><img src={youtubeimg} className='w-18 h-18' /></div>
+                        </div>
+                        <div className='h-1/2 bg-white p-4 text-center overflow-y-auto custom-scrollbar'>
+                            <h3 className='font-bold text-xl text-gray-800'>Interview Videos</h3>
+                            <p className='text-sm text-gray-600'>Don’t waste time searching for good videos — we’ve already done the research. Learn from the best YouTube videos.</p>
                         </div>
                     </div>
                 </div>
@@ -206,7 +215,7 @@ export default function HomePage() {
                         ))}
                     </div>
                 </div>}
-            <div className={`hidden lg:block  p-5 ${blogs.length === 0 ? 'mt-40': '' }`}>
+            <div className={`hidden lg:block  p-5 ${blogs.length === 0 ? 'mt-40' : ''}`}>
                 <h1 className=' font-bold text-xl '>Top Searches</h1>
                 <div className='grid grid-cols-3 p-5 gap-3 text-[#244ad1]'>
                     < p className='cursor-pointer' onClick={() => navigate(`career/1314/TCS`)}>TCS Careers</p>
@@ -229,45 +238,54 @@ export default function HomePage() {
                 </div>
 
 
-                <div className='flex flex-col gap-10'>
-                    <div className='w-full flex  justify-evenly'>
-                        <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
-                            <div className='flex justify-center '>
-                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
-                                    <img src={Company} className='w-12 h-12' />
-                                </div>
-                            </div>
-                            <span className='font-bold'>Company Careers</span>
-                        </div>
-                        <div onClick={() => navigate('/interview-Q&A')} className='flex flex-col gap-2'>
-                            <div className='flex justify-center'>
-                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
-                                    <img src={youtubeimg} className='w-12 h-12' />
-                                </div>
-                            </div>
+                <div className='grid grid-cols-4 gap-2 px-2 space-y-6'>
 
-                            <span className='font-bold '>Interview Q&A</span>
+                    <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
+                        <div className='flex justify-center '>
+                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                <img src={Company} className='w-12 h-12' />
+                            </div>
                         </div>
+                        <span className='font-bold text-xs text-center'>Company Careers</span>
+                    </div>
+                    <div onClick={() => navigate('/interviewqa')} className='flex flex-col gap-2'>
+                        <div className='flex justify-center'>
+                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                <img src={youtubeimg} className='w-12 h-12' />
+                            </div>
+                        </div>
+
+                        <span className='font-bold  text-xs text-center '>Interview Q&A Hub</span>
                     </div>
 
-                    <div className='w-full flex  justify-evenly'>
-                        <div onClick={() => navigate('/institute')} className='flex flex-col gap-2'>
-                            <div className='flex justify-center '>
-                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
-                                    <img src={instituteimg} className='w-12 h-12' />
-                                </div>
-                            </div>
-                            <span className='font-bold '>Coaching Centers</span>
-                        </div>
-                        <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2'>
-                            <div className='flex justify-center'>
-                                <div className=' w-[73.6px] h-[73.6px]  flex justify-center items-center rounded-lg'>
-                                    <img src={certificateimg} className='w-12 h-12' />
-                                </div>
-                            </div>
 
-                            <span className='font-bold '>Free Certifications</span>
+
+                    <div onClick={() => navigate('/institute')} className='flex flex-col gap-2 items-center justify-center'>
+                        <div className='flex justify-center  '>
+                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                <img src={instituteimg} className='w-12 h-12' />
+                            </div>
                         </div>
+                        <span className='font-bold  text-xs text-center '>Coaching Centers</span>
+                    </div>
+                    <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2 justify-center items-center mx-auto'>
+                        <div className='flex justify-center'>
+                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                <img src={certificateimg} className='w-12 h-12' />
+                            </div>
+                        </div>
+
+                        <span className='font-bold  text-xs text-center'>Free Certifications</span>
+                    </div>
+
+                     <div onClick={() => navigate('/interview-Q&A')} className='flex flex-col gap-2'>
+                        <div className='flex justify-center'>
+                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                <img src={youtubeimg} className='w-12 h-12' />
+                            </div>
+                        </div>
+
+                        <span className='font-bold  text-xs text-center '>Interview Videos</span>
                     </div>
 
                     {/* <div className='w-full flex  justify-evenly'>
