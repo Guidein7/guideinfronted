@@ -27,6 +27,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: saikumartanakala/guidein_frontend_test
-
-
+          tags: saikumartanakala/guiden
