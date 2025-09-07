@@ -4,6 +4,7 @@ export const types = {
     CAREER :'career',
     COACHING : 'courseInfo',
     CERTIFICATE: 'certificate',
-    STUDENT: 'student_info'
+    STUDENT: 'student_info',
+    INTERVIEW:'interview'
     
 } 

@@ -10,6 +10,7 @@ export default function AdminNavbar() {
       <span onClick={() => navigate("/admin-blog")}>Blog Upload</span>
       <span onClick={() => navigate("/admin-blog-list")}>Blog List</span>
       <span onClick={() => navigate("/admin-data")}>Student Info</span>
+      <span onClick={() => navigate()}></span>
     </nav>
   );
 }
