@@ -72,7 +72,7 @@ function App() {
           <Route path="/knowledge-hub/:slug" element={<SingleBlog />} />
           <Route path="/edit-blog/:blogId" element={<EditBlog />} />
           <Route path='/interviewqa-hub' element={<InterviewQA />}/>
-          <Route path='/answer' element={<Answer/>}/>
+          <Route path='/interviewqa-hub/:name' element={<Answer/>}/>
 
 
           <Route path='*' element={<NotFound />} />

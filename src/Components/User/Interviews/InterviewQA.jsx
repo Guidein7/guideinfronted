@@ -238,7 +238,9 @@ const InterviewQA = () => {
             {datas.map((data, index) => (
               <div
                 key={index}
-                onClick={() => navigate('/answer', { state: data })}
+                onClick={() => navigate(`/interviewqa-hub/${data.roles.replace(/\s+/g, "-").toLowerCase()}`, {
+  state: data,
+})}
                 className="cursor-pointer flex flex-col gap-2 items-center bg-white  px-1  py-5 border  border-blue-200 rounded-lg hover:shadow-lg"
               >
                 <div className="w-[50.6px] h-[50.6px] bg-blue-500 rounded-full flex justify-center items-center">

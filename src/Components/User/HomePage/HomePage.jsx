@@ -240,7 +240,7 @@ export default function HomePage() {
                 </div>
 
 
-                <div className='grid grid-cols-4 gap-2 px-2 space-y-6'>
+                <div className='grid grid-cols-3 gap-2 px-2 space-y-6 justify-center'>
 
                     <div onClick={() => navigate('/career')} className='flex flex-col gap-2'>
                         <div className='flex justify-center '>
@@ -270,26 +270,28 @@ export default function HomePage() {
                         </div>
                         <span className='font-bold  text-xs text-center '>Coaching Centers</span>
                     </div>
-                    <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2 justify-center items-center mx-auto'>
-                        <div className='flex justify-center'>
-                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
-                                <img src={certificateimg} className='w-12 h-12' />
+                    <div className='flex col-span-2 justify-center '>
+                        <div onClick={() => navigate('/certificate')} className='flex flex-col gap-2 justify-center items-center mx-auto'>
+                            <div className='flex justify-center'> 
+                                <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={certificateimg} className='w-12 h-12' />
+                                </div>
                             </div>
+
+                            <span className='font-bold  text-xs text-center'>Free Certifications</span>
                         </div>
 
-                        <span className='font-bold  text-xs text-center'>Free Certifications</span>
-                    </div>
-
-                     <div onClick={() => navigate('/interview-Q&A')} className='flex flex-col gap-2'>
-                        <div className='flex justify-center'>
-                            <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
-                                <img src={youtubeimg} className='w-12 h-12' />
+                        <div onClick={() => navigate('/interview-Q&A')} className='flex flex-col gap-2'>
+                            <div className='flex justify-center'>
+                                <div className=' w-[40.6px] h-[40.6px]  flex justify-center items-center rounded-lg'>
+                                    <img src={youtubeimg} className='w-12 h-12' />
+                                </div>
                             </div>
+
+                            <span className='font-bold  text-xs text-center '>Interview Videos</span>
                         </div>
 
-                        <span className='font-bold  text-xs text-center '>Interview Videos</span>
                     </div>
-
                     {/* <div className='w-full flex  justify-evenly'>
                         <div onClick={() => navigate('/interviewqa')} className='flex flex-col gap-2'>
                             <div className='flex justify-center '>
