@@ -79,7 +79,6 @@ export default function HomePage() {
 
     const getCareerData = (type) => {
         axios.get(`${resources.APPLICATION_URL}view/data?type=${type}&page=0&size=6`).then(response => {
-            console.log(response)
             if (type === types.CAREER) {
                 setData(prev => ({
                     ...prev,
@@ -132,7 +131,6 @@ export default function HomePage() {
         navigate(`/knowledge-hub/${blogSlug}`);
     };
 
-    console.log(data.careerData)
     return (
         <div className="bg-[#f5faff] w-full min-h-screen">
 
@@ -333,11 +331,6 @@ export default function HomePage() {
                     </div>
                 </div>}
 
-
-
-
-
-
                 <div className='flex flex-col'>
                     <div className='flex justify-between items-center p-2 font-sans'>
                         <span className='text-lg font-semibold'>Explore Career Pages</span>
@@ -368,8 +361,6 @@ export default function HomePage() {
 
                     </div>
                 </div>
-
-
 
 
                 <div className='flex flex-col  rounded-2xl p-2'>
@@ -432,7 +423,7 @@ export default function HomePage() {
 
                 <div className='flex flex-col p-2'>
                     <div className='flex justify-between items-center p-2 font-sans'>
-                        <span className='text-lg font-semibold'>Interview Q&A</span>
+                        <span className='text-lg font-semibold'>Interview Videos</span>
                         {data.youtubeData.length > 5 && (
                             <Link to='/interview-Q&A' className='cursor-pointer text-blue-400 font-semibold'>
                                 View all
