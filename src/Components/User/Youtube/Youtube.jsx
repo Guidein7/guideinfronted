@@ -295,9 +295,9 @@ const Youtub = () => {
           <div className="flex gap-1 items-center text-blue-500 mb-2">
             <Link to="/" className="hover:underline">Home</Link>
             <ChevronRight size={18} />
-            <Link to="/interview-Q&A" className="hover:underline">Interview Q&A</Link>
+            <Link to="/interview-Q&A" className="hover:underline">Interview Videos</Link>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Interview Q&A</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Interview Videos</h1>
           <p className="text-gray-600 text-sm sm:text-base">Learn Faster with Curated Interview Q&A Videos Across Tech & Business</p>
         </div>
 

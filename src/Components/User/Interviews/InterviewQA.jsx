@@ -139,6 +139,9 @@ const InterviewQA = () => {
   }
 
 
+  
+
+
 
   return (
     <>
@@ -211,9 +214,7 @@ const InterviewQA = () => {
             {datas.map((data, index) => (
               <div
                 key={index}
-                onClick={() => navigate(`/interviewqa-hub/${data.roles.replace(/\s+/g, "-").toLowerCase()}`, {
-                  state: data,
-                })}
+                onClick={() => navigate(`/interviewqa-hub/${data.roles.replace(/\s+/g, "-").toLowerCase()}/${data?.experience}`)}
                 className="cursor-pointer flex flex-col gap-2 items-center bg-white  px-1  py-5 border  border-gray-300 rounded-lg hover:shadow-lg"
               >
                 <div className="w-[50.6px] h-[50.6px] bg-[#244ad1] rounded-full flex justify-center items-center">
