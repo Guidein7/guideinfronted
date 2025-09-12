@@ -121,15 +121,14 @@ const Answer = () => {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-3 py-1 text-xs border rounded-lg ${
-                        activeTab === tab ? "bg-black text-white font-bold" : ""
-                      }`}
+                      className={`px-3 py-1 text-xs border rounded-lg ${activeTab === tab ? "bg-black text-white font-bold" : ""
+                        }`}
                     >
                       {tab === "how"
                         ? "How to Answer"
                         : tab === "checks"
-                        ? "Interviewer Checks"
-                        : "Best Answer"}
+                          ? "Interviewer Checks"
+                          : "Best Answer"}
                     </button>
                   ))}
                 </div>
@@ -166,115 +165,131 @@ const Answer = () => {
   const renderDesktop = () => {
     const headerHeight = 64;
     return (
-      <main className="grid md:grid-cols-[25rem_1fr]">
+      <main className="grid md:grid-cols-[25rem_1fr] gap-6 px-4">
         {/* Sidebar */}
         <aside
-          className="hidden md:block bg-white"
+          className="hidden md:block bg-white shadow-lg rounded-lg mt-23 mb-5"
           style={{
             position: "sticky",
             top: headerHeight,
-            height: `calc(100vh - ${headerHeight}px)`,
+            height: `calc(115vh - ${headerHeight}px)`,
             overflowY: "auto",
           }}
         >
-          <div className="p-2 mr-10">
+          <div className="p-4">
             {loading ? (
               <p className="text-sm text-gray-500">Loading…</p>
             ) : !data?.questions?.length ? (
               <p className="text-sm text-gray-500">No questions.</p>
             ) : (
-              <div className="space-y-2 mt-20">
+              <div className="mt-6 divide-y divide-gray-200">
                 {data.questions.map((qa, idx) => {
                   const short =
                     qa.question.length > 60 ? qa.question.slice(0, 60) + "…" : qa.question;
                   return (
-                    <label
+                    <div
                       key={idx}
-                      className={`flex items-start gap-2 cursor-pointer p-2 rounded-lg ${
-                        activeQuestion === idx ? "bg-blue-200" : "hover:bg-gray-200"
-                      }`}
                       onClick={() => {
                         setActiveQuestion(idx);
                         setActiveTab("how");
                       }}
+                      className={`relative cursor-pointer p-3 ${activeQuestion === idx ? "bg-blue-50" : "hover:bg-gray-50"
+                        }`}
                     >
-                      <span className="text-sm leading-snug">{short}</span>
-                    </label>
+                      <img src={Q} alt="Q" className="absolute top-2 left-2 w-4 h-4" />
+                      <span className="text-sm leading-snug block pl-6">{short}</span>
+                    </div>
                   );
                 })}
               </div>
+
             )}
           </div>
         </aside>
 
-        {/* Main */}
-        <section className="md:p-9 mt-17 shadow-lg">
-          <div className="rounded-lg bg-white shadow p-6">
-            <h2 className="text-lg font-semibold mb-2">
-              {data?.questions?.[activeQuestion]?.question}
-            </h2>
-            {data?.questions?.[activeQuestion]?.conceptTag && (
-              <span className="inline-block text-xs px-2 py-1 text-white font-bold bg-[#244ad1] rounded-full mb-4">
-                {data.questions[activeQuestion].conceptTag}
-              </span>
-            )}
+        {/* Main Section */}
+        <section className="rounded-lg bg-white shadow-lg p-8 mt-23">
+          <h2 className="text-lg font-semibold mb-2">
+            {data?.questions?.[activeQuestion]?.question}
+          </h2>
+          {data?.questions?.[activeQuestion]?.conceptTag && (
+            <span className="inline-block text-xs px-2 py-1 text-white font-bold bg-[#244ad1] rounded-full mb-4">
+              {data.questions[activeQuestion].conceptTag}
+            </span>
+          )}
 
-            {/* Tabs */}
-            <div className="flex gap-5 mb-4">
-              {["how", "checks", "sample"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-3 py-1 text-sm rounded-md border ${
-                    activeTab === tab ? "bg-black text-white font-bold" : "bg-gray-100"
+          {/* Tabs */}
+          <div className="flex gap-5 mb-4 pb-2">
+            {["how", "checks", "sample"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-3 py-1 text-sm rounded-md ${activeTab === tab
+                    ? "bg-black text-white font-bold"
+                    : "bg-gray-100"
                   }`}
-                >
-                  {tab === "how"
-                    ? "How to Answer"
-                    : tab === "checks"
+              >
+                {tab === "how"
+                  ? "How to Answer"
+                  : tab === "checks"
                     ? "Interviewer Checks"
                     : "Best Answer"}
-                </button>
-              ))}
-            </div>
+              </button>
+            ))}
+          </div>
 
-            {/* Tab content */}
+          
+          {/* Tab content */}
+          <div className="pb-4">
             {activeTab === "how" && (
-              <p className="text-gray-700 whitespace-pre-line">
-                {data.questions[activeQuestion].howToAnswer}
-              </p>
+              <div>
+                <h3 className="font-bold mb-2">How to Answer</h3>
+                <pre className="bg-gray-100 p-3 rounded-md text-sm text-gray-800 whitespace-pre-wrap font-mono">
+                  {data.questions[activeQuestion].howToAnswer}
+                </pre>
+              </div>
             )}
             {activeTab === "checks" && (
-              <p className="text-gray-700 whitespace-pre-line">
-                {data.questions[activeQuestion].whatInterviewerChecks}
-              </p>
+              <div>
+                <h3 className="font-bold mb-2">What Interviewer Checks</h3>
+                <pre className="bg-gray-100 p-3 rounded-md text-sm text-gray-800 whitespace-pre-wrap font-mono">
+                  {data.questions[activeQuestion].whatInterviewerChecks}
+                </pre>
+              </div>
             )}
             {activeTab === "sample" && (
-              <p className="text-gray-700 whitespace-pre-line">
-                {data.questions[activeQuestion].bestAnswer}
-              </p>
+              <div>
+                <h3 className="font-bold mb-2">Best Answer</h3>
+                <pre className="bg-gray-100 p-3 rounded-md text-sm text-gray-800 whitespace-pre-wrap font-mono">
+                  {data.questions[activeQuestion].bestAnswer}
+                </pre>
+              </div>
             )}
-
-            {/* Navigation */}
-            <div className="flex justify-between mt-6">
-              <button
-                onClick={handlePrev}
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-              >
-                Previous Question
-              </button>
-              <button
-                onClick={handleNext}
-                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-              >
-                Next Question
-              </button>
-            </div>
           </div>
+
+
+          {/* Navigation Buttons */}
+          {/* Navigation Buttons */}
+          <div className="flex justify-between mt-6 pt-4 border-t border-gray-200">
+            <button
+              onClick={handlePrev}
+              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 shadow-sm"
+            >
+              Previous Question
+            </button>
+            <button
+              onClick={handleNext}
+              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 shadow-sm"
+            >
+              Next Question
+            </button>
+          </div>
+
         </section>
       </main>
     );
   };
+
 
   return (
     <>
