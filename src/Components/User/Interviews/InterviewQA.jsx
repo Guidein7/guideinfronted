@@ -209,6 +209,8 @@ const InterviewQA = () => {
         </div>
 
         {/* Results Section */}
+
+        {datas.length === 0 ? <div className="h-screen flex justify-center items-center">No Data Found...</div> : 
         <div className="max-w-6xl mx-auto pt-52 md:pt-56 px-4 ">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-2 mb-2">
             {datas.map((data, index) => (
@@ -228,7 +230,7 @@ const InterviewQA = () => {
             ))}
           </div>
 
-        </div>
+        </div>}
       </div >
 
       <Footer />

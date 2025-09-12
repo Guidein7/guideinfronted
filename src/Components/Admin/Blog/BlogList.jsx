@@ -436,7 +436,7 @@ const BlogList = () => {
             )}
              
         </div>
-           <BlogOutside/>
+           {/* <BlogOutside/> */}
             <Footer/>
         </>
     );

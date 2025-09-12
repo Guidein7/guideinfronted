@@ -1116,7 +1116,7 @@ const Institute = () => {
               data.map((course, index) => (
                 <div key={index}>
                 <InstituteCard key={course.id || index} course={course} setShowModel={setShowModel} setId={setId} />
-                  {index === 0 && <InstituteAdSense key={`adsense-${course?.id}`} />}
+                  {/* {index === 0 && <InstituteAdSense key={`adsense-${course?.id}`} />} */}
                 </div>
               ))
             ) : (
@@ -1178,7 +1178,7 @@ const Institute = () => {
         )}
         <EnquiryModal showModel={showModel} setId={setId} id={id} setShowModel={setShowModel} successMessage={successMessage} errorMessage={errorMessage} />
       </div>
-      <InstituteOutside/>
+      {/* <InstituteOutside/> */}
       <Footer/>
     </div>
   );

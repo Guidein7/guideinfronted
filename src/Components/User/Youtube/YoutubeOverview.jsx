@@ -259,7 +259,7 @@ export default function YoutubeOverView() {
                     </div>
                 </div>
             </div>
-            <InterviewInside/>
+            {/* <InterviewInside/> */}
             <Footer/>
         </div>
     );

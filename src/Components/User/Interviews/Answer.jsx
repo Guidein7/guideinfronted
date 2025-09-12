@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronRight, ChevronUp } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import Footer from "../Footer";
 import axios from "axios";
 import { resources } from "../../resources";
@@ -165,14 +165,14 @@ const Answer = () => {
   const renderDesktop = () => {
     const headerHeight = 64;
     return (
-      <main className="grid md:grid-cols-[25rem_1fr] gap-6 px-4">
+      <main className="grid md:grid-cols-[25rem_1fr] gap-6 px-4 mt-3">
         {/* Sidebar */}
         <aside
-          className="hidden md:block bg-white shadow-lg rounded-lg mt-23 mb-5"
+          className="hidden md:block bg-white  border border-gray-200 rounded-lg mt-20  mb-5"
           style={{
             position: "sticky",
-            top: headerHeight,
-            height: `calc(115vh - ${headerHeight}px)`,
+            // top: headerHeight,
+            height: `75vh`,
             overflowY: "auto",
           }}
         >
@@ -182,7 +182,7 @@ const Answer = () => {
             ) : !data?.questions?.length ? (
               <p className="text-sm text-gray-500">No questions.</p>
             ) : (
-              <div className="mt-6 divide-y divide-gray-200">
+              <div className=" divide-y divide-gray-200">
                 {data.questions.map((qa, idx) => {
                   const short =
                     qa.question.length > 60 ? qa.question.slice(0, 60) + "…" : qa.question;
@@ -208,7 +208,7 @@ const Answer = () => {
         </aside>
 
         {/* Main Section */}
-        <section className="rounded-lg bg-white shadow-lg p-8 mt-23">
+        <section className="rounded-lg bg-white border border-gray-200 p-8 mt-20 h-[75vh] ">
           <h2 className="text-lg font-semibold mb-2">
             {data?.questions?.[activeQuestion]?.question}
           </h2>
@@ -225,8 +225,8 @@ const Answer = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-3 py-1 text-sm rounded-md ${activeTab === tab
-                    ? "bg-black text-white font-bold"
-                    : "bg-gray-100"
+                  ? "bg-black text-white font-bold"
+                  : "bg-gray-100"
                   }`}
               >
                 {tab === "how"
@@ -238,9 +238,9 @@ const Answer = () => {
             ))}
           </div>
 
-          
+
           {/* Tab content */}
-          <div className="pb-4">
+          <div className="pb-4 h-[60%] overflow-y-auto">
             {activeTab === "how" && (
               <div>
                 <h3 className="font-bold mb-2">How to Answer</h3>
@@ -273,15 +273,14 @@ const Answer = () => {
           <div className="flex justify-between mt-6 pt-4 border-t border-gray-200">
             <button
               onClick={handlePrev}
-              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 shadow-sm"
+              className="flex  items-center cursor-pointer"
             >
-              Previous Question
+              <ChevronLeft /> <span>Previous Question</span>
             </button>
             <button
               onClick={handleNext}
-              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 shadow-sm"
-            >
-              Next Question
+              className="flex  items-center cursor-pointer"            >
+              <span>Next Question</span> <ChevronRight/>
             </button>
           </div>
 
@@ -295,7 +294,7 @@ const Answer = () => {
     <>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <header className="fixed top-14 z-10 bg-white p-2 w-full shadow-sm">
+        <header className="fixed top-14 z-10 bg-white p-2 w-full ">
           <div className="flex gap-1 items-center text-blue-500 mb-2">
             <Link to="/" className="hover:underline">Home</Link>
             <ChevronRight size={18} />

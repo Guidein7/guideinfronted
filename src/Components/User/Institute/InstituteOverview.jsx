@@ -299,7 +299,7 @@ export default function InstituteOverview() {
                 <EnquiryModal showModel={showModal}  id={id} setShowModel={setShowModal} successMessage={successMessage} errorMessage={errorMessage}/>
             )}
         </div>
-            <InstituteInside/>
+            {/* <InstituteInside/> */}
         <Footer/>
 
         </>

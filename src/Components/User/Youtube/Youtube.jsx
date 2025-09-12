@@ -374,7 +374,7 @@ const Youtub = () => {
             data.map((video, index) => (
               <div key={index}>
                 <VideoCard key={video.id} video={video} />
-                {index === 0 && <InterviewAdsense key={`adsense-${page}`} />}
+                {/* {index === 0 && <InterviewAdsense key={`adsense-${page}`} />} */}
 
               </div>
             ))
@@ -435,7 +435,7 @@ const Youtub = () => {
           </div>
         )}
       </div>
-      <InterviewOutside/>
+      {/* <InterviewOutside/> */}
       <Footer />
     </div>
   );
