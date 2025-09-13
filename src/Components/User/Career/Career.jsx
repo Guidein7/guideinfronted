@@ -386,7 +386,7 @@ const Career = () => {
             data.map((company, index) => (
               <div  key={company.id || company.companyName}>
                 <CompanyCard key={company.id || company.companyName} company={company} />
-                {index === 0 && <CareerAdSense key={`adsense-${page}`} />}
+                {/* {index === 0 && <CareerAdSense key={`adsense-${page}`} />} */}
               </div>
             ))
           ) : (
@@ -449,7 +449,7 @@ const Career = () => {
           </div>
         )}
       </div>
-      <CareerDisplayAd/>
+      {/* <CareerDisplayAd/> */}
       <Footer />
     </div>
   );

@@ -60,12 +60,12 @@ export default function CareerOverview() {
               />
             );
             if (pCount === 2) {
-              elements.push(<AdSenseAd key={`ad-after-2`} />);
+            //   elements.push(<AdSenseAd key={`ad-after-2`} />);
             }
     
             // Insert ad before last 2 paragraphs
             if (pCount === totalParagraphs - 2) {
-              elements.push(<AdSenseAd key={`ad-before-last-2`} />);
+            //   elements.push(<AdSenseAd key={`ad-before-last-2`} />);
             }
           } else {
             elements.push(
@@ -308,7 +308,7 @@ export default function CareerOverview() {
 )} */}
 
             {/* Desktop Button - Regular button at bottom of content */}
-            <InsideCareerCard/>
+            {/* <InsideCareerCard/> */}
             <div className="mb-12">
                     <Footer/>
             </div>

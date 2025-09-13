@@ -141,12 +141,12 @@ const renderBlogWithAds = (htmlContent) => {
           />
         );
         if (pCount === 2) {
-          elements.push(<AdSenseAd key={`ad-after-2`} />);
+        //   elements.push(<AdSenseAd key={`ad-after-2`} />);
         }
 
         // Insert ad before last 2 paragraphs
         if (pCount === totalParagraphs - 4) {
-          elements.push(<AdSenseAd key={`ad-before-last-2`} />);
+        //   elements.push(<AdSenseAd key={`ad-before-last-2`} />);
         }
       } else {
         elements.push(
