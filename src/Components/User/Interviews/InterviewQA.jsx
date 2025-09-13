@@ -21,6 +21,7 @@ const InterviewQA = () => {
   const exp = searchParams.get("experience") || "";
   const page = parseInt(searchParams.get("page")) || 0;
   const [totalPages, setTotalPages] = useState(1);
+  const [loading,setLoading] = useState(false)
 
 
   const getDropdown = () => {
@@ -60,7 +61,7 @@ const InterviewQA = () => {
     if (domainParam && domainParam.trim() !== "") {
       params.append("domain", domainParam); // correct
     }
-
+    setLoading(true);
     axios.get(`${resources.APPLICATION_URL}view/data?${params}`)
       .then(response => {
         if (response.data.content && typeof response.data.content === "object") {
@@ -82,7 +83,7 @@ const InterviewQA = () => {
       .catch(error => {
         console.log(error);
         setdatas([]);
-      });
+      }).finally(() => setLoading(false))
   };
 
   useEffect(() => {
@@ -147,7 +148,7 @@ const InterviewQA = () => {
     <>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="fixed z-10 bg-white p-2 w-full shadow-sm">
+        <div className=" bg-white p-2 w-full  relative">
           <div>
             <div className="flex gap-1 items-center text-blue-500 ">
               <Link to="/" className="hover:underline">Home</Link>
@@ -161,7 +162,9 @@ const InterviewQA = () => {
           </div>
 
 
-          <div className="bg-white rounded-lg mt-2 p-4 md:w-[60%] mx-auto">
+      
+        </div>
+            <div className="sticky top-[60px] z-10 bg-white rounded-lg  p-4 mx-auto">
             <div className="flex gap-4">
 
               <input
@@ -206,12 +209,12 @@ const InterviewQA = () => {
 
             </div>
           </div>
-        </div>
 
         {/* Results Section */}
 
+          {loading ?  <div className="h-100 flex justify-center items-center">Loading...</div> : (<>
         {datas.length === 0 ? <div className="h-screen flex justify-center items-center">No Data Found...</div> : 
-        <div className="max-w-6xl mx-auto pt-52 md:pt-56 px-4 ">
+        <div className="max-w-6xl mx-auto  pt-5 px-4 ">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 gap-y-2 mb-2">
             {datas.map((data, index) => (
               <div
@@ -231,6 +234,7 @@ const InterviewQA = () => {
           </div>
 
         </div>}
+    </>    ) }
       </div >
 
       <Footer />
